@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function SubmitButton(props) {
     return (
@@ -8,4 +8,4 @@ function SubmitButton(props) {
     )
 }
 
-export default SubmitButton
+export default SubmitButton;
