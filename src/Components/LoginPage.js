@@ -1,24 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import HoverButton from '../Helper Components/HoverButton'
 import Input from '../Helper Components/Input'
 import SubmitButton from '../Helper Components/SubmitButton'
 import LinkTo from '../Helper Components/LinkTo'
 import { UserValidations } from '../Validations/SignUpValidations'
 import { useFormik } from 'formik';
+import axios from 'axios';
 
 function LoginPage() {
-
     const initialValues = {
-        name: '',
+        email: '',
         password: '',
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
-        validationSchema: UserValidations,
+        // validationSchema: UserValidations,
         onSubmit: (values, action) => {
             try {
-                console.log(values);
+                const formData = new FormData();
+                formData.append('email', values.email)
+                formData.append('password', values.password)
+                formData.append('client_id', localStorage.getItem('client_id'));
+                // console.log(values);
+                axios.post('api/v1/users/login', formData).then((res) => {
+                    console.log(res);
+                }).catch((err) => {
+                    console.log(err);
+                })
             } catch (error) {
                 console.log(error);
             }
@@ -48,15 +57,15 @@ function LoginPage() {
                     <h1 className=' mt-2'>Hello, who's this?</h1>
                     <form onSubmit={handleSubmit} method='post'>
                         <Input
-                            title='Name'
-                            type='text'
-                            name='name'
-                            placeholder='Enter your name'
+                            title='Email'
+                            type='email'
+                            name='email'
+                            placeholder='Enter your email'
                             handleChange={handleChange}
                             handleBlur={handleBlur}
-                            errors={errors.name}
-                            touched={touched.name}
-                            values={values.name}
+                            errors={errors.email}
+                            touched={touched.email}
+                            values={values.email}
                         />
                         <Input
                             title='Password'
