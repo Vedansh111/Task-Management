@@ -1,9 +1,8 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { FaClipboardList } from "react-icons/fa6";
 import { HiMiniIdentification } from "react-icons/hi2";
 import { CgProfile } from "react-icons/cg";
-import HoverComponent from './HoverComponent';
+import HoverComponent from '../Helper Components/HoverComponent';
 
 function UserSideBar() {
     return (
