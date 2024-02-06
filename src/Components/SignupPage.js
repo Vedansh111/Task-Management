@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import SubmitButton from '../Helper Components/SubmitButton';
 import HoverButton from '../Helper Components/HoverButton';
 import { UserValidations } from '../Validations/SignUpValidations'
+import axios from 'axios';
 
 function SignupPage() {
-
+    const [clientId, setClientId] = useState("");
+    useEffect(() => {
+        axios.get('api/v1/users/app_credentials').then((res) => {
+            console.log(res.data);
+            setClientId(res.data.client_id);
+            localStorage.setItem('client_id', res.data.client_id);
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, [])
     const initialValues = {
         name: '',
         email: '',
@@ -20,6 +30,20 @@ function SignupPage() {
         validationSchema: UserValidations,
         onSubmit: (values, action) => {
             try {
+                const formData = new FormData();
+                // formData.append('user[name]', values.name)
+                formData.append('user[email]', values.email)
+                formData.append('user[password]', values.password)
+                // formData.append('user[phone]', values.phone)
+                formData.append('user[location]', values.location)
+                // formData.append('user[country]', values.country)
+                formData.append('client_id', clientId);
+
+                axios.post('/api/v1/users', formData).then((res) => {
+                    console.log(res);
+                }).catch((err) => {
+                    console.log(err);
+                })
                 console.log(values);
             } catch (error) {
                 console.log(error);
