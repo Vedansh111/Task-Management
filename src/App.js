@@ -3,11 +3,13 @@ import SignupPage from './Components/SignupPage';
 import LoginPage from './Components/LoginPage';
 import OtpPage from './Components/OtpPage';
 import ForgetPasswordPage from './Components/ForgetPasswordPage';
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 import UserEvents from './UserPortal/UserEvents';
 import Events from './UserPortal/Events';
 import UploadProof from './UserPortal/UploadProof';
 import UserProfile from './UserPortal/UserProfile';
+
+const access_token = localStorage.getItem('access_token');
 export const App = createBrowserRouter([
     {
         path: '/',
@@ -27,7 +29,7 @@ export const App = createBrowserRouter([
     },
     {
         path: 'user/',
-        element: <UserEvents />,
+        element: access_token ? <UserEvents /> : <Navigate to='/'/>,
         children: [
             {
                 path: "events",

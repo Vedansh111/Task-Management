@@ -1,36 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import HoverButton from '../Helper Components/HoverButton'
 import Input from '../Helper Components/Input'
 import SubmitButton from '../Helper Components/SubmitButton'
 import LinkTo from '../Helper Components/LinkTo'
-import { UserValidations } from '../Validations/SignUpValidations'
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage() {
+
+    const navigate = useNavigate();
     const initialValues = {
         email: '',
         password: '',
     };
 
+    useEffect(() => {
+        (localStorage.getItem('access_token') ? navigate('/user/events') : navigate('/'))
+    }, [])
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
-        // validationSchema: UserValidations,
+        validationSchema: yup.object({
+            email: yup.string().email('Invalid email address').required('Email is required').matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "Invalid email"),
+            password: yup.string().required('Password is required').matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Invalid password"),
+        }),
         onSubmit: (values, action) => {
-            try {
-                const formData = new FormData();
-                formData.append('email', values.email)
-                formData.append('password', values.password)
-                formData.append('client_id', localStorage.getItem('client_id'));
-                // console.log(values);
-                axios.post('api/v1/users/login', formData).then((res) => {
-                    console.log(res);
+            console.log(values);
+            axios.get('api/v1/users/app_credentials')
+                .then((res) => {
+                    console.log("get data", res.data);
+                    const formData = new FormData();
+                    formData.append('email', values.email)
+                    formData.append('password', values.password)
+                    formData.append('client_id', res.data.client_id);
+                    axios.post('api/v1/users/login', formData).then((res) => {
+                        console.log("post data", res);
+                        localStorage.setItem('access_token', res.data?.user?.access_token);
+                        navigate('/user/events')
+                    }).catch((err) => {
+                        console.log(err);
+                    })
                 }).catch((err) => {
                     console.log(err);
                 })
-            } catch (error) {
-                console.log(error);
-            }
             action.resetForm();
         },
     });
