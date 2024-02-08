@@ -28,8 +28,8 @@ function LoginPage() {
                     axios.post('api/v1/users/login', formData).then((res) => {
                         console.log("post data", res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
-                        localStorage.setItem('volunteer', res.data?.user?.role);
-                        navigate('/user/events', { replace: true });
+                        localStorage.setItem('role', res.data?.user?.role);
+                        (localStorage.getItem('role') === 'admin') ? navigate('/admin/events', { replace: true }) : navigate('/user/events', { replace: true });
                     }).catch((err) => {
                         console.log(err);
                     })

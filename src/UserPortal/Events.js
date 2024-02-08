@@ -5,12 +5,17 @@ import FilterDropDown from '../Helper Components/FilterDropDown';
 import axios from 'axios';
 
 function Events() {
+
     const [tasks, setTasks] = useState([]);
+    
     useEffect(() => {
+
         axios.get('api/v1/tasks').then((res) => {
             console.log(res.data?.tasks);
+            // const access_token = res.data;
             setTasks(res.data?.tasks);
         })
+        
     }, [])
     return (
         <div className="mt-[2rem] w-[83%] h-[35rem] rounded-md sm:rounded-lg">
@@ -28,7 +33,7 @@ function Events() {
                     no: 30,
                 },
             ]} />
-            <table className="w-full bg-[#ecf1e8] text-lg text-center">
+            <table className="w-full bg-[#ecf1e8] text-gray-900  text-center">
                 <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
                     <tr>
                         <ThComponent name='Event' />
@@ -42,13 +47,13 @@ function Events() {
                 <tbody>
                     {tasks.map((val) => {
                         return (
-                            <tr key={val.id}>
+                            <tr key={val.id} >
                                 <TdComponent things={val.event_name} />
                                 <TdComponent things={val.date} />
                                 <TdComponent things={val.time} />
                                 <TdComponent things={val.event_location} />
                                 <TdComponent things={val.points} />
-                                <TdComponent things={<button className="font-medium text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
+                                <TdComponent things={<button className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
                             </tr>
                         )
                     })}
@@ -56,7 +61,7 @@ function Events() {
                 </tbody>
             </table>
         </div>
-       )
+    )
 }
 
 export default Events;

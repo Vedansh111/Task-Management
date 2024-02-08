@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 function TdComponent(props) {
     return (
-        <td className="px-4 py-4 font-medium whitespace-nowrap">
+        <td className="px-4 py-4 text-lg font-semibold whitespace-nowrap">
             {props.things}
         </td>
     )
