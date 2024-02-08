@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ThComponent from '../Helper Components/ThComponent';
+import TdComponent from '../Helper Components/TdComponent';
 import FilterDropDown from '../Helper Components/FilterDropDown';
+import axios from 'axios';
+
 function Events() {
+    const [tasks, setTasks] = useState([]);
+    useEffect(() => {
+        axios.get('api/v1/tasks').then((res) => {
+            console.log(res.data?.tasks);
+            setTasks(res.data?.tasks);
+        })
+    }, [])
     return (
-        <div className=" w-[83%] h-[35rem] rounded-md sm:rounded-lg shadow-md">
+        <div className="mt-[2rem] w-[83%] h-[35rem] rounded-md sm:rounded-lg">
             <FilterDropDown items={[
                 {
                     name: 'Last Day',
@@ -17,42 +28,35 @@ function Events() {
                     no: 30,
                 },
             ]} />
-            <table className="w-full text-sm text-left rtl:text-right">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <table className="w-full bg-[#ecf1e8] text-lg text-center">
+                <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
                     <tr>
-                        <th scope="col" className="px-6 py-3">
-                            Title
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Date
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Time
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Status
-                        </th>
+                        <ThComponent name='Event' />
+                        <ThComponent name='Date' />
+                        <ThComponent name='Time' />
+                        <ThComponent name='Location' />
+                        <ThComponent name='Points' />
+                        <ThComponent name='Status' />
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="px-6 py-4 font-medium whitespace-nowrap">
-                            Apple MacBook Pro 17"
-                        </td>
-                        <td className="px-6 py-4">
-                            Silver
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td className="px-6 py-4">
-                            <button className="font-medium text-blue-600">Edit</button>
-                        </td>
-                    </tr>
+                    {tasks.map((val) => {
+                        return (
+                            <tr key={val.id}>
+                                <TdComponent things={val.event_name} />
+                                <TdComponent things={val.date} />
+                                <TdComponent things={val.time} />
+                                <TdComponent things={val.event_location} />
+                                <TdComponent things={val.points} />
+                                <TdComponent things={<button className="font-medium text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
+                            </tr>
+                        )
+                    })}
+
                 </tbody>
             </table>
         </div>
-    )
+       )
 }
 
 export default Events;

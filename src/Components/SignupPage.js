@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import SubmitButton from '../Helper Components/SubmitButton';
 import HoverButton from '../Helper Components/HoverButton';
-import { UserValidations } from '../Validations/SignUpValidations'
+import { UserValidations } from '../Validations/SignUpValidations';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,12 +28,8 @@ function SignupPage() {
             axios.get('api/v1/users/app_credentials').then((res) => {
                 console.log("get data", res.data);
                 const formData = new FormData();
-                // formData.append('user[name]', values.name)
                 formData.append('user[email]', values.email)
                 formData.append('user[password]', values.password)
-                // formData.append('user[phone]', values.phone)
-                // formData.append('user[location]', values.location)
-                // formData.append('user[country]', values.country)
                 formData.append('client_id', res.data.client_id);
                 axios.post('/api/v1/users', formData).then((res) => {
                     localStorage.setItem('access_token', res.data?.user?.access_token)
@@ -46,36 +42,30 @@ function SignupPage() {
                 console.log(err);
             })
 
-
             action.resetForm();
         },
     });
 
     return (
-        <div className='w-screen h-screen flex font-jetbrains' >
+        <div className='w-screen h-screen flex justify-center items-center font-jetbrains'>
 
-            {/* ⬇ Pencil background */}
-            <div style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?q=90&w=0540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} className="flex justify-center w-[42%] object-center bg-center">
-                <div className='flex flex-col text-center h-[30%] mt-[220px] w-[80%] text-4xl '>
-                    <h1 className='mb-2'>Sign up</h1>
-                    <h1 className='mt-2'> &</h1>
-                    <h1 className='mt-2'> come on in</h1>
+            {/* Pencil background */}
+            <div className="bg-center md:text-center justify-center items-center w-1/2 h-screen hidden md:flex" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?q=90&w=0540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
+                <div className='mb-[5rem] flex flex-col items-center md:w-[42%]'>
+                    <h1 className='mb-1 text-3xl'>Sign up</h1>
+                    <h1 className='mt-1 text-3xl'>& come on in</h1>
                 </div>
             </div>
 
-            {/* ⬇ SignUp, Already account? */}
-            <div className='w-[58%] flex flex-col items-center bg-[#fdfdfa]'>
-
-                {/* ⬇ Already account? */}
-                <div className=' w-[350px] h-[50px] mt-[10px] ml-[32rem] flex justify-center items-center text-center'>
+            {/* SignUp section */}
+            <div className='w-full md:w-1/2 flex flex-col items-center bg-[#fdfdfa]'>
+                <div className='bg- w-full md:w-[350px] h-[50px] md:mt-0 md:mr-0 flex justify-end items-center text-center absolute top-0 right-2'>
                     <h1>Already have an account?</h1>
                     <HoverButton name='Log In' to='/' />
                 </div>
-
-                {/* ⬇ SignUp */}
-                <div className=' flex flex-col justify-center items-center w-2/3 h-[35rem] mt-[3rem]'>
-                    <h1 className=' text-3xl font-semibold'>TaskNinja</h1>
-                    <form onSubmit={handleSubmit} method='post'>
+                <div className='w-full md:w-[350px] flex flex-col justify-center items-center mt-20 md:mt-0'>
+                    <h1 className='text-3xl font-semibold mb-4'>TaskNinja</h1>
+                    <form className='w-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                         <Input
                             title='Name'
                             type='text'
@@ -134,4 +124,4 @@ function SignupPage() {
     )
 }
 
-export default SignupPage
+export default SignupPage;

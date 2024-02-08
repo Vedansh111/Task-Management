@@ -8,18 +8,18 @@ function UserEvents() {
     useEffect(() => {
         (localStorage.getItem('access_token') ? navigate('/user/events') : navigate('/user'))
     }, [])
+
     return (
         <div className='flex font-jura text-[#500025]'>
             <div className='font-jura h-screen text-[#500025]'>
                 <UserSideBar />
             </div>
-            <div className=' w-full h-screen'>
+            <div className=' w-full'>
                 <UserHeader />
-                <div className='flex justify-center items-center min-h-[89.4vh]'>
+                <div className='flex justify-center items-center max-h-[89.4vh]'>
                     <Outlet />
                 </div>
             </div>
-
         </div>
     )
 }

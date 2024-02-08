@@ -1,36 +1,26 @@
-import React, { useEffect } from 'react'
-import HoverButton from '../Helper Components/HoverButton'
-import Input from '../Helper Components/Input'
-import SubmitButton from '../Helper Components/SubmitButton'
-import LinkTo from '../Helper Components/LinkTo'
-import * as yup from 'yup';
+import React from 'react';
+import HoverButton from '../Helper Components/HoverButton';
+import Input from '../Helper Components/Input';
+import SubmitButton from '../Helper Components/SubmitButton';
+import LinkTo from '../Helper Components/LinkTo';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-
     const navigate = useNavigate();
     const initialValues = {
         email: '',
         password: '',
     };
 
-    useEffect(() => {
-        (localStorage.getItem('access_token') ? navigate('/user/events') : navigate('/'))
-    }, [])
-
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
-        validationSchema: yup.object({
-            email: yup.string().email('Invalid email address').required('Email is required').matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "Invalid email"),
-            password: yup.string().required('Password is required').matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Invalid password"),
-        }),
         onSubmit: (values, action) => {
             console.log(values);
             axios.get('api/v1/users/app_credentials')
                 .then((res) => {
-                    console.log("get data", res.data);
+                    // console.log("get data", res.data);
                     const formData = new FormData();
                     formData.append('email', values.email)
                     formData.append('password', values.password)
@@ -38,7 +28,8 @@ function LoginPage() {
                     axios.post('api/v1/users/login', formData).then((res) => {
                         console.log("post data", res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
-                        navigate('/user/events')
+                        localStorage.setItem('volunteer', res.data?.user?.role);
+                        navigate('/user/events', { replace: true });
                     }).catch((err) => {
                         console.log(err);
                     })
@@ -50,26 +41,22 @@ function LoginPage() {
     });
 
     return (
-        <div className='w-screen h-screen flex font-jetbrains' >
+        <div className='w-screen h-screen flex justify-center items-center font-jetbrains'>
 
-            {/* ⬇ Pencil background */}
-            <div style={{ backgroundImage: "url('https://images.unsplash.com/photo-1578852612716-854e527abf2e?q=90&w=0840&h=1100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} className="flex justify-center w-[42%] bg-center">
+            {/* Pencil background */}
+            <div className="hidden md:flex justify-center items-center w-1/2 h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1578852612716-854e527abf2e?q=90&w=0840&h=1100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
             </div>
 
-            {/* ⬇ Login, Dont account? */}
-            <div className='w-[58%] flex flex-col items-center bg-[#fdfdfa]'>
-
-                {/* ⬇ Dont account? */}
-                <div className=' w-[350px] h-[50px] mt-[10px] ml-[32rem] flex justify-center items-center text-center'>
+            {/* Login section */}
+            <div className='w-full md:w-1/2 flex flex-col items-center bg-[#fdfdfa]'>
+                <div className='w-full md:w-[350px] h-[50px] mt-5 md:mt-0 mr-5 md:mr-0 flex justify-end items-center text-center absolute top-0 right-2 '>
                     <h1>Don't have an account yet?</h1>
                     <HoverButton name="Sign Up" to='/signup' />
                 </div>
-
-                {/* ⬇ Login */}
-                <div className=' flex flex-col justify-center items-center w-2/3 h-[35rem] mt-[3rem]'>
-                    <h1 className=' text-3xl font-semibold'>TaskNinja</h1>
-                    <h1 className=' mt-2'>Hello, who's this?</h1>
-                    <form onSubmit={handleSubmit} method='post'>
+                <div className='w-full md:w-[350px] flex flex-col justify-center items-center mt-20 md:mt-0'>
+                    <h1 className='text-3xl font-semibold mb-2'>TaskNinja</h1>
+                    <h1 className='mb-4'>Hello, who's this?</h1>
+                    <form className='w-full' onSubmit={handleSubmit} method='post'>
                         <Input
                             title='Email'
                             type='email'
@@ -101,7 +88,7 @@ function LoginPage() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default LoginPage
+export default LoginPage;
