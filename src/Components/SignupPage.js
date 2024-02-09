@@ -29,12 +29,14 @@ function SignupPage() {
                 console.log("get data", res.data);
                 const formData = new FormData();
                 formData.append('user[email]', values.email)
+                formData.append('user[name]', values.name)
+                formData.append('user[mobile_number]', values.phone)
                 formData.append('user[password]', values.password)
                 formData.append('client_id', res.data.client_id);
                 axios.post('/api/v1/users', formData).then((res) => {
                     localStorage.setItem('access_token', res.data?.user?.access_token)
                     console.log("post data", res);
-                    navigate('/user');
+                    navigate('/user/events');
                 }).catch((err) => {
                     console.log(err);
                 })
