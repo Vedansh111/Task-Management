@@ -5,6 +5,8 @@ import InputSettings from '../Helper Components/InputSettings';
 import UploadButton from '../Helper Components/UploadButton';
 import { useOutletContext } from "react-router-dom";
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function UserProfile() {
     const [accessToken, setAccessToken] = useState();
@@ -24,7 +26,7 @@ function UserProfile() {
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
-        onSubmit: async (values, action) => {
+        onSubmit: async (values) => {
             axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
@@ -39,7 +41,7 @@ function UserProfile() {
                     console.log(err);
                 })
             console.log(values);
-            window.location.reload();
+            toast.success("Your profile has been successfully updated.");
         },
     });
 
@@ -49,7 +51,7 @@ function UserProfile() {
                 <form className='w-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="img" className='rounded-full w-10 h-10 mx-2' />
+                        <img src={userInfo[0]?.avatar_url} alt="img" className='rounded-full w-10 h-10 mx-2' />
                         <UploadButton title='Change Profile Picture ' />
                     </div>
                     <InputSettings
@@ -72,8 +74,8 @@ function UserProfile() {
                         handleBlur={handleBlur}
                         errors={errors.email}
                         touched={touched.email}
-                        values={values.email} 
-                        width='20rem'/>
+                        values={values.email}
+                        width='20rem' />
                     <InputSettings
                         title='Phone Number'
                         type='phone'
@@ -83,8 +85,8 @@ function UserProfile() {
                         handleBlur={handleBlur}
                         errors={errors.phone}
                         touched={touched.phone}
-                        values={values.phone} 
-                        width='20rem'/>
+                        values={values.phone}
+                        width='20rem' />
                     {/* <InputSettings
                         title='Position'
                         type='position'
@@ -104,8 +106,8 @@ function UserProfile() {
                         handleBlur={handleBlur}
                         errors={errors.address}
                         touched={touched.address}
-                        values={values.address} 
-                        width='20rem'/>
+                        values={values.address}
+                        width='20rem' />
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload Id</label>
                         <UploadButton title='Aadhar Card/ Pan Card' />

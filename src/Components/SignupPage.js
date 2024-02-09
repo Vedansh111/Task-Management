@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import SubmitButton from '../Helper Components/SubmitButton';
@@ -6,9 +6,11 @@ import HoverButton from '../Helper Components/HoverButton';
 import { UserValidations } from '../Validations/SignUpValidations';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../Helper Components/Loader';
 
 function SignupPage() {
     const navigate = useNavigate();
+    const [loader, setLoader] = useState([]);
     const initialValues = {
         name: '',
         email: '',
@@ -18,13 +20,15 @@ function SignupPage() {
     };
 
     useEffect(() => {
-        (localStorage.getItem('access_token') ? navigate('/user/events') : navigate('/signup'))
+        if (localStorage.getItem('role') === 'volunteer') {
+            navigate('/user/events', { replace: true });
+        }
     }, [])
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: UserValidations,
         onSubmit: (values, action) => {
-
+            setLoader(0);
             axios.get('api/v1/users/app_credentials').then((res) => {
                 console.log("get data", res.data);
                 const formData = new FormData();
@@ -34,6 +38,7 @@ function SignupPage() {
                 formData.append('user[password]', values.password)
                 formData.append('client_id', res.data.client_id);
                 axios.post('/api/v1/users', formData).then((res) => {
+                    setLoader(res);
                     localStorage.setItem('access_token', res.data?.user?.access_token)
                     console.log("post data", res);
                     navigate('/user/events');
@@ -48,7 +53,7 @@ function SignupPage() {
         },
     });
 
-    return (
+    return (loader ?
         <div className='w-screen h-screen flex justify-center items-center font-jetbrains'>
 
             {/* Pencil background */}
@@ -122,7 +127,7 @@ function SignupPage() {
                     </form>
                 </div>
             </div>
-        </div>
+        </div> : <Loader />
     )
 }
 

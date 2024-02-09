@@ -5,6 +5,7 @@ import InputSettings from '../Helper Components/InputSettings';
 import axios from 'axios';
 import UploadButton from '../Helper Components/UploadButton';
 import SubmitButton from '../Helper Components/SubmitButton';
+import { toast } from 'react-toastify';
 
 function AdminNewEvent() {
     const initialValues = {
@@ -19,20 +20,22 @@ function AdminNewEvent() {
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
+
             console.log(values);
             const formData = new FormData();
-                formData.append('task[event_name]', values.event_name)
-                formData.append('task[event_location]', values.event_location)
-                formData.append('task[google_link]', values.google_link)
-                formData.append('task[date]', values.date)
-                formData.append('task[time]', values.time)
-                formData.append('task[points]', values.points)
-                formData.append('task[event_poster]', values.event_poster)
-                axios.post('/api/v1/tasks', formData).then((res) => {
-                    console.log("post data", res);
-                }).catch((err) => {
-                    console.log(err);
-                })
+            formData.append('task[event_name]', values.event_name)
+            formData.append('task[event_location]', values.event_location)
+            formData.append('task[google_link]', values.google_link)
+            formData.append('task[date]', values.date)
+            formData.append('task[time]', values.time)
+            formData.append('task[points]', values.points)
+            formData.append('task[event_poster]', values.event_poster)
+            axios.post('/api/v1/tasks', formData).then((res) => {
+                toast.success("Event created successfully!!!");
+                console.log("post data", res);
+            }).catch((err) => {
+                console.log(err);
+            })
             action.resetForm();
         },
     });
