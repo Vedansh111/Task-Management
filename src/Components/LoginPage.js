@@ -18,18 +18,18 @@ function LoginPage() {
         password: '',
     };
 
-    useEffect(() => {
-        if (localStorage.getItem('role') === 'volunteer') {
-            navigate('/user/events', { replace: true });
-        } else if (localStorage.getItem('role') === 'admin') {
-            navigate('/admin/events', { replace: true });
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (localStorage.getItem('role') === 'volunteer') {
+    //         navigate('/user/events', { replace: true });
+    //     } else if (localStorage.getItem('role') === 'admin') {
+    //         navigate('/admin/events', { replace: true });
+    //     }
+    // }, [])
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
-            setLoader(0);
+            setLoader(1);
             console.log(values);
             axios.get('api/v1/users/app_creds')
                 .then((res) => {
