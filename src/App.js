@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import SignupPage from './Components/SignupPage';
 import LoginPage from './Components/LoginPage';
 import OtpPage from './Components/OtpPage';
@@ -16,12 +16,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
     const access_token = localStorage.getItem('access_token');
+    // const access_token = '123'
     const role = localStorage.getItem('role');
-    
-    useEffect(() => {
-        console.log("Role",role);
-        console.log("Access Token",access_token);
-    }, [role, access_token]);
     return (
         <Router>
             <Routes>

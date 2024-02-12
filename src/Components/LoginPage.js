@@ -1,24 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HoverButton from '../Helper Components/HoverButton';
 import Input from '../Helper Components/Input';
 import SubmitButton from '../Helper Components/SubmitButton';
 import LinkTo from '../Helper Components/LinkTo';
+import Loader from '../Helper Components/Loader';
+import { toast } from 'react-toastify';
+// import AdminLoader from '../Helper Components/AdminLoader';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+    const [loader, setLoader] = useState([]);
     const navigate = useNavigate();
     const initialValues = {
         email: '',
         password: '',
     };
 
+    useEffect(() => {
+        if (localStorage.getItem('role') === 'volunteer') {
+            navigate('/user/events', { replace: true });
+        } else if (localStorage.getItem('role') === 'admin') {
+            navigate('/admin/events', { replace: true });
+        }
+    }, [])
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
+            setLoader(0);
             console.log(values);
-            axios.get('api/v1/users/app_credentials')
+            axios.get('api/v1/users/app_creds')
                 .then((res) => {
                     // console.log("get data", res.data);
                     const formData = new FormData();
@@ -26,6 +39,8 @@ function LoginPage() {
                     formData.append('password', values.password)
                     formData.append('client_id', res.data.client_id);
                     axios.post('api/v1/users/login', formData).then((res) => {
+                        setLoader(res);
+                        toast.success(`Welcome ${res?.data?.user?.email}`);
                         console.log("post data", res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
                         localStorage.setItem('role', res.data?.user?.role);
@@ -40,7 +55,9 @@ function LoginPage() {
         },
     });
 
-    return (
+
+
+    return (loader ?
         <div className='w-screen h-screen flex justify-center items-center font-jetbrains'>
 
             {/* Pencil background */}
@@ -87,7 +104,7 @@ function LoginPage() {
                     </form>
                 </div>
             </div>
-        </div>
+        </div> : <Loader />
     );
 }
 

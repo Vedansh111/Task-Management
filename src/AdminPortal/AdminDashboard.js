@@ -8,7 +8,7 @@ function AdminDashboard() {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState([]);
     useEffect(() => {
-        (localStorage.getItem('access_token')) ? navigate('/admin/events') : navigate('/admin');
+        if (localStorage.getItem('access_token')) { navigate('/admin/events') };
         axios.get(`api/v1/users/find_user?access_token=${localStorage.getItem('access_token')}`).then((res) => {
             console.log(res.data?.user);
             setUserInfo(res.data?.user);
@@ -22,7 +22,7 @@ function AdminDashboard() {
             <div className=' w-full'>
                 <AdminHeader email={userInfo.email} name={userInfo.name} img={userInfo.avatar_url} />
                 <div className='flex justify-center items-center max-h-[89.4vh]'>
-                    <Outlet context={userInfo}/>
+                    <Outlet context={userInfo} />
                 </div>
             </div>
         </div>

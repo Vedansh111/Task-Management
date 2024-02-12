@@ -1,5 +1,6 @@
 import React from 'react'
-function Loader() {
+
+function AdminLoader() {
     return (
         <div className='animate-pulse flex'>
             <div className='h-screen'>
@@ -11,13 +12,7 @@ function Loader() {
                         <div class=" h-[1rem] m.5y-[1rem] p-3 w-[9rem] bg-gray-300 rounded col-span-2"></div>
                     </div>
                     <div className='w-full mt-[29rem] border border-gray-400'></div>
-                    <div className='flex items-center justify-between h-full'>
-                        <div class="rounded-full bg-gray-300 h-[3rem] w-[3rem]"></div>
-                        <div className='flex flex-col px-2'>
-                            <div class=" h-[1rem] my-[0.3rem] w-[5rem] bg-gray-300 rounded col-span-2"></div>
-                            <div class=" h-[0.9rem] my-[0.3rem] w-[9rem] bg-gray-300 rounded col-span-2"></div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div className=' w-full'>
@@ -25,8 +20,13 @@ function Loader() {
                     <div class=" h-[1.4rem] ml-[3rem] w-[5.5rem] bg-gray-300 rounded "></div>
                     <div class=" h-[1.4rem] mx-[1.5rem] w-[5.5rem] bg-gray-300 rounded "></div>
                     <div className='mx-1 w-[6rem] flex justify-around items-center absolute right-5'>
-                        <div class="rounded-md bg-gray-300 h-[2rem] w-[2rem]"></div>
-                        <div class="rounded-md bg-gray-300 h-[2rem] w-[2rem]"></div>
+                        <div className='flex items-center justify-between h-full'>
+                            <div class="rounded-full bg-gray-300 h-[3rem] w-[3rem]"></div>
+                            <div className='flex flex-col px-2'>
+                                <div class=" h-[1rem] my-[0.3rem] w-[5rem] bg-gray-300 rounded col-span-2"></div>
+                                <div class=" h-[0.9rem] my-[0.3rem] w-[9rem] bg-gray-300 rounded col-span-2"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className='flex justify-center items-center max-h-[89.4vh]'>
@@ -36,4 +36,4 @@ function Loader() {
     )
 }
 
-export default Loader;
+export default AdminLoader
