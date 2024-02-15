@@ -12,7 +12,7 @@ function FilterDropDown(props) {
         setAge(event.target.value);
     };
     return (
-        <Box sx={{ width: '8rem', marginBottom: "5px", marginTop: "15px" }} >
+        <Box sx={{ width: '8rem', marginBottom: "8px" }} >
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Select</InputLabel>
                 <Select

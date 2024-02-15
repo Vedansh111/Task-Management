@@ -7,28 +7,37 @@ import Loader from '../Helper Components/Loader';
 
 function UserEvents() {
     const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState(0);
-    useEffect(() => {
-        (localStorage.getItem('access_token') ? navigate('/user/events') : navigate('/user'))
-        axios.get(`api/v1/users/find_user?access_token=${localStorage.getItem('access_token')}`).then((res) => {
-            console.log(res.data?.user);
-            setUserInfo(res.data?.user);
-        })
-    }, [])
+    const [userInfo, setUserInfo] = useState(1);
+    // useEffect(() => {
+    //     const accessToken = localStorage.getItem('access_token');
+    //     if (!accessToken) {
+    //         navigate('/');
+    //     } else {
+    //         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+    //             console.log(res.data?.user);
+    //             setUserInfo(res.data?.user);
+    //         }).catch((error) => {
+    //             console.error('Error fetching user data:', error);
+    //             navigate('/');
+    //         });
+    //     }
+    // }, [navigate]);
 
-    return (userInfo ?
-        <div className='flex font-jura text-[#500025] tracking-wider overflow-hidden h-[100vh]'>
-            <div className='font-jura bg-red-900 text-[#500025]'>
-                <UserSideBar name={userInfo.name} email={userInfo.email} img={userInfo.avatar_url} />
-            </div>
-            <div className='w-full'>
-                <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
-                <div className='flex justify-center max-h-full'>
-                    <Outlet context={[userInfo]} />
+    return (
+        userInfo ? (
+            <div className='h-screen flex font-jura text-[#500025] tracking-wider overflow-hidden'>
+                <div className='md:flex md:flex-col md:w-1/4'>
+                    <UserSideBar name={userInfo.name} email={userInfo.email} img={userInfo.avatar_url} />
+                </div>
+                <div className='md:w-3/4'>
+                    <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
+                    <div className='flex justify-center max-h-full'>
+                        <Outlet context={[userInfo]} />
+                    </div>
                 </div>
             </div>
-        </div> : <Loader />
-    )
+        ) : <Loader />
+    );
 }
 
-export default UserEvents
+export default UserEvents;

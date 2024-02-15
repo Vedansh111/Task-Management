@@ -7,6 +7,7 @@ import UploadButton from '../Helper Components/UploadButton';
 import SubmitButton from '../Helper Components/SubmitButton';
 import { toast } from 'react-toastify';
 
+
 function AdminNewEvent() {
     const initialValues = {
         event_name: '',
@@ -20,7 +21,6 @@ function AdminNewEvent() {
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
-
             console.log(values);
             const formData = new FormData();
             formData.append('task[event_name]', values.event_name)
@@ -40,81 +40,81 @@ function AdminNewEvent() {
         },
     });
     return (
-        <div className='w-[50%] border border-black rounded-tl-[2rem] rounded-bl-[2rem]  h-[37rem]'>
-            <form onSubmit={handleSubmit} className='flex flex-col items-center'>
-                <Input
-                    title='Event Name'
-                    type='text'
-                    name='event_name'
-                    placeholder='Enter the name of the event'
+
+        <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-7'>
+            <Input
+                title='Event Name'
+                type='text'
+                name='event_name'
+                placeholder='Enter the name of the event'
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors.event_name}
+                touched={touched.event_name}
+                values={values.event_name}
+            />
+            <Input
+                title='Event Location'
+                type='text'
+                name='event_location'
+                placeholder='Enter the location of the event'
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors.event_location}
+                touched={touched.event_location}
+                values={values.event_location}
+            />
+            <Input
+                title='Google Link'
+                type='text'
+                name='google_link'
+                placeholder='Enter the google link'
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors.google_link}
+                touched={touched.google_link}
+                values={values.google_link}
+            />
+            <Input
+                title='Receive Points'
+                type='text'
+                name='points'
+                placeholder='Enter the points'
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors.points}
+                touched={touched.points}
+                values={values.points}
+            />
+            <div className='flex justify-around'>
+                <InputSettings
+                    title='Date'
+                    type='date'
+                    name='date'
                     handleChange={handleChange}
                     handleBlur={handleBlur}
-                    errors={errors.event_name}
-                    touched={touched.event_name}
-                    values={values.event_name}
-                />
-                <Input
-                    title='Event Location'
-                    type='text'
-                    name='event_location'
-                    placeholder='Enter your the location of the event'
+                    errors={errors.date}
+                    touched={touched.date}
+                    values={values.date}
+                    width='9rem' />
+                <InputSettings
+                    title='Time'
+                    type='time'
+                    name='time'
                     handleChange={handleChange}
                     handleBlur={handleBlur}
-                    errors={errors.event_location}
-                    touched={touched.event_location}
-                    values={values.event_location}
-                />
-                <Input
-                    title='Google Link'
-                    type='text'
-                    name='google_link'
-                    placeholder='Enter the google link'
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors.google_link}
-                    touched={touched.google_link}
-                    values={values.google_link}
-                />
-                <Input
-                    title='Receive Points'
-                    type='text'
-                    name='points'
-                    placeholder='Enter the points'
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors.points}
-                    touched={touched.points}
-                    values={values.points}
-                />
-                <div className='flex justify-around'>
-                    <InputSettings
-                        title='Date'
-                        type='date'
-                        name='date'
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        errors={errors.date}
-                        touched={touched.date}
-                        values={values.date}
-                        width='9rem' />
-                    <InputSettings
-                        title='Time'
-                        type='time'
-                        name='time'
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        errors={errors.time}
-                        touched={touched.time}
-                        values={values.time}
-                        width='9rem' />
-                </div>
-                <div className=' flex p-2 m-2 items-center'>
-                    <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload</label>
-                    <UploadButton title='Event Poster' />
-                </div>
-                <SubmitButton name='Add Event' />
-            </form>
-        </div>
+                    errors={errors.time}
+                    touched={touched.time}
+                    values={values.time}
+                    width='9rem' />
+            </div>
+            <div className=' flex p-1 m-2 items-center'>
+                <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload</label>
+                <UploadButton title='Event Poster' />
+            </div>
+            <SubmitButton name='Add Event' />
+        </form>
+
     )
 }
 

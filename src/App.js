@@ -8,16 +8,14 @@ import Events from './UserPortal/Events';
 import UploadProof from './UserPortal/UploadProof';
 import UserProfile from './UserPortal/UserProfile';
 import AdminDashboard from './AdminPortal/AdminDashboard';
-import AdminEventRequest from './AdminPortal/AdminEventRequest';
 import AdminEvents from './AdminPortal/AdminEvents';
+import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
-import AdminUploadProofRequest from './AdminPortal/AdminUploadProofRequest';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
-    const access_token = localStorage.getItem('access_token');
-    // const access_token = '123'
-    const role = localStorage.getItem('role');
+    // const access_token = localStorage.getItem('access_token');
+    // const role = localStorage.getItem('role');
     return (
         <Router>
             <Routes>
@@ -32,8 +30,7 @@ export default function App() {
                 </Route>
                 <Route path="admin/" element={<AdminDashboard />}>
                     <Route path="events" element={<AdminEvents />} />
-                    <Route path="events_requests" element={<AdminEventRequest />} />
-                    <Route path="upload_proof_requests" element={<AdminUploadProofRequest />} />
+                    <Route path="requests" element={<AdminRequests />} />
                     <Route path="points_history" element={<AdminPointsHistory />} />
                 </Route>
             </Routes>

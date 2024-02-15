@@ -13,7 +13,7 @@ function UserHeader(props) {
         <div className='h-[5rem] w-full bg-[#ecf1e8] flex items-center border-[2px] border-black border-x-0 border-t-0 border-s-0'>
             <Points name='Points:' points={props.points} />
             <Points name='Redeemed:' points={props.redeemed} />
-            <div className='mx-1 flex justify-around items-center absolute right-5'>
+            <div className='animate-fade-left animate-once animate-ease-out mx-1 flex justify-around items-center absolute right-5'>
                 <Link to='user_profile'><IoMdSettings size={30} className='mx-3' /></Link>
                 <Link to='/' onClick={handleClick}><MdOutlinePowerSettingsNew size={30} className='mx-3' /></Link>
             </div>

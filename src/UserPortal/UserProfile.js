@@ -46,9 +46,9 @@ function UserProfile() {
     });
 
     return (
-        <div className='flex h-[41.9rem] w-full justify-center items-center'>
-            <div className='flex flex-col w-2/3'>
-                <form className='w-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
+        <div className='flex w-full justify-center items-center mt-10'>
+            <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>
+                <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
                         <img src={userInfo[0]?.avatar_url} alt="img" className='rounded-full w-10 h-10 mx-2' />
