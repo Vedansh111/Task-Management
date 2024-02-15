@@ -5,6 +5,7 @@ import SubmitButton from '../Helper Components/SubmitButton';
 import LinkTo from '../Helper Components/LinkTo';
 import Loader from '../Helper Components/Loader';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 // import AdminLoader from '../Helper Components/AdminLoader';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -18,18 +19,18 @@ function LoginPage() {
         password: '',
     };
 
-    // useEffect(() => {
-    //     if (localStorage.getItem('role') === 'volunteer') {
-    //         navigate('/user/events', { replace: true });
-    //     } else if (localStorage.getItem('role') === 'admin') {
-    //         navigate('/admin/events', { replace: true });
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (localStorage.getItem('role') === 'volunteer') {
+            navigate('/user/events', { replace: true });
+        } else if (localStorage.getItem('role') === 'admin') {
+            navigate('/admin/events', { replace: true });
+        }
+    }, [])
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
-            setLoader(1);
+            setLoader(0);
             console.log(values);
             axios.get('api/v1/users/app_creds')
                 .then((res) => {
@@ -40,11 +41,26 @@ function LoginPage() {
                     formData.append('client_id', res.data.client_id);
                     axios.post('api/v1/users/login', formData).then((res) => {
                         setLoader(res);
-                        toast.success(`Welcome ${res?.data?.user?.email}`);
-                        console.log("post data", res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
                         localStorage.setItem('role', res.data?.user?.role);
                         (localStorage.getItem('role') === 'admin') ? navigate('/admin/events', { replace: true }) : navigate('/user/events', { replace: true });
+                        console.log("post data", res);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: `Welcome ${res?.data?.user?.email}`
+                        });
+
                     }).catch((err) => {
                         console.log(err);
                     })

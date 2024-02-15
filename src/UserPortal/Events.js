@@ -1,23 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
 import FilterDropDown from '../Helper Components/FilterDropDown';
 import axios from 'axios';
 import EventsLoader from '../Helper Components/EventsLoader';
+import { useOutletContext } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 function Events() {
-    // const [tasks, setTasks] = useState(0);
-    const tasks = [1, 2, 3, 4, 5]
+    const userInfo = useOutletContext();
+    const [tasks, setTasks] = useState(0);
+    // const tasks = [1, 2, 3, 4, 5]
 
-    useEffect(() => {
+    const handleRequest = useCallback((val) => {
+        const formData = new FormData();
+        formData.append('participate[user_id]', userInfo[0]?.id);
+        formData.append('participate[task_id]', val);
+        axios.post('api/v1/participate_volunteers', formData).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log(err);
+        })
+        console.log(val, userInfo[0]?.id);
+    }, [])
 
+    const handleShow = () => {
         axios.get('api/v1/tasks').then((res) => {
             console.log(res.data?.tasks);
-            // setTasks(res.data?.tasks);
+            setTasks(res.data?.tasks);
         })
+    }
+    useEffect(() => {
+        handleShow();
     }, [])
+
     return (tasks ?
-        <div className="w-[80%] rounded-md sm:rounded-lg border shadow-lg mt-8">
+        <div className="rounded-md sm:rounded-lg border shadow-lg mt-8">
             <FilterDropDown items={[
                 {
                     name: 'Last Day',
@@ -47,13 +65,15 @@ function Events() {
                     <tbody className=''>
                         {tasks.map((val) => {
                             return (
-                                <tr key={val.id}>
+                                <tr key={val.id} className=''>
                                     <TdComponent things={val.event_name} />
                                     <TdComponent things={val.date} />
                                     <TdComponent things={val.time} />
                                     <TdComponent things={val.event_location} />
                                     <TdComponent things={val.points} />
-                                    <TdComponent things={<button className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
+                                    <TdComponent things={<button
+                                        onClick={() => handleRequest(val.id)}
+                                        className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
                                 </tr>
                             )
                         })}

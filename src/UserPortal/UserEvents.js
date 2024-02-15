@@ -7,21 +7,27 @@ import Loader from '../Helper Components/Loader';
 
 function UserEvents() {
     const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState(1);
-    // useEffect(() => {
-    //     const accessToken = localStorage.getItem('access_token');
-    //     if (!accessToken) {
-    //         navigate('/');
-    //     } else {
-    //         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
-    //             console.log(res.data?.user);
-    //             setUserInfo(res.data?.user);
-    //         }).catch((error) => {
-    //             console.error('Error fetching user data:', error);
-    //             navigate('/');
-    //         });
-    //     }
-    // }, [navigate]);
+    const [userInfo, setUserInfo] = useState(0);
+    const waah = 0;
+    const accessToken = localStorage.getItem('access_token');
+
+    const handleShow = () => {
+        axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+            console.log(res.data?.user);
+            setUserInfo(res.data?.user);
+        }).catch((error) => {
+            console.error('Error fetching user data:', error);
+            navigate('/');
+        });
+    }
+    useEffect(() => {
+        if (!accessToken) {
+            navigate('/');
+        } else {
+            navigate('/user/events')
+            handleShow();
+        }
+    }, []);
 
     return (
         userInfo ? (
@@ -32,7 +38,7 @@ function UserEvents() {
                 <div className='md:w-3/4'>
                     <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
                     <div className='flex justify-center max-h-full'>
-                        <Outlet context={[userInfo]} />
+                        <Outlet context={[userInfo, waah, handleShow]} />
                     </div>
                 </div>
             </div>

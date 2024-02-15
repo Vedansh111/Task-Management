@@ -6,11 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 function FilterDropDown(props) {
-    const [age, setAge] = useState('');
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
     return (
         <Box sx={{ width: '8rem', marginBottom: "8px" }} >
             <FormControl fullWidth>
@@ -18,11 +13,12 @@ function FilterDropDown(props) {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={age}
+                    value={props.age}
                     label="Age"
-                    onChange={handleChange}
+                    onChange={props.handleChange}
                 >
                     {props.items.map((val) => {
+                        console.log(val.name);
                         return <MenuItem value={val.no} key={val.no}>{val.name}</MenuItem>
                     })}
                 </Select>

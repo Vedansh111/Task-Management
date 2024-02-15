@@ -10,9 +10,9 @@ function AdminHeader(props) {
     }
     return (
         <div className='h-[5rem] w-full bg-[#ecf1e8] flex items-center border-[2px] border-black border-x-0 border-t-0 border-s-0'>
-            <div className='animate-fade-left animate-once animate-ease-out flex justify-around items-center ml-[45rem] w-[7rem]'>
+            <div className='animate-fade-left animate-once animate-ease-out flex justify-around items-center absolute right-[1rem]'>
                 {/* <Link to='user_profile'><IoMdSettings size={30} /></Link> */}
-                <div className='flex items-center justify-between h-full ml-[35rem]'>
+                <div className='flex items-center justify-between h-full '>
                     <img src={props.img} alt="img" className='rounded-full w-10 h-10' />
                     <div className='flex flex-col pl-2 ml-1'>
                         <h1 className='font-semibold'>{props.name}</h1>

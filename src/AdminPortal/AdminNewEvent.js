@@ -5,10 +5,10 @@ import InputSettings from '../Helper Components/InputSettings';
 import axios from 'axios';
 import UploadButton from '../Helper Components/UploadButton';
 import SubmitButton from '../Helper Components/SubmitButton';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 
-function AdminNewEvent() {
+function AdminNewEvent(props) {
     const initialValues = {
         event_name: '',
         event_location: '',
@@ -31,7 +31,14 @@ function AdminNewEvent() {
             formData.append('task[points]', values.points)
             formData.append('task[event_poster]', values.event_poster)
             axios.post('/api/v1/tasks', formData).then((res) => {
-                toast.success("Event created successfully!!!");
+                props.function();
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "New event has been created",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 console.log("post data", res);
             }).catch((err) => {
                 console.log(err);
