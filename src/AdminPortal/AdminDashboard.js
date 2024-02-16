@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
+import Loader from '../Helper Components/Loader';
 import { Outlet, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Loader from '../Helper Components/Loader';
 
 function AdminDashboard() {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState([]);
+    const accessToken = localStorage.getItem('access_token');
     useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
         if (!accessToken) {
             navigate('/');
         } else {
