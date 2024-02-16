@@ -12,8 +12,10 @@ function UserProfile() {
     const [accessToken, setAccessToken] = useState();
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
+
     }, [])
     const userInfo = useOutletContext();
+    // console.log(userInfo[2]);
     const initialValues = {
         name: userInfo[0]?.name,
         email: userInfo[0]?.email,
@@ -21,18 +23,19 @@ function UserProfile() {
         phone: userInfo[0]?.mobile_number,
         position: userInfo[0]?.role,
         address: userInfo[0]?.residential_address,
-        upload: '',
+        upload: userInfo[0]?.avatar,
     };
-
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
+            console.log(values);
             axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
                     email: values.email,
                     mobile_number: values.phone,
-                    residential_address: values.address
+                    residential_address: values.address,
+                    avatar_url: values.upload,
                 },
             })
                 .then((res) => {
@@ -41,10 +44,10 @@ function UserProfile() {
                     console.log(err);
                 })
             console.log(values);
+            userInfo[2]();
             toast.success("Your profile has been successfully updated.");
         },
     });
-
     return (
         <div className='flex w-full justify-center items-center mt-10'>
             <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>

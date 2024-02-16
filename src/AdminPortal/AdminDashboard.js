@@ -7,21 +7,21 @@ import Loader from '../Helper Components/Loader';
 
 function AdminDashboard() {
     const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState([1]);
-    // useEffect(() => {
-    //     const accessToken = localStorage.getItem('access_token');
-    //     if (!accessToken) {
-    //         navigate('/');
-    //     } else {
-    //         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
-    //             console.log(res.data?.user);
-    //             setUserInfo(res.data?.user);
-    //         }).catch((error) => {
-    //             console.error('Error fetching user data:', error);
-    //             navigate('/');
-    //         });
-    //     }
-    // }, [navigate]);
+    const [userInfo, setUserInfo] = useState([]);
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+            navigate('/');
+        } else {
+            axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+                // console.log(res.data?.user);
+                setUserInfo(res.data?.user);
+            }).catch((error) => {
+                console.error('Error fetching user data:', error);
+                navigate('/');
+            });
+        }
+    }, [navigate]);
     return (
         userInfo ? (
             <div className='h-screen flex font-jura text-[#500025] tracking-wider overflow-hidden'>

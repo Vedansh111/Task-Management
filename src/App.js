@@ -11,6 +11,7 @@ import AdminDashboard from './AdminPortal/AdminDashboard';
 import AdminEvents from './AdminPortal/AdminEvents';
 import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
+import ErrorPage from './Components/ErrorPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
                     <Route path="requests" element={<AdminRequests />} />
                     <Route path="points_history" element={<AdminPointsHistory />} />
                 </Route>
+                <Route path='*' element={<ErrorPage />} />
             </Routes>
         </Router>
     );
