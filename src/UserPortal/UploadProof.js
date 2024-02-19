@@ -1,37 +1,23 @@
 import axios from 'axios';
-import React, { useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import TdComponent from '../Helper Components/TdComponent';
 import ThComponent from '../Helper Components/ThComponent';
-import FilterDropDown from '../Helper Components/FilterDropDown';
+import DropDown from '../Helper Components/DropDown';
 import UploadButton from '../Helper Components/UploadButton';
 import EventsLoader from '../Helper Components/EventsLoader';
 
 function UploadProof() {
-    // const [tasks, setTasks] = useState(0);
-    const tasks = [1, 2, 3, 4, 5, 6, 7, 9, 8, 10]
+    const [tasks, setTasks] = useState(0);
     useEffect(() => {
         axios.get('api/v1/tasks').then((res) => {
             console.log(res.data?.tasks);
-            // setTasks(res.data?.tasks);
+            setTasks(res.data?.tasks);
         })
     }, [])
 
     return (tasks ?
-        <div className="w-[80%] rounded-md sm:rounded-lg border shadow-lg mt-8">
-            <FilterDropDown items={[
-                {
-                    name: 'Last Day',
-                    no: 10,
-                },
-                {
-                    name: 'Last Week',
-                    no: 20,
-                },
-                {
-                    name: 'Last Month',
-                    no: 30,
-                },
-            ]} />
+        <div className="w-[85%] rounded-md sm:rounded-lg border shadow-lg mt-8">
+            <DropDown />
             <div className='h-[70vh] overflow-scroll '>
                 <table className="w-full h-full bg-[#ecf1e8] text-lg text-center ">
                     <thead className=" text-gray-700 uppercase bg-[#c6cac3]">

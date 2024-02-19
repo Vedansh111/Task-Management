@@ -8,7 +8,6 @@ import Loader from '../Helper Components/Loader';
 function UserEvents() {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(0);
-    const waah = 0;
     const accessToken = localStorage.getItem('access_token');
 
     const handleShow = () => {
@@ -20,6 +19,7 @@ function UserEvents() {
             navigate('/');
         });
     }
+
     useEffect(() => {
         if (!accessToken) {
             navigate('/');
@@ -38,7 +38,7 @@ function UserEvents() {
                 <div className='md:w-3/4'>
                     <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
                     <div className='flex justify-center max-h-full'>
-                        <Outlet context={[userInfo, waah, handleShow]} />
+                        <Outlet context={[userInfo]} />
                     </div>
                 </div>
             </div>

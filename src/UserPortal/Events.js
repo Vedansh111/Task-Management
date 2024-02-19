@@ -1,23 +1,32 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
-import FilterDropDown from '../Helper Components/FilterDropDown';
 import axios from 'axios';
 import EventsLoader from '../Helper Components/EventsLoader';
+import DropDown from '../Helper Components/DropDown';
 import { useOutletContext } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 function Events() {
     const userInfo = useOutletContext();
     const [tasks, setTasks] = useState(0);
-    // const tasks = [1, 2, 3, 4, 5]
+    const [approveButton, setApproveButton] = useState(0);
+    const formData = new FormData();
 
     const handleRequest = useCallback((val) => {
-        const formData = new FormData();
         formData.append('participate[user_id]', userInfo[0]?.id);
         formData.append('participate[task_id]', val);
         axios.post('api/v1/participate_volunteers', formData).then((res) => {
             console.log(res);
+            // setApproveButton(val);
+            Swal.fire({
+                title: "Requested",
+                text: "Your request has been sent.",
+                icon: "success"
+            });
+            if (res.status === 'success') {
+                handleShow();
+            }
         }).catch((err) => {
             console.log(err);
         })
@@ -30,29 +39,17 @@ function Events() {
             setTasks(res.data?.tasks);
         })
     }
+
     useEffect(() => {
         handleShow();
     }, [])
 
     return (tasks ?
-        <div className="rounded-md sm:rounded-lg border shadow-lg mt-8">
-            <FilterDropDown items={[
-                {
-                    name: 'Last Day',
-                    no: 10,
-                },
-                {
-                    name: 'Last Week',
-                    no: 20,
-                },
-                {
-                    name: 'Last Month',
-                    no: 30,
-                },
-            ]} />
+        <div className="w-[85%] rounded-md sm:rounded-lg border shadow-lg mt-8">
+            <DropDown />
             <div className='h-[70vh] overflow-scroll'>
                 <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
-                    <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
+                    <thead className="text-gray-700 uppercase bg-[#c6cac3]">
                         <tr>
                             <ThComponent name='Event' />
                             <ThComponent name='Date' />
@@ -65,15 +62,18 @@ function Events() {
                     <tbody className=''>
                         {tasks.map((val) => {
                             return (
-                                <tr key={val.id} className=''>
+                                <tr key={val.id}>
                                     <TdComponent things={val.event_name} />
                                     <TdComponent things={val.date} />
                                     <TdComponent things={val.time} />
                                     <TdComponent things={val.event_location} />
                                     <TdComponent things={val.points} />
-                                    <TdComponent things={<button
-                                        onClick={() => handleRequest(val.id)}
-                                        className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
+                                    {approveButton ?
+                                        <TdComponent things={<div
+                                            className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>} />
+                                        : <TdComponent things={<button
+                                            onClick={() => handleRequest(val.id)}
+                                            className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />}
                                 </tr>
                             )
                         })}

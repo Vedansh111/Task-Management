@@ -24,12 +24,13 @@ function SignupPage() {
             navigate('/user/events', { replace: true });
         }
     }, [])
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: UserValidations,
         onSubmit: (values, action) => {
             setLoader(0);
-            axios.get('api/v1/users/app_credentials').then((res) => {
+            axios.get('api/v1/users/app_creds').then((res) => {
                 console.log("get data", res.data);
                 const formData = new FormData();
                 formData.append('user[email]', values.email)
@@ -48,7 +49,6 @@ function SignupPage() {
             }).catch((err) => {
                 console.log(err);
             })
-
             action.resetForm();
         },
     });

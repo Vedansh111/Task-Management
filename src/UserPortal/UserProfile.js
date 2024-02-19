@@ -7,15 +7,17 @@ import { useOutletContext } from "react-router-dom";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
 
 function UserProfile() {
     const [accessToken, setAccessToken] = useState();
+    const userInfo = useOutletContext();
+
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
 
     }, [])
-    const userInfo = useOutletContext();
-    // console.log(userInfo[2]);
+
     const initialValues = {
         name: userInfo[0]?.name,
         email: userInfo[0]?.email,
@@ -25,6 +27,7 @@ function UserProfile() {
         address: userInfo[0]?.residential_address,
         upload: userInfo[0]?.avatar,
     };
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
@@ -48,14 +51,39 @@ function UserProfile() {
             toast.success("Your profile has been successfully updated.");
         },
     });
+
+    const uploadButton = () => {
+        const { value: file } = Swal.fire({
+            title: "Select image",
+            input: "file",
+            inputAttributes: {
+                "accept": "image/*",
+                "aria-label": "Upload your profile picture"
+            }
+        });
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                Swal.fire({
+                    title: "Your uploaded picture",
+                    imageUrl: e.target.result,
+                    imageAlt: "The uploaded picture"
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     return (
         <div className='flex w-full justify-center items-center mt-10'>
             <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>
                 <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src={userInfo[0]?.avatar_url} alt="img" className='rounded-full w-10 h-10 mx-2' />
-                        <UploadButton title='Change Profile Picture ' />
+                        <img src={userInfo[0]?.avatar_url} alt="img" className='border border-black rounded-full w-10 h-10 mx-2' />
+                        <button
+                            className='border border-gray-500 text-white p-1 rounded-md bg-orange-800 hover:scale-105'
+                            onClick={uploadButton}>Upload Picture</button>
                     </div>
                     <InputSettings
                         title='Name'
@@ -90,16 +118,6 @@ function UserProfile() {
                         touched={touched.phone}
                         values={values.phone}
                         width='20rem' />
-                    {/* <InputSettings
-                        title='Position'
-                        type='position'
-                        name='position'
-                        placeholder='Enter your position'
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        errors={errors.position}
-                        touched={touched.position}
-                        values={values.position} /> */}
                     <InputSettings
                         title='Address'
                         type='address'
@@ -113,7 +131,9 @@ function UserProfile() {
                         width='20rem' />
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload Id</label>
-                        <UploadButton title='Aadhar Card/ Pan Card' />
+                        <button
+                            className='border border-gray-500 text-white p-1 rounded-md bg-orange-800 hover:scale-105'
+                            onClick={uploadButton}>Aadhar Card/ Pan Card</button>
                     </div>
                     <SubmitButton name='Save' />
                 </form>
