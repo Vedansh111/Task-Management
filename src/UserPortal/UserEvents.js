@@ -10,22 +10,23 @@ function UserEvents() {
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
 
-    const handleShow = () => {
-        axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
-            console.log(res.data?.user);
-            setUserInfo(res.data?.user);
-        }).catch((error) => {
-            console.error('Error fetching user data:', error);
-            navigate('/');
-        });
-    }
-
     useEffect(() => {
         if (!accessToken) {
             navigate('/');
         } else {
             navigate('/user/events')
-            handleShow();
+            axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+                setUserInfo(res.data?.user);
+                if (res?.data?.user?.role === 'admin') {
+                    navigate('/admin/events');
+                }
+                if (res?.data?.user?.role === 'volunteer') {
+                    navigate('/user/events');
+                }
+            }).catch((error) => {
+                console.error('Error fetching user data:', error);
+                navigate('/');
+            });
         }
     }, []);
 

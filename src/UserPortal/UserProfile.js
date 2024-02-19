@@ -2,21 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useFormik } from 'formik';
 import SubmitButton from '../Helper Components/SubmitButton';
 import InputSettings from '../Helper Components/InputSettings';
-import UploadButton from '../Helper Components/UploadButton';
 import { useOutletContext } from "react-router-dom";
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
 
 function UserProfile() {
     const [accessToken, setAccessToken] = useState();
     const userInfo = useOutletContext();
+    const [avatarUrl, setAvatarUrl] = useState();
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
-
     }, [])
+
 
     const initialValues = {
         name: userInfo[0]?.name,
@@ -25,35 +23,40 @@ function UserProfile() {
         phone: userInfo[0]?.mobile_number,
         position: userInfo[0]?.role,
         address: userInfo[0]?.residential_address,
-        upload: userInfo[0]?.avatar,
+        avatar: userInfo[0]?.avatar_url,
+        aadhar: userInfo[0]?.aadhar_card_url,
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
-            console.log(values);
-            axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
+            await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
                     email: values.email,
                     mobile_number: values.phone,
                     residential_address: values.address,
-                    avatar_url: values.upload,
+                    avatar: avatarUrl,
                 },
+            }, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
                 .then((res) => {
-                    console.log(res);
                 }).catch((err) => {
                     console.log(err);
                 })
-            console.log(values);
-            userInfo[2]();
-            toast.success("Your profile has been successfully updated.");
+            Swal.fire({
+                title: "Updated!!!",
+                text: "Your profile is updated.",
+                icon: "success"
+            });
         },
     });
 
-    const uploadButton = () => {
-        const { value: file } = Swal.fire({
+    const uploadAvatar = async () => {
+        const { value: file } = await Swal.fire({
             title: "Select image",
             input: "file",
             inputAttributes: {
@@ -62,10 +65,34 @@ function UserProfile() {
             }
         });
         if (file) {
+            setAvatarUrl(file[0]);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setAvatarUrl(e.target.files[0]);
+                Swal.fire({
+                    title: "Your uploaded picture",
+                    imageUrl: e.target.result,
+                    imageAlt: "The uploaded picture"
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const uploadAadhar = async () => {
+        const { value: file } = await Swal.fire({
+            title: "Select image",
+            input: "file",
+            inputAttributes: {
+                "accept": "image/*",
+                "aria-label": "Upload your Aadhar card/ Pan card"
+            }
+        });
+        if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 Swal.fire({
-                    title: "Your uploaded picture",
+                    title: "Your uploaded aadhar card",
                     imageUrl: e.target.result,
                     imageAlt: "The uploaded picture"
                 });
@@ -80,10 +107,11 @@ function UserProfile() {
                 <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src={userInfo[0]?.avatar_url} alt="img" className='border border-black rounded-full w-10 h-10 mx-2' />
+                        <img src="https://871d-2405-201-2026-3800-80a2-9b63-531a-6dfc.ngrok-free.app/rails/active_storage/disk/eyJfcmFpbHMiOnsiZGF0YSI6eyJrZXkiOiJpcTdqZGczb29nbGJoYXFvbTBlNTNlYW14eThzIiwiZGlzcG9zaXRpb24iOiJpbmxpbmU7IGZpbGVuYW1lPVwiaXN0b2NrcGhvdG8tODM4MDg5NzYyLTEwMjR4MTAyNC5qcGdcIjsgZmlsZW5hbWUqPVVURi04Jydpc3RvY2twaG90by04MzgwODk3NjItMTAyNHgxMDI0LmpwZyIsImNvbnRlbnRfdHlwZSI6ImltYWdlL2pwZWciLCJzZXJ2aWNlX25hbWUiOiJsb2NhbCJ9LCJleHAiOiIyMDI0LTAyLTE5VDEyOjQwOjI2LjkzMVoiLCJwdXIiOiJibG9iX2tleSJ9fQ==--2277e7e5dfd38c323eacce1aacbde045394e0dd2/istockphoto-838089762-1024x1024.jpg" alt="img" className='border border-gray-500 rounded-full w-10 h-10 mx-2' />
                         <button
-                            className='border border-gray-500 text-white p-1 rounded-md bg-orange-800 hover:scale-105'
-                            onClick={uploadButton}>Upload Picture</button>
+                            type='button'
+                            className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
+                            onClick={uploadAvatar}>Upload Picture</button>
                     </div>
                     <InputSettings
                         title='Name'
@@ -130,10 +158,11 @@ function UserProfile() {
                         values={values.address}
                         width='20rem' />
                     <div className=' flex p-2 m-2 items-center'>
-                        <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload Id</label>
+                        <label className=' text-lg font-semibold mr-3'>Upload Id</label>
                         <button
-                            className='border border-gray-500 text-white p-1 rounded-md bg-orange-800 hover:scale-105'
-                            onClick={uploadButton}>Aadhar Card/ Pan Card</button>
+                            type='button'
+                            className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
+                            onClick={uploadAadhar}>Aadhar Card/ Pan Card</button>
                     </div>
                     <SubmitButton name='Save' />
                 </form>

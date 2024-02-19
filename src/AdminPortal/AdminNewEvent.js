@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import InputSettings from '../Helper Components/InputSettings';
 import axios from 'axios';
-import UploadButton from '../Helper Components/UploadButton';
 import SubmitButton from '../Helper Components/SubmitButton';
 import Swal from 'sweetalert2';
 
-
 function AdminNewEvent(props) {
+
     const initialValues = {
         event_name: '',
         event_location: '',
@@ -18,6 +17,7 @@ function AdminNewEvent(props) {
         points: '',
         event_poster: '',
     };
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
@@ -35,7 +35,8 @@ function AdminNewEvent(props) {
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: "New event has been created",
+                    title: "Created!!!",
+                    text: "New event is created.",
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -46,8 +47,12 @@ function AdminNewEvent(props) {
             action.resetForm();
         },
     });
-    return (
 
+    const handleUpload = useCallback(() => {
+
+    }, [])
+
+    return (
         <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-7'>
             <Input
                 title='Event Name'
@@ -117,7 +122,9 @@ function AdminNewEvent(props) {
             </div>
             <div className=' flex p-1 m-2 items-center'>
                 <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload</label>
-                <UploadButton title='Event Poster' />
+                <button
+                    onClick={() => handleUpload()}
+                    className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload</button>
             </div>
             <SubmitButton name='Add Event' />
         </form>
