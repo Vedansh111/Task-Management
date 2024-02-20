@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TdComponent from '../Helper Components/TdComponent'
 import ThComponent from '../Helper Components/ThComponent'
 import EventsLoader from '../Helper Components/EventsLoader'
@@ -22,7 +22,7 @@ function AdminRequests() {
         })
     }
 
-    const deleteRequest = useCallback((val) => {
+    const deleteRequest = (val) => {
         console.log("current", val);
         Swal.fire({
             title: "Are you sure?",
@@ -47,9 +47,9 @@ function AdminRequests() {
                 });
             }
         });
-    }, []);
+    }
 
-    const approveRequest = useCallback((val) => {
+    const approveRequest = (val) => {
         console.log(val);
         axios.put(`api/v1/participate_volunteers/${val}/approved_request`)
             .then((res) => {
@@ -63,7 +63,7 @@ function AdminRequests() {
                     icon: "success"
                 });
             })
-    }, [])
+    }
 
     useEffect(() => {
         handleShow();

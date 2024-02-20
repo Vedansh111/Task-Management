@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import InputSettings from '../Helper Components/InputSettings';
@@ -21,7 +21,6 @@ function AdminNewEvent(props) {
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: (values, action) => {
-            console.log(values);
             const formData = new FormData();
             formData.append('task[event_name]', values.event_name)
             formData.append('task[event_location]', values.event_location)
@@ -48,9 +47,9 @@ function AdminNewEvent(props) {
         },
     });
 
-    const handleUpload = useCallback(() => {
+    const handleUpload = () => {
 
-    }, [])
+    }
 
     return (
         <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-7'>

@@ -5,7 +5,7 @@ import HoverComponent from '../Helper Components/HoverComponent';
 
 function UserSideBar(props) {
     return (
-        <div className='bg-[#ecf1e8] border-[1.8px] border-black border-t-0 border-b-0 flex flex-col items-center'>
+        <div className='h-full bg-[#ecf1e8] border-[1.8px] border-black border-t-0 border-b-0 flex flex-col items-center'>
             <h1 className='animate-fade animate-once animate-delay-[800ms] animate-ease-out p-4 text-4xl tracking-wider font-extrabold'>TaskNinja</h1>
             <div className='w-full border border-black mt-[6px]'></div>
 
@@ -13,7 +13,7 @@ function UserSideBar(props) {
             <HoverComponent to='status_events' name='Status Events' symbol={<FaClipboardList className='pr-1' />} />
             <HoverComponent to='upload_proof' name='Upload Proof' symbol={<HiMiniIdentification className='pr-1' />} />
 
-            <div className='w-full mt-[26rem] border-[1px] border-black'></div>
+            <div className='w-full mt-[27.8rem] border-[1px] border-black'></div>
             <div className='animate-fade-right animate-once animate-ease-out flex items-center justify-between mt-[0.8rem]'>
                 <img src={props.img} alt="img" className='border border-gray-500 rounded-full w-10 h-10' />
                 <div className='flex flex-col px-2'>
