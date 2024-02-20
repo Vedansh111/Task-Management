@@ -4,9 +4,7 @@ import Input from '../Helper Components/Input';
 import SubmitButton from '../Helper Components/SubmitButton';
 import LinkTo from '../Helper Components/LinkTo';
 import Loader from '../Helper Components/Loader';
-import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-// import AdminLoader from '../Helper Components/AdminLoader';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -58,7 +56,8 @@ function LoginPage() {
                         });
                         Toast.fire({
                             icon: "success",
-                            title: `Welcome ${res?.data?.user?.email}`
+                            title: `Welcome ${res?.data?.user?.email}`,
+                            timer: 2000,
                         });
 
                     }).catch((err) => {

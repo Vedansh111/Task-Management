@@ -8,7 +8,7 @@ function AdminPointsHistory(props) {
     return (
         tasks ? (
             <div className="w-[85%] rounded-md sm:rounded-lg mt-10 border shadow-lg">
-                <div className='h-[70vh] overflow-scroll'>
+                <div className='h-[70vh] overflow-y-scroll'>
                     <table className="bg-[#ecf1e8] w-full h-full text-gray-900 text-center ">
                         <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
                             <tr>

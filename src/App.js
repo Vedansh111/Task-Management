@@ -11,6 +11,7 @@ import AdminDashboard from './AdminPortal/AdminDashboard';
 import AdminEvents from './AdminPortal/AdminEvents';
 import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
+import UserRequestedEvents from './UserPortal/UserRequestedEvents';
 import ErrorPage from './Components/ErrorPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ export default function App() {
                 <Route path="/forgot_password" element={<ForgetPasswordPage />} />
                 <Route path="user/" element={<UserEvents />}>
                     <Route path="events" element={<Events />} />
+                    <Route path="status_events" element={<UserRequestedEvents />} />
                     <Route path="upload_proof" element={<UploadProof />} />
                     <Route path="user_profile" element={<UserProfile />} />
                 </Route>

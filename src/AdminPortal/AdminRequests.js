@@ -73,7 +73,7 @@ function AdminRequests() {
         tasks ? (
             <div className="w-[85%] rounded-md sm:rounded-lg border shadow-lg mt-10">
                 <DropDown handleChange={handleChange} />
-                <div className=' h-[70vh] overflow-scroll'>
+                <div className=' h-[70vh] overflow-y-scroll'>
                     <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
                         <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
                             <tr>

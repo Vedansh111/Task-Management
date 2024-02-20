@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
 function AdminEvents() {
     const [isOpen, setIsOpen] = useState(false);
     const [tasks, setTasks] = useState(0);
-    const formData = new FormData();
 
     const handleAdd = () => {
         setIsOpen(true);
@@ -20,15 +19,17 @@ function AdminEvents() {
     }
 
     const editEvent = useCallback(async (val) => {
+        console.log(val);
         const { value: formValues } = await Swal.fire({
             title: "Edit the event",
-            html: `
-              <input id="swal-input1" class="swal2-input">
-              <input id="swal-input2" class="swal2-input">
-              <input id="swal-input3" class="swal2-input">
-              <input id="swal-input4" class="swal2-input">
+            html: `  
+            Event Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Event Name..."><br/>
+            Date:<input type="date" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Date..."><br/>
+            Time:<input type="time" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Time..."><br/>
+            Points:<input type="text" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Points...">
             `,
             focusConfirm: false,
+            showCancelButton: true,
             preConfirm: () => {
                 return [
                     document.getElementById("swal-input1").value,
@@ -39,19 +40,21 @@ function AdminEvents() {
             }
         });
         if (formValues) {
-            console.log(formValues);
-            formData.append('task[points]', formValues[0])
-            formData.append('task[points]', formValues[0])
-            axios.put(`api/v1/${val}`).then((res) => {
-                console.log(res.data?.tasks);
-                setTasks(res.data?.tasks);
+            const formData = new FormData();
+            formData.append('task[event_name]', formValues[0])
+            formData.append('task[date]', formValues[1])
+            formData.append('task[time]', formValues[2])
+            formData.append('task[points]', formValues[3])
+            axios.put(`api/v1/tasks/${val}`, formData).then((res) => {
+                console.log(res);
+                if (res.data) {
+                    handleShow();
+                }
             })
-            Swal.fire(JSON.stringify(formValues));
         }
     }, [])
 
     const deleteEvent = useCallback((val) => {
-        console.log("current", val);
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -69,8 +72,8 @@ function AdminEvents() {
                     }
                 })
                 Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
+                    title: "Deleted!!!",
+                    text: "Your event is deleted.",
                     icon: "success"
                 });
             }
@@ -79,7 +82,7 @@ function AdminEvents() {
 
     const handleShow = useCallback(() => {
         axios.get('api/v1/tasks').then((res) => {
-            console.log(res.data?.tasks);
+            console.log(res?.data?.tasks);
             setTasks(res.data?.tasks);
         })
     }, [])
@@ -109,7 +112,7 @@ function AdminEvents() {
                 }
                 <div className=" rounded-md sm:rounded-lg">
                     <DropDown />
-                    <div className=' h-[70vh] overflow-scroll'>
+                    <div className=' h-[70vh] overflow--y-scroll'>
                         <table className="bg-[#ecf1e8] text-gray-900 w-full h-full text-center ">
                             <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
                                 <tr>
@@ -130,7 +133,7 @@ function AdminEvents() {
                                             <TdComponent things={val.time} />
                                             <TdComponent things={<button className="font-semibold text-gray-600 border border-black p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline /></button>} />
                                             <TdComponent things={<button
-                                                onClick={editEvent}
+                                                onClick={() => editEvent(val.id)}
                                                 className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Edit</button>} />
                                             <TdComponent things={<button
                                                 onClick={() => deleteEvent(val.id)}

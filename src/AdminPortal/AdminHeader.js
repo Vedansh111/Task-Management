@@ -1,5 +1,4 @@
 import React from 'react'
-import { CgProfile } from 'react-icons/cg';
 import { MdOutlinePowerSettingsNew } from "react-icons/md";
 import { Link } from 'react-router-dom';
 
@@ -13,7 +12,7 @@ function AdminHeader(props) {
             <div className='animate-fade-left animate-once animate-ease-out flex justify-around items-center absolute right-[1rem]'>
                 {/* <Link to='user_profile'><IoMdSettings size={30} /></Link> */}
                 <div className='flex items-center justify-between h-full '>
-                    <img src={props.img} alt="img" className='rounded-full w-10 h-10' />
+                    <img src={props.img} alt="img" className='border border-gray-500 rounded-full w-10 h-10' />
                     <div className='flex flex-col pl-2 ml-1'>
                         <h1 className='font-semibold'>{props.name}</h1>
                         <h1 className='font-medium'>{props.email}</h1>
