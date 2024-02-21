@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import Loader from '../Helper Components/Loader';
@@ -15,10 +15,8 @@ function AdminDashboard() {
             navigate('/');
         } else {
             axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
-                console.log(res.data?.user);
                 setUserInfo(res.data?.user);
                 if (res?.data?.user?.role === 'admin') {
-
                     navigate('/admin/events');
                 }
                 if (res?.data?.user?.role === 'volunteer') {

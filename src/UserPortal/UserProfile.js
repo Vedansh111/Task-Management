@@ -10,11 +10,11 @@ function UserProfile() {
     const [accessToken, setAccessToken] = useState();
     const userInfo = useOutletContext();
     const [avatarUrl, setAvatarUrl] = useState();
+    const [aadharCardUrl, setAadharCardUrl] = useState();
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
     }, [])
-
 
     const initialValues = {
         name: userInfo[0]?.name,
@@ -24,7 +24,7 @@ function UserProfile() {
         position: userInfo[0]?.role,
         address: userInfo[0]?.residential_address,
         avatar: userInfo[0]?.avatar_url,
-        aadhar: userInfo[0]?.aadhar_card_url,
+        aadhar_card: userInfo[0]?.aadhar_card_url,
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
@@ -37,6 +37,7 @@ function UserProfile() {
                     mobile_number: values.phone,
                     residential_address: values.address,
                     avatar: avatarUrl,
+                    aadhar_card: aadharCardUrl,
                 },
             }, {
                 headers: {
@@ -44,6 +45,7 @@ function UserProfile() {
                 }
             })
                 .then((res) => {
+                    console.log(res);
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -65,10 +67,9 @@ function UserProfile() {
             }
         });
         if (file) {
-            setAvatarUrl(file[0]);
+            setAvatarUrl(file);
             const reader = new FileReader();
             reader.onload = (e) => {
-                setAvatarUrl(e.target.files[0]);
                 Swal.fire({
                     title: "Your uploaded picture",
                     imageUrl: e.target.result,
@@ -89,6 +90,7 @@ function UserProfile() {
             }
         });
         if (file) {
+            setAadharCardUrl(file);
             const reader = new FileReader();
             reader.onload = (e) => {
                 Swal.fire({
@@ -100,14 +102,16 @@ function UserProfile() {
             reader.readAsDataURL(file);
         }
     }
-
+    console.log(typeof (userInfo[0]?.avatar_url));
+    console.log(userInfo[0]?.avatar_url);
     return (
         <div className='flex w-full justify-center items-center mt-10'>
             <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>
                 <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src="https://871d-2405-201-2026-3800-80a2-9b63-531a-6dfc.ngrok-free.app/rails/active_storage/disk/eyJfcmFpbHMiOnsiZGF0YSI6eyJrZXkiOiJpcTdqZGczb29nbGJoYXFvbTBlNTNlYW14eThzIiwiZGlzcG9zaXRpb24iOiJpbmxpbmU7IGZpbGVuYW1lPVwiaXN0b2NrcGhvdG8tODM4MDg5NzYyLTEwMjR4MTAyNC5qcGdcIjsgZmlsZW5hbWUqPVVURi04Jydpc3RvY2twaG90by04MzgwODk3NjItMTAyNHgxMDI0LmpwZyIsImNvbnRlbnRfdHlwZSI6ImltYWdlL2pwZWciLCJzZXJ2aWNlX25hbWUiOiJsb2NhbCJ9LCJleHAiOiIyMDI0LTAyLTE5VDEyOjQwOjI2LjkzMVoiLCJwdXIiOiJibG9iX2tleSJ9fQ==--2277e7e5dfd38c323eacce1aacbde045394e0dd2/istockphoto-838089762-1024x1024.jpg" alt="img" className='border border-gray-500 rounded-full w-10 h-10 mx-2' />
+                        <img src={'https://e5b4-2405-201-2026-3800-34a4-1f63-b87b-eb45.ngrok-free.app/rails/active_storage/disk/eyJfcmFpbHMiO[…]alexander-hipp-iEEBWgY_6lA-unsplash.jpg'} alt="img"
+                            className='border object-center border-gray-500 rounded-full w-10 h-10 mx-2' />
                         <button
                             type='button'
                             className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
@@ -167,6 +171,8 @@ function UserProfile() {
                     <SubmitButton name='Save' />
                 </form>
             </div>
+            <img src="https://e5b4-2405-201-2026-3800-34a4-1f63-b87b-eb45.ngrok-free.app/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6NDEsInB1ciI6ImJsb2JfaWQifX0=--6c0a1cf1509939b04f6602b95af782ada114c385/jose-alejandro-cuffia-k1LNP6dnyAE-unsplash.jpg" alt=""
+                className='border border-gray-500 w-full h-full mx-2' />
         </div>
     )
 }

@@ -16,6 +16,7 @@ function UserEvents() {
         } else {
             navigate('/user/events')
             axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+                console.log(res.data?.user);
                 setUserInfo(res.data?.user);
                 if (res?.data?.user?.role === 'admin') {
                     navigate('/admin/events');

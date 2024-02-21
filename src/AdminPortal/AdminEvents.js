@@ -18,7 +18,7 @@ function AdminEvents() {
         handleShow();
     }
 
-    const editEvent = useCallback(async (val) => {
+    const editEvent = async (val) => {
         console.log(val);
         const { value: formValues } = await Swal.fire({
             title: "Edit the event",
@@ -52,9 +52,9 @@ function AdminEvents() {
                 }
             })
         }
-    }, [])
-
-    const deleteEvent = useCallback((val) => {
+    }
+    
+    const deleteEvent = (val) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -66,7 +66,6 @@ function AdminEvents() {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`api/v1/tasks/${val}`).then((res) => {
-                    // console.log(res);
                     if (res.status === 200) {
                         handleShow();
                     }
@@ -78,11 +77,10 @@ function AdminEvents() {
                 });
             }
         });
-    }, [])
+    }
 
     const handleShow = useCallback(() => {
         axios.get('api/v1/tasks').then((res) => {
-            console.log(res?.data?.tasks);
             setTasks(res.data?.tasks);
         })
     }, [])
@@ -93,7 +91,7 @@ function AdminEvents() {
 
     return (
         tasks ? (
-            <div className="w-[80%] mt-8 rounded-md sm:rounded-lg border shadow-lg">
+            <div className="w-[80%] mt-[4rem] rounded-md sm:rounded-lg border shadow-lg">
                 {isOpen ?
                     <div
                         className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-fit absolute right-[4px] bg-[#ecf1e8f3] shadow-md'>
@@ -111,7 +109,7 @@ function AdminEvents() {
                     </div>
                 }
                 <div className=" rounded-md sm:rounded-lg">
-                    <DropDown />
+                    {/* <DropDown /> */}
                     <div className=' h-[70vh] overflow--y-scroll'>
                         <table className="bg-[#ecf1e8] text-gray-900 w-full h-full text-center ">
                             <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
