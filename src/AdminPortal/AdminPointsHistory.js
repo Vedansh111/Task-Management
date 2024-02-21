@@ -20,7 +20,7 @@ function AdminPointsHistory(props) {
                         <tbody className=''>
                             {tasks.map((val) => {
                                 return (
-                                    <tr key={val.id}>
+                                    <tr key={val}>
                                         <TdComponent things={val.user} />
                                         <TdComponent things={val.points} />
                                         <TdComponent things={val.redeemed} />

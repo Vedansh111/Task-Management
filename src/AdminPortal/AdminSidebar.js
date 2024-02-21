@@ -11,7 +11,8 @@ function AdminSidebar() {
             <div className='w-full border border-black mt-[6px]'></div>
 
             <HoverComponent to='events' name='Events' symbol={<FaClipboardList className='pr-1' />} />
-            <HoverComponent to='requests' name='Requests' symbol={<IoBriefcaseOutline className='pr-1' />} />
+            <HoverComponent to='participate_requests' name='Participate Requests' symbol={<IoBriefcaseOutline className='pr-1' />} />
+            <HoverComponent to='proof_requests' name='Proof Requests' symbol={<IoBriefcaseOutline className='pr-1' />} />
             <HoverComponent to='points_history' name='Points History' symbol={<HiMiniIdentification className='pr-1' />} />
         </div >
     )

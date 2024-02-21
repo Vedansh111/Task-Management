@@ -5,7 +5,7 @@ function Loader() {
             {/* Sidebar */}
             <div className='h-screen'>
                 <div className='  w-[24rem] h-full bg-[#ecf1e8] border border-gray-400 border-t-0 flex flex-col items-center'>
-                    <div className=" h-[5rem] my-[1.53rem] p-3 w-[13rem] bg-gray-300 rounded"></div>
+                    <div className=" h-[4rem] my-[1.53rem] p-3 w-[13rem] bg-gray-300 rounded"></div>
                     <div className='w-full border border-gray-400 '></div>
                     <div className='flex flex-col justify-center items-center text-3xl w-full my-[1.5rem]'>
                         <div className=" h-[1rem] my-[1rem] p-3 w-[9rem] bg-gray-300 rounded col-span-2"></div>

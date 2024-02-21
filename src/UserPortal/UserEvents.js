@@ -10,24 +10,28 @@ function UserEvents() {
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
 
+    const fetchUserData = async () => {
+        axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
+            console.log(res.data?.user);
+            setUserInfo(res.data?.user);
+            if (res?.data?.user?.role === 'admin') {
+                navigate('/admin/events');
+            }
+            if (res?.data?.user?.role === 'volunteer') {
+                navigate('/user/events');
+            }
+        }).catch((error) => {
+            console.error('Error fetching user data:', error);
+            navigate('/');
+        });
+    }
+
     useEffect(() => {
         if (!accessToken) {
             navigate('/');
         } else {
             navigate('/user/events')
-            axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
-                console.log(res.data?.user);
-                setUserInfo(res.data?.user);
-                if (res?.data?.user?.role === 'admin') {
-                    navigate('/admin/events');
-                }
-                if (res?.data?.user?.role === 'volunteer') {
-                    navigate('/user/events');
-                }
-            }).catch((error) => {
-                console.error('Error fetching user data:', error);
-                navigate('/');
-            });
+            fetchUserData();
         }
     }, []);
 
@@ -40,7 +44,7 @@ function UserEvents() {
                 <div className='md:w-3/4'>
                     <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
                     <div className='flex justify-center max-h-full'>
-                        <Outlet context={[userInfo]} />
+                        <Outlet context={[userInfo, fetchUserData]} />
                     </div>
                 </div>
             </div>

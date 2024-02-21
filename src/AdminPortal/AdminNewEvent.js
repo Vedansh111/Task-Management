@@ -120,10 +120,10 @@ function AdminNewEvent(props) {
                     width='9rem' />
             </div>
             <div className=' flex p-1 m-2 items-center'>
-                <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Upload</label>
+                <label className=' text-lg font-semibold mr-3'>Upload</label>
                 <button
                     onClick={() => handleUpload()}
-                    className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload</button>
+                    className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload Poster</button>
             </div>
             <SubmitButton name='Add Event' />
         </form>
