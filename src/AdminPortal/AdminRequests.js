@@ -13,10 +13,10 @@ function AdminRequests() {
 
     const handleChange = (event) => {
         setAge(event.target.value);
+
     };
 
     const handleShow = () => {
-        console.log(age);
         axios.get(`api/v1/participate_volunteers?request_type=${age}`).then((res) => {
             console.log(res?.data?.participate_volunteer);
             setTasks(res?.data?.participate_volunteer);
@@ -24,7 +24,6 @@ function AdminRequests() {
     }
 
     const deleteRequest = (val) => {
-        console.log("current", val);
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -51,7 +50,6 @@ function AdminRequests() {
     }
 
     const approveRequest = (val) => {
-        console.log(val);
         axios.put(`api/v1/participate_volunteers/${val}/approved_request`)
             .then((res) => {
                 console.log(res);
@@ -73,7 +71,7 @@ function AdminRequests() {
     return (
         tasks ? (
             <div className="w-[85%] rounded-md sm:rounded-lg border shadow-lg mt-10">
-                <DropDown handleChange={handleChange} items={items}/>
+                <DropDown handleChange={handleChange} items={items} />
                 <div className=' h-[70vh] overflow-y-scroll'>
                     <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
                         <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
@@ -95,34 +93,40 @@ function AdminRequests() {
                             </tr>
                         </thead>
                         <tbody className=''>
-                            {tasks.map((val) => {
-                                return (
-                                    <tr key={val.id}>
-                                        <TdComponent things={val?.task?.event_name} />
-                                        <TdComponent things={val?.user?.name} />
-                                        <TdComponent things={val?.user?.email} />
-                                        <TdComponent things={val?.user?.mobile_number} />
-                                        {(val?.participate_request === 'approved' ?
-                                            <>
-                                                <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white">Approved</div>} />
-                                            </>
-                                            :
-                                            ""
-                                        )}
-                                        {(val?.participate_request === 'pending' ?
-                                            <>
-                                                <TdComponent things={<button
-                                                    onClick={() => approveRequest(val.id)}
-                                                    className="font-semibold text-green-600 border border-black p-1 rounded-md hover:bg-[#34cc40] hover:text-white">Approve</button>} />
-                                                <TdComponent things={<button
-                                                    onClick={() => deleteRequest(val.id)}
-                                                    className="font-semibold text-red-600 border border-black p-1 rounded-md hover:bg-[#c43e19] hover:text-white" >Reject</button>} />
-                                            </> :
-                                            ""
-                                        )}
-                                    </tr>
+                            {tasks.length === 0 ?
+                                <td className='text-2xl' colSpan={5}>No Data Found!!!</td> :
+                                (
+                                    tasks.map((val) => {
+                                        return (
+
+                                            <tr key={val.id}>
+                                                <TdComponent things={val?.task?.event_name} />
+                                                <TdComponent things={val?.user?.name} />
+                                                <TdComponent things={val?.user?.email} />
+                                                <TdComponent things={val?.user?.mobile_number} />
+                                                {(val?.participate_request === 'approved' ?
+                                                    <>
+                                                        <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white">Approved</div>} />
+                                                    </>
+                                                    :
+                                                    ""
+                                                )}
+                                                {(val?.participate_request === 'pending' ?
+                                                    <>
+                                                        <TdComponent things={<button
+                                                            onClick={() => approveRequest(val.id)}
+                                                            className="font-semibold text-green-600 border border-black p-1 rounded-md hover:bg-[#34cc40] hover:text-white">Approve</button>} />
+                                                        <TdComponent things={<button
+                                                            onClick={() => deleteRequest(val.id)}
+                                                            className="font-semibold text-red-600 border border-black p-1 rounded-md hover:bg-[#c43e19] hover:text-white" >Reject</button>} />
+                                                    </> :
+                                                    ""
+                                                )}
+                                            </tr>
+                                        )
+                                    })
                                 )
-                            })}
+                            }
                         </tbody>
                     </table>
                 </div>

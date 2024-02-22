@@ -8,14 +8,13 @@ import DropDown from '../Helper Components/DropDown';
 function UserRequestedEvents() {
     const [tasks, setTasks] = useState(0);
     const [age, setAge] = useState('pending');
-    const items = ['pending', 'approved'];
+    const items = ['pending', 'approved', 'rejected'];
 
     const handleChange = (e) => {
         setAge(e.target.value);
     };
 
     const handleShow = () => {
-        console.log(age);
         axios.get(`api/v1/participate_volunteers?request_type=${age}`).then((res) => {
             console.log(res?.data?.participate_volunteer);
             setTasks(res?.data?.participate_volunteer);
@@ -41,28 +40,36 @@ function UserRequestedEvents() {
                             <ThComponent name='Status' />
                         </tr>
                     </thead>
-                    <tbody className=''>
-                        {tasks.map((val) => {
-                            return (
-                                <tr key={val.id}>
-                                    <TdComponent things={val.task.event_name} />
-                                    <TdComponent things={val.task.date} />
-                                    <TdComponent things={val.task.time} />
-                                    <TdComponent things={val.task.event_location} />
-                                    <TdComponent things={val.task.points} />
-                                    {age === 'pending' ?
-                                        <TdComponent things={<div
-                                            className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>} />
-                                        :
-                                        <TdComponent things={<div
-                                            className="font-semibold text-white border bg-green-600 border-green-400 p-1 rounded-md">Approved</div>} />
-                                    }
-
-
-                                </tr>
-                            )
-                        })}
-
+                    <tbody>
+                        {tasks.length === 0 ?
+                            <td className='text-2xl' colSpan={8}>No Data Found!!!</td> :
+                            (tasks.map((val) => {
+                                return (
+                                    <tr key={val.id}>
+                                        <TdComponent things={val.task.event_name} />
+                                        <TdComponent things={val.task.date} />
+                                        <TdComponent things={val.task.time} />
+                                        <TdComponent things={val.task.event_location} />
+                                        <TdComponent things={val.task.points} />
+                                        {age === 'pending' ?
+                                            <TdComponent things={<div
+                                                className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>
+                                            } /> : ""
+                                        }
+                                        {age === 'approved' ?
+                                            <TdComponent things={<div
+                                                className="font-semibold text-white border bg-green-600 border-green-400 p-1 rounded-md">Approved</div>
+                                            } /> : ""
+                                        }
+                                        {age === 'rejected' ?
+                                            <TdComponent things={<div
+                                                className="font-semibold text-white border bg-red-600 border-red-400 p-1 rounded-md">Rejected</div>
+                                            } /> : ""
+                                        }
+                                    </tr>
+                                )
+                            }))
+                        }
                     </tbody>
                 </table>
             </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import InputSettings from '../Helper Components/InputSettings';
@@ -7,6 +7,7 @@ import SubmitButton from '../Helper Components/SubmitButton';
 import Swal from 'sweetalert2';
 
 function AdminNewEvent(props) {
+    const [proof, setProof] = useState("");
 
     const initialValues = {
         event_name: '',
@@ -15,7 +16,6 @@ function AdminNewEvent(props) {
         date: '',
         time: '',
         points: '',
-        event_poster: '',
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
@@ -28,7 +28,7 @@ function AdminNewEvent(props) {
             formData.append('task[date]', values.date)
             formData.append('task[time]', values.time)
             formData.append('task[points]', values.points)
-            formData.append('task[event_poster]', values.event_poster)
+            formData.append('task[event_poster]', proof)
             axios.post('/api/v1/tasks', formData).then((res) => {
                 props.function();
                 Swal.fire({
@@ -48,7 +48,26 @@ function AdminNewEvent(props) {
     });
 
     const handleUpload = () => {
-
+        const { value: file } = Swal.fire({
+            title: "Select image",
+            input: "file",
+            inputAttributes: {
+                "accept": "image/*",
+                "aria-label": "Upload your Aadhar card/ Pan card"
+            }
+        });
+        if (file) {
+            setProof(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                Swal.fire({
+                    title: "Your uploaded poster!",
+                    imageUrl: e.target.result,
+                    imageAlt: "The uploaded poster"
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     return (
@@ -122,7 +141,8 @@ function AdminNewEvent(props) {
             <div className=' flex p-1 m-2 items-center'>
                 <label className=' text-lg font-semibold mr-3'>Upload</label>
                 <button
-                    onClick={() => handleUpload()}
+                    type='button'
+                    onClick={handleUpload}
                     className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload Poster</button>
             </div>
             <SubmitButton name='Add Event' />
