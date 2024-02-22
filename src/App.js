@@ -11,6 +11,7 @@ import AdminDashboard from './AdminPortal/AdminDashboard';
 import AdminEvents from './AdminPortal/AdminEvents';
 import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
+import AdminProofRequests from './AdminPortal/AdminProofRequests';
 import UserRequestedEvents from './UserPortal/UserRequestedEvents';
 import ErrorPage from './Components/ErrorPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -33,7 +34,8 @@ export default function App() {
                 </Route>
                 <Route path="admin/" element={<AdminDashboard />}>
                     <Route path="events" element={<AdminEvents />} />
-                    <Route path="requests" element={<AdminRequests />} />
+                    <Route path="participate_requests" element={<AdminRequests />} />
+                    <Route path="proof_requests" element={<AdminProofRequests />} />
                     <Route path="points_history" element={<AdminPointsHistory />} />
                 </Route>
                 <Route path='*' element={<ErrorPage />} />

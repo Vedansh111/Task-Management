@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import OtpInput from '../Helper Components/OtpInput';
 import { Link } from 'react-router-dom';
 import SubmitButton from '../Helper Components/SubmitButton';
-import axios from 'axios';
 
 function OtpPage() {
     const [enterOtp, setEnterOtp] = useState(false);
@@ -11,7 +10,6 @@ function OtpPage() {
     const ids = [1, 2, 3, 4];
 
     function handleClick() {
-        axios.post(`api/v1/users/send_otp?access_token=${access_token}`)
         setEnterOtp(true);
         const inputs = document.querySelectorAll('#otp > *[id]');
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import AdminNewEvent from './AdminNewEvent';
 import { IoAddCircle } from "react-icons/io5";
-import { IoArrowBackCircleSharp, IoShareSocialOutline } from "react-icons/io5";
+import { FaCircleArrowRight } from "react-icons/fa6";
+import { IoShareSocialOutline } from "react-icons/io5";
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
-import DropDown from '../Helper Components/DropDown'
 import axios from 'axios';
 import EventsLoader from '../Helper Components/EventsLoader';
 import Swal from 'sweetalert2';
@@ -53,7 +53,7 @@ function AdminEvents() {
             })
         }
     }
-    
+
     const deleteEvent = (val) => {
         Swal.fire({
             title: "Are you sure?",
@@ -63,9 +63,9 @@ function AdminEvents() {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                axios.delete(`api/v1/tasks/${val}`).then((res) => {
+                await axios.delete(`api/v1/tasks/${val}`).then((res) => {
                     if (res.status === 200) {
                         handleShow();
                     }
@@ -94,9 +94,9 @@ function AdminEvents() {
             <div className="w-[80%] mt-[4rem] rounded-md sm:rounded-lg border shadow-lg">
                 {isOpen ?
                     <div
-                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-fit absolute right-[4px] bg-[#ecf1e8f3] shadow-md'>
+                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30.5%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-fit absolute right-[4px] bg-[#ecf1e8f3] shadow-md'>
                         <button
-                            onClick={() => setIsOpen(false)} className='mx-2 my-2' c><IoArrowBackCircleSharp size={45} /></button>
+                            onClick={() => setIsOpen(false)} className='mx-3 my-3' ><FaCircleArrowRight size={35} /></button>
                         <AdminNewEvent function={handleShow} />
                     </div> :
                     <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute right-3'>

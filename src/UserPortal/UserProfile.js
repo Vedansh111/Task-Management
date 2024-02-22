@@ -8,28 +8,38 @@ import Swal from 'sweetalert2';
 
 function UserProfile() {
     const [accessToken, setAccessToken] = useState();
-    const userInfo = useOutletContext();
-    const [avatarUrl, setAvatarUrl] = useState();
-    const [aadharCardUrl, setAadharCardUrl] = useState();
+    const [userInfo, fetchUserData] = useOutletContext();
+    const [avatarUrl, setAvatarUrl] = useState("");
+    const [aadharCardUrl, setAadharCardUrl] = useState("");
+    const [imageSrc, setImageSrc] = useState('');
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
     }, [])
 
     const initialValues = {
-        name: userInfo[0]?.name,
-        email: userInfo[0]?.email,
-        password: userInfo[0]?.password,
-        phone: userInfo[0]?.mobile_number,
-        position: userInfo[0]?.role,
-        address: userInfo[0]?.residential_address,
-        avatar: userInfo[0]?.avatar_url,
-        aadhar_card: userInfo[0]?.aadhar_card_url,
+        name: userInfo.name,
+        email: userInfo.email,
+        password: userInfo.password,
+        phone: userInfo.mobile_number,
+        position: userInfo.role,
+        address: userInfo.residential_address,
+        avatar: userInfo.avatar_url,
+        aadhar_card: userInfo.aadhar_card_url,
     };
+
+    useEffect(() => {
+        async function loadImage() {
+            const src = await convertImageToBase64(userInfo.avatar_url);
+            setImageSrc(src);
+        }
+        loadImage();
+    }, [userInfo.avatar_url]);
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
+
             await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
@@ -46,6 +56,7 @@ function UserProfile() {
             })
                 .then((res) => {
                     console.log(res);
+                    fetchUserData();
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -102,16 +113,37 @@ function UserProfile() {
             reader.readAsDataURL(file);
         }
     }
-    console.log(typeof (userInfo[0]?.avatar_url));
-    console.log(userInfo[0]?.avatar_url);
+
+    async function convertImageToBase64(imageUrl) {
+        try {
+            const response = await fetch(imageUrl, {
+                headers: {
+                    'ngrok-skip-browser-warning': true
+                }
+            });
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((resolve, reject) => {
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+                reader.onerror = reject;
+            });
+        } catch (error) {
+            console.error('Error converting image to base64:', error);
+            throw error;
+        }
+    }
+
     return (
         <div className='flex w-full justify-center items-center mt-10'>
             <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>
                 <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
-                        <label htmlFor='upload' className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src={'https://e5b4-2405-201-2026-3800-34a4-1f63-b87b-eb45.ngrok-free.app/rails/active_storage/disk/eyJfcmFpbHMiO[…]alexander-hipp-iEEBWgY_6lA-unsplash.jpg'} alt="img"
-                            className='border object-center border-gray-500 rounded-full w-10 h-10 mx-2' />
+                        <label className=' text-lg font-semibold mr-3'>Profile Picture</label>
+                        <img src={imageSrc} alt="img"
+                            className='object-center rounded-full w-[3rem] h-[3rem] mx-2' />
                         <button
                             type='button'
                             className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
@@ -171,8 +203,6 @@ function UserProfile() {
                     <SubmitButton name='Save' />
                 </form>
             </div>
-            <img src="https://e5b4-2405-201-2026-3800-34a4-1f63-b87b-eb45.ngrok-free.app/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6NDEsInB1ciI6ImJsb2JfaWQifX0=--6c0a1cf1509939b04f6602b95af782ada114c385/jose-alejandro-cuffia-k1LNP6dnyAE-unsplash.jpg" alt=""
-                className='border border-gray-500 w-full h-full mx-2' />
         </div>
     )
 }
