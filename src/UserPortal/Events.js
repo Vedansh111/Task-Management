@@ -59,24 +59,26 @@ function Events() {
                         </tr>
                     </thead>
                     <tbody className=''>
-                        {tasks.map((val) => {
-                            return (
-                                <tr key={val.id}>
-                                    <TdComponent things={val.event_name} />
-                                    <TdComponent things={val.date} />
-                                    <TdComponent things={val.time} />
-                                    <TdComponent things={val.event_location} />
-                                    <TdComponent things={val.points} />
-                                    {approveButton ?
-                                        <TdComponent things={<div
-                                            className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>} />
-                                        : <TdComponent things={<button
-                                            onClick={() => handleRequest(val.id)}
-                                            className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />}
-                                </tr>
-                            )
-                        })}
-
+                        {tasks.length === 0 ?
+                            <td className='text-2xl' colSpan={8}>No Data Found!!!</td> :
+                            (tasks.map((val) => {
+                                return (
+                                    <tr key={val.id}>
+                                        <TdComponent things={val.event_name} />
+                                        <TdComponent things={val.date} />
+                                        <TdComponent things={val.time} />
+                                        <TdComponent things={val.event_location} />
+                                        <TdComponent things={val.points} />
+                                        {approveButton ?
+                                            <TdComponent things={<div
+                                                className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>} />
+                                            : <TdComponent things={<button
+                                                onClick={() => handleRequest(val.id)}
+                                                className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />}
+                                    </tr>
+                                )
+                            }))
+                    }
                     </tbody>
                 </table>
             </div>

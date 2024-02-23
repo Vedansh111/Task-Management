@@ -54,95 +54,94 @@ function UploadProof() {
     }
 
     const handleLocation = async (val) => {
-    const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+
+        function success(pos) {
+            const crd = pos.coords;
+
+            console.log("Your current position is:");
+            console.log(`Latitude : ${crd.latitude}`);
+            console.log(`Longitude: ${crd.longitude}`);
+            console.log(`More or less ${crd.accuracy} meters.`);
+        }
+
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        // Get user's location
+        navigator.geolocation.getCurrentPosition(success, error, options);
+
+        // Create a button for capturing the photo
+        const captureButton = document.createElement('button');
+        captureButton.textContent = 'Capture Photo';
+        captureButton.style.position = 'fixed';
+        captureButton.style.top = '50%';
+        captureButton.style.left = '50%';
+        captureButton.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(captureButton);
+
+        // Open camera and take a photo when the button is clicked
+        captureButton.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                document.body.appendChild(video);
+                video.srcObject = stream;
+                await video.play();
+
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                const photo = canvas.toDataURL('image/jpeg');
+
+                // Close the camera stream
+                stream.getTracks().forEach(track => track.stop());
+                video.remove();
+                canvas.remove();
+                captureButton.remove();
+
+                // Proceed with the photo upload
+                const { value: file } = await Swal.fire({
+                    title: "Your photo",
+                    imageUrl: photo,
+                    imageAlt: "Your photo",
+                    showCancelButton: true,
+                });
+
+                if (file) {
+                    formData.append("volunteer_presence[participate_volunteer_id]", val);
+                    formData.append("volunteer_presence[request_type]", "geo_location");
+                    formData.append("volunteer_presence[location]", position.latitude, position.longitude);
+                    formData.append("volunteer_presence[upload_proof]", file);
+                    axios.post('/api/v1/volunteer_presences', formData)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+
+                    Swal.fire({
+                        showCloseButton: true,
+                        title: "Your uploaded picture",
+                        imageUrl: photo,
+                        imageAlt: "The uploaded picture"
+                    });
+                }
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                // Handle error accessing camera
+            }
+        });
     };
 
-    function success(pos) {
-        const crd = pos.coords;
-
-        console.log("Your current position is:");
-        console.log(`Latitude : ${crd.latitude}`);
-        console.log(`Longitude: ${crd.longitude}`);
-        console.log(`More or less ${crd.accuracy} meters.`);
-    }
-
-    function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-
-    // Get user's location
-    navigator.geolocation.getCurrentPosition(success, error, options);
-
-    // Create a button for capturing the photo
-    const captureButton = document.createElement('button');
-    captureButton.textContent = 'Capture Photo';
-    captureButton.style.position = 'fixed';
-    captureButton.style.top = '50%';
-    captureButton.style.left = '50%';
-    captureButton.style.transform = 'translate(-50%, -50%)';
-    document.body.appendChild(captureButton);
-
-    // Open camera and take a photo when the button is clicked
-    captureButton.addEventListener('click', async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const video = document.createElement('video');
-            document.body.appendChild(video);
-            video.srcObject = stream;
-            await video.play();
-
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            const photo = canvas.toDataURL('image/jpeg');
-
-            // Close the camera stream
-            stream.getTracks().forEach(track => track.stop());
-            video.remove();
-            canvas.remove();
-            captureButton.remove();
-
-            // Proceed with the photo upload
-            const { value: file } = await Swal.fire({
-                title: "Your photo",
-                imageUrl: photo,
-                imageAlt: "Your photo",
-                showCancelButton: true,
-            });
-
-            if (file) {
-                formData.append("volunteer_presence[participate_volunteer_id]", val);
-                formData.append("volunteer_presence[request_type]", "geo_location");
-                formData.append("volunteer_presence[location]", position.latitude, position.longitude);
-                formData.append("volunteer_presence[upload_proof]", file);
-                axios.post('/api/v1/volunteer_presences', formData)
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-
-                Swal.fire({
-                    showCloseButton: true,
-                    title: "Your uploaded picture",
-                    imageUrl: photo,
-                    imageAlt: "The uploaded picture"
-                });
-            }
-        } catch (err) {
-            console.error('Error accessing camera:', err);
-            // Handle error accessing camera
-        }
-    });
-};
-
     const handleQR = (val) => {
-
     }
 
     useEffect(() => {
@@ -165,37 +164,39 @@ function UploadProof() {
                         </tr>
                     </thead>
                     <tbody>
-                        {tasks.map((val) => {
-                            return (
-                                <tr key={val.id}>
-                                    <TdComponent things={val.task?.event_name} />
-                                    <TdComponent things={val.task?.date} />
-                                    {show === val.id ?
-                                        change ?
-                                            <td className='rounded border border-yellow-400 bg-yellow-500'>
-                                                Requested
-                                            </td>
+                        {tasks.length === 0 ?
+                            <td className='text-2xl' colSpan={8}>No Data Found!!!</td> :
+                            (tasks.map((val) => {
+                                return (
+                                    <tr key={val.id}>
+                                        <TdComponent things={val.task?.event_name} />
+                                        <TdComponent things={val.task?.date} />
+                                        {show === val.id ?
+                                            change ?
+                                                <td className='rounded border border-yellow-400 bg-yellow-500'>
+                                                    Requested
+                                                </td>
+                                                :
+                                                <td className='mt-6'>
+                                                    <UploadProofButton
+                                                        function={() => handleQR(val.id)}
+                                                        name='QR Code' />
+                                                    <UploadProofButton
+                                                        function={() => handleLocation(val.id)}
+                                                        name='Location' />
+                                                    <UploadProofButton
+                                                        function={() => handleUpload(val.id)}
+                                                        name='Image/Video' />
+                                                </td>
                                             :
-                                            <td className='mt-6'>
-                                                <UploadProofButton
-                                                    function={() => handleQR(val.id)}
-                                                    name='QR Code' />
-                                                <UploadProofButton
-                                                    function={() => handleLocation(val.id)}
-                                                    name='Location' />
-                                                <UploadProofButton
-                                                    function={() => handleUpload(val.id)}
-                                                    name='Image/Video' />
-                                            </td>
-                                        :
-                                        <TdComponent things={<button
-                                            onClick={() => uploadMain(val.id)}
-                                            className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload</button>} />}
+                                            <TdComponent things={<button
+                                                onClick={() => uploadMain(val.id)}
+                                                className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Upload</button>} />}
 
-                                </tr>
-                            )
-                        })}
-
+                                    </tr>
+                                )
+                            }))
+                        }
                     </tbody>
                 </table>
             </div>
