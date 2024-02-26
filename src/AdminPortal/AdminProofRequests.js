@@ -18,12 +18,9 @@ function AdminProofRequests() {
     };
 
     const handleShow = () => {
-        axios.get(`api/v1/volunteer_presences`).then((res) => {
+        axios.get(`api/v1/volunteer_presences?requst_status=${age}`).then((res) => {
             console.log(res?.data?.volunteer_presences);
             setTasks(res?.data?.volunteer_presences);
-            res?.data?.volunteer_presences.map((val) => {
-                setImageProof(val.upload_proof_url);
-            })
         })
     }
 
@@ -77,25 +74,20 @@ function AdminProofRequests() {
     }, [imageProof]);
 
     async function convertImageToBase64(imageUrl) {
-        try {
-            const response = await fetch(imageUrl, {
-                headers: {
-                    'ngrok-skip-browser-warning': true
-                }
-            });
-            const blob = await response.blob();
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            return new Promise((resolve, reject) => {
-                reader.onloadend = () => {
-                    resolve(reader.result);
-                };
-                reader.onerror = reject;
-            });
-        } catch (error) {
-            console.error('Error converting image to base64:', error);
-            throw error;
-        }
+        const response = await fetch(imageUrl, {
+            headers: {
+                'ngrok-skip-browser-warning': true
+            }
+        });
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        return new Promise((resolve, reject) => {
+            reader.onloadend = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = reject;
+        });
     }
 
     useEffect(() => {
@@ -120,7 +112,6 @@ function AdminProofRequests() {
                                         <th scope="col" className="text-lg px-4 py-3"></th>
                                         <th scope="col" className="text-lg px-4 py-3"></th>
                                     </> : ''}
-
                                 {age === "approved" ?
                                     <>
                                         <th scope="col" className="text-lg px-4 py-3"></th>
@@ -132,12 +123,16 @@ function AdminProofRequests() {
                                 <td className='text-2xl' colSpan={5}>No Data Found!!!</td> :
                                 (
                                     tasks.map((val) => {
+                                        convertImageToBase64(val?.upload_proof_url)
+                                            .then(src => {
+                                                setImageSrc(src);
+                                            })
                                         return (
                                             <tr key={val.id}>
                                                 <TdComponent things={val?.participate_volunteer?.task?.event_name} />
                                                 <TdComponent things={val?.participate_volunteer?.user?.name} />
                                                 <TdComponent things={val?.participate_volunteer?.user?.email} />
-                                                <TdComponent things={<img src={imageSrc} alt='' className='w-[6rem] h-[6rem] rounded-[1rem] object-center' />} />
+                                                <TdComponent things={<img src={convertImageToBase64(val?.upload_proof_url)} alt='' className='w-[6rem] h-[rem] rounded-[1rem] object-center' />} />
                                                 {(val?.requst_status === 'approved' ?
                                                     <>
                                                         <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white">Approved</div>} />

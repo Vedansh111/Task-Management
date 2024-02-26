@@ -3,14 +3,13 @@ import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
 import axios from 'axios';
 import EventsLoader from '../Helper Components/EventsLoader';
-import DropDown from '../Helper Components/DropDown';
+// import DropDown from '../Helper Components/DropDown';
 import { useOutletContext } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 function Events() {
     const userInfo = useOutletContext();
     const [tasks, setTasks] = useState(0);
-    const [approveButton, setApproveButton] = useState(0);
     const formData = new FormData();
 
     const handleRequest = (val) => {
@@ -69,16 +68,13 @@ function Events() {
                                         <TdComponent things={val.time} />
                                         <TdComponent things={val.event_location} />
                                         <TdComponent things={val.points} />
-                                        {approveButton ?
-                                            <TdComponent things={<div
-                                                className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>} />
-                                            : <TdComponent things={<button
-                                                onClick={() => handleRequest(val.id)}
-                                                className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />}
+                                        <TdComponent things={<button
+                                            onClick={() => handleRequest(val.id)}
+                                            className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
                                     </tr>
                                 )
                             }))
-                    }
+                        }
                     </tbody>
                 </table>
             </div>

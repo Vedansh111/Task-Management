@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
+
 function HoverComponent(props) {
     return (
         <div className='animate-fade-right animate-once animate-ease-out  flex justify-center items-center font-medium text-xl w-full h-[4rem] hover:text-white'>
