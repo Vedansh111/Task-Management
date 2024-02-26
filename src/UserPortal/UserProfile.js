@@ -7,6 +7,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 function UserProfile() {
+    
     const [accessToken, setAccessToken] = useState();
     const [userInfo, fetchUserData] = useOutletContext();
     const [avatarUrl, setAvatarUrl] = useState("");
@@ -39,7 +40,6 @@ function UserProfile() {
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
-
             await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
