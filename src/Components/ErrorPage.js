@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
-function ErrorPage() {
 
+function ErrorPage() {
     Swal.fire({
         icon: 'error',
         title: "Oops...",

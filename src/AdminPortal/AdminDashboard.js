@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import Loader from '../Helper Components/Loader';
