@@ -12,21 +12,36 @@ import Swal from 'sweetalert2';
 function AdminEvents() {
     const [isOpen, setIsOpen] = useState(false);
     const [tasks, setTasks] = useState(0);
+    const [initialValues, setInitialValues] = useState({
+        name: '',
+        date: '',
+        time: '',
+        points: '',
+    });
 
     const handleAdd = () => {
         setIsOpen(true);
         handleShow();
     }
 
-    const editEvent = async (val) => {
-        console.log(val);
+    const editEvent = async (valu) => {
+        tasks.filter((item) => {
+            console.log(item);
+            return (item?.id === valu) ? setInitialValues({
+                name: item?.event_name,
+                date: item?.date,
+                time: item?.time,
+                points: item?.points,
+            }) : false;
+        })
+        console.log(valu);
         const { value: formValues } = await Swal.fire({
             title: "Edit the event",
             html: `  
-            Event Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Event Name..."><br/>
-            Date:<input type="date" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Date..."><br/>
-            Time:<input type="time" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Time..."><br/>
-            Points:<input type="text" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="" placeholder="Points...">
+            Event Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.name}" placeholder="Event Name..."><br/>
+            Date:<input type="date" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.date}" placeholder="Date..."><br/>
+            Time:<input type="time" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.time}" placeholder="Time..."><br/>
+            Points:<input type="text" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.points}" placeholder="Points...">
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -45,10 +60,18 @@ function AdminEvents() {
             formData.append('task[date]', formValues[1])
             formData.append('task[time]', formValues[2])
             formData.append('task[points]', formValues[3])
-            axios.put(`api/v1/tasks/${val}`, formData).then((res) => {
+            axios.put(`api/v1/tasks/${valu}`, formData).then((res) => {
                 console.log(res);
                 if (res.data) {
                     handleShow();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Updated!!!",
+                        text: "Your event is updated.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }
             })
         }
@@ -81,6 +104,7 @@ function AdminEvents() {
 
     const handleShow = useCallback(() => {
         axios.get('api/v1/tasks').then((res) => {
+            console.log(res.data?.tasks);
             setTasks(res.data?.tasks);
         })
     }, [])

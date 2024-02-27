@@ -8,8 +8,6 @@ import axios from 'axios'
 
 function AdminProofRequests() {
     const [tasks, setTasks] = useState(0);
-    const [imageSrc, setImageSrc] = useState("");
-    const [imageProof, setImageProof] = useState([]);
     const [age, setAge] = useState('pending');
     const items = ['pending', 'approved', 'rejected'];
 
@@ -34,60 +32,35 @@ function AdminProofRequests() {
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, reject it!"
         }).then((result) => {
-            // if (result.isConfirmed) {
-            //     axios.put(`api/v1/participate_volunteers/${val}/rejected_request`).then((res) => {
-            //         console.log(res);
-            //         if (res.status) {
-            //             handleShow();
-            //         }
-            //     })
-            //     Swal.fire({
-            //         title: "Rejected!",
-            //         text: "The request has been rejected.",
-            //         icon: "success"
-            //     });
-            // }
+            if (result.isConfirmed) {
+                axios.put(`api/v1/volunteer_presences/${val}/rejected_request`).then((res) => {
+                    console.log(res);
+                    if (res.status) {
+                        handleShow();
+                    }
+                })
+                Swal.fire({
+                    title: "Rejected!",
+                    text: "The request has been rejected.",
+                    icon: "success"
+                });
+            }
         });
     }
 
     const approveRequest = (val) => {
-        // axios.put(`api/v1/participate_volunteers/${val}/approved_request`)
-        //     .then((res) => {
-        //         console.log(res);
-        //         if (res.status) {
-        //             handleShow();
-        //         }
-        //         Swal.fire({
-        //             title: "Approved",
-        //             text: "The request has been approved.",
-        //             icon: "success"
-        //         });
-        //     })
-    }
-
-    useEffect(() => {
-        async function loadImage() {
-            const src = await convertImageToBase64(imageProof);
-            setImageSrc(src);
-        }
-        loadImage();
-    }, [imageProof]);
-
-    async function convertImageToBase64(imageUrl) {
-        const response = await fetch(imageUrl, {
-            headers: {
-                'ngrok-skip-browser-warning': true
-            }
-        });
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        return new Promise((resolve, reject) => {
-            reader.onloadend = () => {
-                resolve(reader.result);
-            };
-            reader.onerror = reject;
-        });
+        axios.put(`api/v1/volunteer_presences/${val}/approved_request`)
+            .then((res) => {
+                console.log(res);
+                if (res.status) {
+                    handleShow();
+                }
+                Swal.fire({
+                    title: "Approved",
+                    text: "The request has been approved.",
+                    icon: "success"
+                });
+            })
     }
 
     useEffect(() => {
@@ -123,16 +96,12 @@ function AdminProofRequests() {
                                 <td className='text-2xl' colSpan={5}>No Data Found!!!</td> :
                                 (
                                     tasks.map((val) => {
-                                        convertImageToBase64(val?.upload_proof_url)
-                                            .then(src => {
-                                                setImageSrc(src);
-                                            })
                                         return (
                                             <tr key={val.id}>
                                                 <TdComponent things={val?.participate_volunteer?.task?.event_name} />
                                                 <TdComponent things={val?.participate_volunteer?.user?.name} />
                                                 <TdComponent things={val?.participate_volunteer?.user?.email} />
-                                                <TdComponent things={<img src={convertImageToBase64(val?.upload_proof_url)} alt='' className='w-[6rem] h-[rem] rounded-[1rem] object-center' />} />
+                                                <TdComponent things={<img src={val?.upload_proof_url} alt='' className='w-[6rem] h-[rem] rounded-[1rem] object-center' />} />
                                                 {(val?.requst_status === 'approved' ?
                                                     <>
                                                         <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white">Approved</div>} />

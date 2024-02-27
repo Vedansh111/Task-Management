@@ -5,7 +5,7 @@ import App from './App';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 
-axios.defaults.baseURL = 'https://7fef-2405-201-2026-3800-e178-c8d0-e243-9bbb.ngrok-free.app';
+axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers.common['ngrok-skip-browser-warning'] = true;
 axios.interceptors.request.use(
     config => {

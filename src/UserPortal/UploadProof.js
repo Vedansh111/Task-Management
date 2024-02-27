@@ -135,7 +135,9 @@ function UploadProof() {
                     </thead>
                     <tbody>
                         {tasks.length === 0 ?
-                            <td className='text-2xl' colSpan={8}>No Data Found!!!</td> :
+                            <tr>
+                                <th className='text-2xl' colSpan={8}>No Data Found!!!</th>
+                            </tr> :
                             (tasks.map((val) => {
                                 return (
                                     <tr key={val.id}>

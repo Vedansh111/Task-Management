@@ -47,13 +47,13 @@ function AdminNewEvent(props) {
         },
     });
 
-    const handleUpload = () => {
-        const { value: file } = Swal.fire({
+    const handleUpload = async () => {
+        const { value: file } = await Swal.fire({
             title: "Select image",
             input: "file",
             inputAttributes: {
                 "accept": "image/*",
-                "aria-label": "Upload your Aadhar card/ Pan card"
+                "aria-label": "Upload your poster"
             }
         });
         if (file) {
