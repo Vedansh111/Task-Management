@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { MdDone } from "react-icons/md"
+import { IoMdClose } from "react-icons/io"
 import TdComponent from '../Helper Components/TdComponent'
 import ThComponent from '../Helper Components/ThComponent'
 import EventsLoader from '../Helper Components/EventsLoader'
@@ -94,7 +96,9 @@ function AdminRequests() {
                         </thead>
                         <tbody className=''>
                             {tasks.length === 0 ?
-                                <td className='text-2xl' colSpan={5}>No Data Found!!!</td> :
+                                <tr>
+                                    <th className='text-2xl' colSpan={8}>No Data Found!!!</th>
+                                </tr> :
                                 (
                                     tasks.map((val) => {
                                         return (
@@ -115,10 +119,10 @@ function AdminRequests() {
                                                     <>
                                                         <TdComponent things={<button
                                                             onClick={() => approveRequest(val.id)}
-                                                            className="font-semibold text-green-600 border border-black p-1 rounded-md hover:bg-[#34cc40] hover:text-white">Approve</button>} />
+                                                            className="font-semibold text-green-600 border border-gray-300 p-1 rounded-md hover:bg-[#34cc40] hover:text-white"><MdDone size={20} /></button>} />
                                                         <TdComponent things={<button
                                                             onClick={() => deleteRequest(val.id)}
-                                                            className="font-semibold text-red-600 border border-black p-1 rounded-md hover:bg-[#c43e19] hover:text-white" >Reject</button>} />
+                                                            className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><IoMdClose size={20} /></button>} />
                                                     </> :
                                                     ""
                                                 )}

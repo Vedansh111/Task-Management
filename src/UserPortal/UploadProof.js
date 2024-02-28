@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import Webcam from "react-webcam";
 
 function UploadProof() {
-    const [tasks, setTasks] = useState(0);
+    const [tasks, setTasks] = useState([]);
     const [position, setPosition] = useState({
         latitude: null,
         longitude: null,
@@ -18,6 +18,7 @@ function UploadProof() {
     const webcamRef = React.useRef(null);
     const [locationView, setLocationView] = useState(0);
     const [imageSrc, setImageSrc] = useState();
+    const [imageFile, setImageFile] = useState();
     const [show, setShow] = useState();
     const [change, setChange] = useState();
     const formData = new FormData();
@@ -59,52 +60,58 @@ function UploadProof() {
             reader.readAsDataURL(file);
         }
     }
-    const videoConstraints = {
-        width: 1400,
-        height: 900,
-        facingMode: "user"
-    };
 
-    const capture = useCallback(() => {
-        setImageSrc(webcamRef.current.getScreenshot());
-    }, [webcamRef]);
-
-    const handleLocation = (val) => {
-        setLocationView(1);
+    const getUserPhoto = (val) => {
         try {
-            // Get user's location
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    setPosition({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    });
-                });
-            } else {
-                console.log("Geolocation is not available in your browser.");
-            }
-
-            // Get user's photo
-            if (imageSrc) {
+            if (imageFile) {
                 formData.append("volunteer_presence[participate_volunteer_id]", val);
                 formData.append("volunteer_presence[request_type]", "geo_location");
-                formData.append("volunteer_presence[location]", position.latitude, position.longitude);
-                formData.append("volunteer_presence[upload_proof]", imageSrc);
+                formData.append("volunteer_presence[location]", position.latitude);
+                formData.append("volunteer_presence[upload_proof]", imageFile);
                 axios.post('/api/v1/volunteer_presences', formData)
                     .then((res) => {
                         console.log(res);
+                        Swal.fire({
+                            title: "Uploaded!",
+                            text: "Your proof is uploaded.",
+                            icon: "success"
+                        });
+                        setLocationView(0)
                     })
                     .catch((err) => {
                         console.log(err);
                     });
+            }
+        } catch (error) {
+            console.error('Error occurred while shortening URL:', error);
+        }
+    };
 
-                Swal.fire({
-                    showCloseButton: true,
-                    title: "Your uploaded picture",
-                    imageUrl: imageSrc,
-                    imageAlt: "The uploaded picture"
-                });
+    const capture = useCallback(async () => {
+        setImageSrc(webcamRef.current.getScreenshot());
+        const screenshot = webcamRef.current.getScreenshot();
+        try {
+            const blob = await fetch(screenshot).then(res => res.blob());
+            const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
+            console.log(file);
+            setImageFile(file);
+        } catch (error) {
+            console.error('Error occurred while capturing and sending screenshot:', error);
+        }
+    }, [webcamRef]);
 
+    const handleLocation = () => {
+        setLocationView(1);
+        try {
+            // Get user's location
+            if (position.latitude && position.longitude) {
+                axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${position.latitude},${position.longitude}&key=52e0489d27fa4b149f155d298a0e7bec`)
+                    .then((res) => {
+                        // console.log(res.data.results);
+                        res?.data?.results.map((val) => {
+                            return console.log(val.formatted);
+                        })
+                    })
             }
         } catch (err) {
             console.error('Error:', err);
@@ -119,6 +126,18 @@ function UploadProof() {
             console.log(res?.data?.participate_volunteer);
             setTasks(res?.data?.participate_volunteer);
         })
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.log(position);
+                setPosition({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                });
+            });
+        } else {
+            console.log("Geolocation is not available in your browser.");
+        }
     }, [])
 
     return (tasks ?
@@ -156,22 +175,28 @@ function UploadProof() {
                                                     {
                                                         locationView ?
                                                             imageSrc ?
-                                                                <img src={imageSrc}
-                                                                    alt='' />
+                                                                <div className='flex flex-col items-center'>
+                                                                    <img src={imageSrc}
+                                                                        className='rounded-[2rem]'
+                                                                        alt='' />
+                                                                    <UploadProofButton name='Upload'
+                                                                        function={() => getUserPhoto(val.id)} />
+                                                                </div>
                                                                 :
-                                                                <div>
+                                                                <div className='flex flex-col items-center'>
                                                                     <Webcam
                                                                         audio={false}
-                                                                        height={720}
+                                                                        width={280}
+                                                                        height={280}
                                                                         screenshotFormat="image/jpeg"
-                                                                        width={1280}
                                                                         ref={webcamRef}
-                                                                        videoConstraints={videoConstraints}
                                                                     />
-                                                                    <button onClick={capture}>Capture photo</button>
+                                                                    <UploadProofButton
+                                                                        name='Capture Photo'
+                                                                        function={capture} />
                                                                 </div>
                                                             : <UploadProofButton
-                                                                function={() => handleLocation(val.id)}
+                                                                function={handleLocation}
                                                                 name='Location' />
                                                     }
                                                     <UploadProofButton
@@ -194,4 +219,4 @@ function UploadProof() {
     )
 }
 
-export default UploadProof
+export default UploadProof;

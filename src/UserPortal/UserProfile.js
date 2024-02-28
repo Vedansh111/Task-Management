@@ -7,12 +7,10 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 function UserProfile() {
-    
     const [accessToken, setAccessToken] = useState();
     const [userInfo, fetchUserData] = useOutletContext();
     const [avatarUrl, setAvatarUrl] = useState("");
     const [aadharCardUrl, setAadharCardUrl] = useState("");
-    const [imageSrc, setImageSrc] = useState('');
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
@@ -28,14 +26,6 @@ function UserProfile() {
         avatar: userInfo.avatar_url,
         aadhar_card: userInfo.aadhar_card_url,
     };
-
-    useEffect(() => {
-        async function loadImage() {
-            const src = await convertImageToBase64(userInfo.avatar_url);
-            setImageSrc(src);
-        }
-        loadImage();
-    }, [userInfo.avatar_url]);
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
@@ -57,14 +47,14 @@ function UserProfile() {
                 .then((res) => {
                     console.log(res);
                     fetchUserData();
+                    Swal.fire({
+                        title: "Updated!",
+                        text: "Your profile is updated.",
+                        icon: "success"
+                    });
                 }).catch((err) => {
                     console.log(err);
                 })
-            Swal.fire({
-                title: "Updated!!!",
-                text: "Your profile is updated.",
-                icon: "success"
-            });
         },
     });
 
@@ -114,36 +104,14 @@ function UserProfile() {
         }
     }
 
-    async function convertImageToBase64(imageUrl) {
-        try {
-            const response = await fetch(imageUrl, {
-                headers: {
-                    'ngrok-skip-browser-warning': true
-                }
-            });
-            const blob = await response.blob();
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            return new Promise((resolve, reject) => {
-                reader.onloadend = () => {
-                    resolve(reader.result);
-                };
-                reader.onerror = reject;
-            });
-        } catch (error) {
-            console.error('Error converting image to base64:', error);
-            throw error;
-        }
-    }
-
     return (
         <div className='flex w-full justify-center items-center mt-10'>
             <div className='flex flex-col h-[75vh] w-2/3 border shadow-lg rounded-md bg-[#ecf1e8]'>
                 <form className='w-full h-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
                     <div className=' flex p-2 m-2 items-center'>
                         <label className=' text-lg font-semibold mr-3'>Profile Picture</label>
-                        <img src={imageSrc} alt="img"
-                            className='object-center rounded-full w-[3rem] h-[3rem] mx-2' />
+                        <img src={values.avatar} alt="img"
+                            className='object-center rounded-full w-[3rem] h-[3rem] border border-gray-400 mx-2' />
                         <button
                             type='button'
                             className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
