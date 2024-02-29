@@ -1,26 +1,63 @@
-import React from 'react'
-import { MdOutlinePowerSettingsNew } from "react-icons/md";
+import React, { useState } from 'react'
+import { LiaGripLinesSolid } from "react-icons/lia";
 import { Link } from 'react-router-dom';
 
 function AdminHeader(props) {
+    const [settings, setSettings] = useState(0);
+
+    function showSettings() {
+        setSettings(1);
+        if (settings) {
+            setSettings(0);
+        }
+    }
     function handleClick() {
         localStorage.clear();
         window.reload();
     }
     return (
-        <div className='h-[5rem] w-full bg-[#ecf1e8] flex items-center border-[2px] border-black border-x-0 border-t-0 border-s-0'>
-            <div className='animate-fade-left animate-once animate-ease-out flex justify-around items-center absolute right-[1rem]'>
-                {/* <Link to='user_profile'><IoMdSettings size={30} /></Link> */}
-                <div className='flex items-center justify-between h-full '>
-                    <img src="https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" alt="img" className='object-center rounded-full w-[3rem] h-[3rem]' />
-                    <div className='flex flex-col pl-2 ml-1'>
-                        <h1 className='font-semibold'>{props.name}</h1>
-                        <h1 className='font-medium'>{props.email}</h1>
-                    </div>
-                </div>
-                <div className='border border-black h-[5rem] mx-4'></div>
-                <Link to='/' className='ml-1' onClick={handleClick}><MdOutlinePowerSettingsNew size={30} /></Link>
-            </div>
+        <div
+            className="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button
+                onClick={props.function}
+                type="button"
+                className="text-lg border rounded-md p-1.5 border-gray-400 text-gray-900 font-semibold sidebar-toggle">
+                <LiaGripLinesSolid />
+            </button>
+
+            <ul className="ml-auto flex items-center">
+                <li className="dropdown ml-3">
+                    <button type="button"
+                        onClick={showSettings}
+                        className="dropdown-toggle flex items-center">
+                        <div className="flex-shrink-0 w-10 h-10 relative">
+                            <div className="p-1 bg-white rounded-full focus:outline-none focus:ring">
+                                <img className="w-8 h-8 rounded-full" src="https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" alt="" />
+                                <div className="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>
+                                <div className="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div className="p-2 md:block text-left">
+                            <h2 className="text-sm font-semibold text-gray-800">{props.name}</h2>
+                            <p className="text-xs text-gray-500">Administrator</p>
+                        </div>
+                    </button>
+                    {
+                        settings ?
+                            <ul className="absolute dropdown-menu shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                                <li>
+                                    <Link to='/'
+                                        className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
+                                        onClick={handleClick}>
+                                        Log Out
+                                    </Link>
+                                </li>
+                            </ul>
+                            :
+                            <div></div>
+                    }
+                </li>
+            </ul>
         </div>
     )
 }
