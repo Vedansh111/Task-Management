@@ -5,6 +5,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import { IoShareSocialOutline } from "react-icons/io5";
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
+import { MdEdit, MdDelete } from "react-icons/md";
 import axios from 'axios';
 import EventsLoader from '../Helper Components/EventsLoader';
 import Swal from 'sweetalert2';
@@ -153,13 +154,13 @@ function AdminEvents() {
                                             <TdComponent things={val.event_name} />
                                             <TdComponent things={val.date} />
                                             <TdComponent things={val.time} />
-                                            <TdComponent things={<button className="font-semibold text-gray-600 border border-black p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline /></button>} />
+                                            <TdComponent things={<button className="font-semibold text-gray-600 border border-gray-300 p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline size={20} /></button>} />
                                             <TdComponent things={<button
                                                 onClick={() => editEvent(val.id)}
-                                                className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Edit</button>} />
+                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white"><MdEdit size={20} /></button>} />
                                             <TdComponent things={<button
                                                 onClick={() => deleteEvent(val.id)}
-                                                className="font-semibold text-red-600 border border-black p-1 rounded-md hover:bg-[#c43e19] hover:text-white" >Delete</button>} />
+                                                className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><MdDelete size={20} /></button>} />
                                         </tr>
                                     )
                                 })}

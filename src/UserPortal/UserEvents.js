@@ -9,7 +9,6 @@ function UserEvents() {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
-
     const fetchUserData = async () => {
         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
             console.log(res.data?.user);
