@@ -72,69 +72,92 @@ function AdminRequests() {
 
     return (
         tasks ? (
-            <div className="w-[85%] rounded-md sm:rounded-lg border shadow-lg mt-10">
-                <DropDown handleChange={handleChange} items={items} />
-                <div className=' h-[70vh] overflow-y-scroll'>
-                    <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
-                        <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
-                            <tr>
-                                <ThComponent name='Event' />
-                                <ThComponent name='User' />
-                                <ThComponent name='Email' />
-                                <ThComponent name='Phone Number' />
-                                {age === "pending" ?
-                                    <>
-                                        <th scope="col" className="text-lg px-4 py-3"></th>
-                                        <th scope="col" className="text-lg px-4 py-3"></th>
-                                    </> : ''}
+            <div className='p-6'>
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+                    <div className="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md h-[82vh]">
+                        <div className="flex justify-between mb-4 items-start">
+                            <DropDown handleChange={handleChange} items={items} />
+                        </div>
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[90%]">
+                            <table className="w-full min-w-[460px] z-0">
+                                <thead className='uppercase'>
+                                    <tr>
+                                        <ThComponent
+                                            moreClasses="rounded-tl-md rounded-bl-md"
+                                            name='Event' />
+                                        <ThComponent
+                                            name='User' />
+                                        <ThComponent
+                                            moreClasses="rounded-tr-md rounded-br-md"
+                                            name='Email' />
+                                        <ThComponent name='Phone Number' />
+                                        {age === "pending" ?
+                                            <>
+                                                <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-4 bg-gray-100 text-left "></th>
+                                                <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-4 bg-gray-100 text-left "></th>
+                                            </> : ''}
 
-                                {age === "approved" ?
-                                    <>
-                                        <th scope="col" className="text-lg px-4 py-3"></th>
-                                    </> : ''}
-                            </tr>
-                        </thead>
-                        <tbody className=''>
-                            {tasks.length === 0 ?
-                                <tr>
-                                    <th className='text-2xl' colSpan={8}>No Data Found!!!</th>
-                                </tr> :
-                                (
-                                    tasks.map((val) => {
-                                        return (
-
-                                            <tr key={val.id}>
-                                                <TdComponent things={val?.task?.event_name} />
-                                                <TdComponent things={val?.user?.name} />
-                                                <TdComponent things={val?.user?.email} />
-                                                <TdComponent things={val?.user?.mobile_number} />
-                                                {(val?.participate_request === 'approved' ?
-                                                    <>
-                                                        <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white">Approved</div>} />
-                                                    </>
-                                                    :
-                                                    ""
-                                                )}
-                                                {(val?.participate_request === 'pending' ?
-                                                    <>
-                                                        <TdComponent things={<button
-                                                            onClick={() => approveRequest(val.id)}
-                                                            className="font-semibold text-green-600 border border-gray-300 p-1 rounded-md hover:bg-[#34cc40] hover:text-white"><MdDone size={20} /></button>} />
-                                                        <TdComponent things={<button
-                                                            onClick={() => deleteRequest(val.id)}
-                                                            className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><IoMdClose size={20} /></button>} />
-                                                    </> :
-                                                    ""
-                                                )}
-                                            </tr>
+                                        {age === "approved" ?
+                                            <>
+                                                <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-4 bg-gray-100 text-left "></th>
+                                            </> : ''}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {tasks.length === 0 ?
+                                        <tr>
+                                            <th className='text-[12px] uppercase tracking-wide font-medium text-gray-400 pt-[13rem] text-lg' colSpan={8}>No Data Found!</th>
+                                        </tr> :
+                                        (
+                                            tasks.map((val) => {
+                                                return (
+                                                    <tr key={val.id} >
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.task?.event_name} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.user?.name} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.user?.email} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.user?.mobile_number} />
+                                                        </td>
+                                                        {(val?.participate_request === 'approved' ?
+                                                            <td className='py-3 border-b border-b-gray-50'>
+                                                                <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
+                                                            </td>
+                                                            :
+                                                            ""
+                                                        )}
+                                                        {(val?.participate_request === 'pending' ?
+                                                            <td className='py-3 border-b border-b-gray-50 flex' >
+                                                                <div className='text-gray-600 text-sm font-medium truncate ml-[1rem]'>
+                                                                    <button
+                                                                        onClick={() => approveRequest(val.id)}
+                                                                        className="font-semibold text-green-600 border border-gray-300 p-1 rounded-md hover:bg-[#34cc40] hover:text-white"><MdDone size={20} /></button>
+                                                                </div>
+                                                                <div className='text-gray-600 text-sm font-medium truncate ml-[3rem]'>
+                                                                    <button
+                                                                        onClick={() => deleteRequest(val.id)}
+                                                                        className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><IoMdClose size={20} /></button>
+                                                                </div>
+                                                            </td> :
+                                                            ""
+                                                        )}
+                                                    </tr>
+                                                )
+                                            })
                                         )
-                                    })
-                                )
-                            }
-                        </tbody>
-                    </table>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>) : <EventsLoader />
+            </div>
+        ) : <EventsLoader />
     )
 }
 

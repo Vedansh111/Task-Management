@@ -115,16 +115,17 @@ function AdminEvents() {
     }, [])
 
     return (
+
         tasks ? (
-            <div className="w-[80%] mt-[4rem] rounded-md sm:rounded-lg border shadow-lg">
+            <div className='p-6'>
                 {isOpen ?
                     <div
-                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30.5%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-fit absolute right-[4px] bg-[#ecf1e8f3] shadow-md'>
+                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30.5%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-[82vh] absolute right-[4px] bg-[#dfdbda] shadow-md z-50'>
                         <button
-                            onClick={() => setIsOpen(false)} className='mx-3 my-3' ><FaCircleArrowRight size={35} /></button>
+                            onClick={() => setIsOpen(false)} className='mx-3 my-3' ><FaCircleArrowRight size={38} /></button>
                         <AdminNewEvent function={handleShow} />
                     </div> :
-                    <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute right-3'>
+                    <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute z-50 right-9'>
                         <button
                             onClick={handleAdd}
                         >
@@ -133,39 +134,61 @@ function AdminEvents() {
                         <p className='mt-1'>Add Event</p>
                     </div>
                 }
-                <div className=" rounded-md sm:rounded-lg">
-                    {/* <DropDown /> */}
-                    <div className=' h-[70vh] overflow--y-scroll'>
-                        <table className="bg-[#ecf1e8] text-gray-900 w-full h-full text-center ">
-                            <thead className=" text-gray-700 uppercase bg-[#c6cac3]">
-                                <tr>
-                                    <ThComponent name='Event' />
-                                    <ThComponent name='Date' />
-                                    <ThComponent name='Time' />
-                                    <th scope="col" className="text-lg px-4 py-3"></th>
-                                    <th scope="col" className="text-lg px-4 py-3"></th>
-                                    <th scope="col" className="text-lg px-4 py-3"></th>
-                                </tr>
-                            </thead>
-                            <tbody className=''>
-                                {tasks.map((val) => {
-                                    return (
-                                        <tr key={val.id}>
-                                            <TdComponent things={val.event_name} />
-                                            <TdComponent things={val.date} />
-                                            <TdComponent things={val.time} />
-                                            <TdComponent things={<button className="font-semibold text-gray-600 border border-gray-300 p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline size={20} /></button>} />
-                                            <TdComponent things={<button
-                                                onClick={() => editEvent(val.id)}
-                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white"><MdEdit size={20} /></button>} />
-                                            <TdComponent things={<button
-                                                onClick={() => deleteEvent(val.id)}
-                                                className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><MdDelete size={20} /></button>} />
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+                    <div className="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md h-[82vh]">
+                        <div className="flex justify-between mb-4 items-start">
+                            <div className="font-medium">All Events</div>
+                        </div>
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[95%]">
+                            <table className="w-full min-w-[460px] z-0">
+                                <thead className='uppercase'>
+                                    <tr>
+                                        <ThComponent
+                                            moreClasses="rounded-tl-md rounded-bl-md"
+                                            name='Event' />
+                                        <ThComponent name='Date' />
+                                        <ThComponent
+                                            name='Time' />
+                                        <ThComponent />
+                                        <ThComponent />
+                                        <ThComponent />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        tasks.map((val) => {
+                                            return (
+                                                <tr key={val.id} >
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.event_name} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.date} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.time} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={<button
+                                                            onClick={() => editEvent(val.id)}
+                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white"><MdEdit size={20} /></button>} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={<button
+                                                            onClick={() => deleteEvent(val.id)}
+                                                            className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><MdDelete size={20} /></button>} />
+                                                    </td>
+                                                    <td className="py-3 px-4     border-b border-b-gray-50">
+                                                        <TdComponent things={<button className="font-semibold text-gray-600 border border-gray-300 p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline size={20} /></button>} />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
