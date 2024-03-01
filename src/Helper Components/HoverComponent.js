@@ -3,10 +3,15 @@ import { NavLink } from 'react-router-dom';
 
 function HoverComponent(props) {
     return (
-        <div className='animate-fade-right animate-once animate-ease-out  flex justify-center items-center font-medium text-xl w-full h-[4rem] hover:text-white'>
-            <NavLink to={props.to} className={({ isActive }) => `flex md:text-center justify-center items-center font-medium text-[1.5rem] w-full  h-[4rem] hover:bg-[#052142f3] hover:text-white ${isActive ? "text-white bg-[#052142]" : " bg-[#ecf1e8]"}`}>
-                {props.symbol}{props.name}</NavLink>
-        </div>
+        <li className="mb-1 group text-balance">
+            <NavLink to={props.to}
+                className={({ isActive }) => `animate-fade-right animate-once animate-ease-out flex font-semibold items-center py-2 px-2 text-gray-900 hover:bg-gray-950 hover:text-gray-100 hover:rounded-md rounded-md 
+                ${isActive ? 'bg-gray-950 text-gray-100' : 'text-gray-900 '} `}>
+                <i className="ri-home-2-line mr-3 text-lg"></i>
+                <span className="flex items-center text-base">{props.symbol}<span className='px-1'>{props.name}</span></span>
+            </NavLink>
+        </li >
+
     )
 }
 
