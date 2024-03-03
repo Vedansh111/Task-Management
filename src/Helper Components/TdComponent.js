@@ -2,9 +2,9 @@ import React from 'react';
 
 function TdComponent(props) {
     return (
-        <td className="w-[0.5rem] text-wrap px-3 py-4 text-lg font-semibold whitespace-nowrap">
+        <div className='text-gray-600 text-sm font-medium ml-2 truncate'>
             {props.things}
-        </td>
+        </div>
     )
 }
 
