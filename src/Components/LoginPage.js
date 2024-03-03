@@ -41,7 +41,7 @@ function LoginPage() {
                         setLoader(res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
                         localStorage.setItem('role', res.data?.user?.role);
-                        (localStorage.getItem('role') === 'admin') ? navigate('/admin/events', { replace: true }) : navigate('/user/events', { replace: true });
+                        (localStorage.getItem('role') === 'admin') ? navigate('/admin/dashboard', { replace: true }) : navigate('/user/dashboard', { replace: true });
                         console.log("post data", res);
                         const Toast = Swal.mixin({
                             toast: true,

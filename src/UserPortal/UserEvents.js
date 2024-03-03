@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import UserHeader from './UserHeader';
 import UserSideBar from './UserSideBar';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -7,45 +7,66 @@ import Loader from '../Helper Components/Loader';
 
 function UserEvents() {
     const navigate = useNavigate();
+    const [sidebarToggle, setSidebarToggle] = useState(1);
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
-    const fetchUserData = async () => {
+
+    const handleClickOutside = () => {
+        setSidebarToggle(0);
+        if (!sidebarToggle) {
+            setSidebarToggle(1)
+        }
+    };
+
+    const fetchUserData = useCallback(() => {
         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
             console.log(res.data?.user);
             setUserInfo(res.data?.user);
             if (res?.data?.user?.role === 'admin') {
-                navigate('/admin/events');
+                navigate('/admin/dashboard');
             }
             if (res?.data?.user?.role === 'volunteer') {
-                navigate('/user/events');
+                navigate('/user/dashboard');
             }
         }).catch((error) => {
             console.error('Error fetching user data:', error);
             navigate('/');
         });
-    }
+    }, [])
 
     useEffect(() => {
         if (!accessToken) {
             navigate('/');
         } else {
-            navigate('/user/events')
+            navigate('/user/dashboard')
             fetchUserData();
         }
     }, []);
 
     return (
         userInfo ? (
-            <div className='h-screen flex font-jura text-[#500025] tracking-wider overflow-hidden'>
-                <div className='md:flex md:flex-col md:w-1/4'>
-                    <UserSideBar name={userInfo.name} email={userInfo.email} img={userInfo.avatar_url} />
-                </div>
-                <div className='md:w-3/4'>
-                    <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} />
-                    <div className='flex justify-center max-h-full'>
-                        <Outlet context={[userInfo, fetchUserData]} />
-                    </div>
-                </div>
+            <div className='text-gray-800 font-inter font-sans tracking-wide'>
+                {
+                    sidebarToggle ?
+                        <>
+                            {/* Sidebar */}
+                            <UserSideBar show={sidebarToggle} />
+                            <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
+                                {/* Header */}
+                                <UserHeader img={userInfo.avatar_url} email={userInfo.email} points={userInfo.points} name={userInfo.name} redeemed={userInfo.redeemed} show={sidebarToggle} function={handleClickOutside} />
+                                {/* Outlet */}
+                                <Outlet context={[userInfo, fetchUserData]} />
+                            </main>
+                        </> :
+                        <>
+                            <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
+                                {/* Header */}
+                                <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} show={sidebarToggle} function={handleClickOutside} />
+                                {/* Outlet */}
+                                <Outlet context={[userInfo, fetchUserData]} />
+                            </main>
+                        </>
+                }
             </div>
         ) : <Loader />
     );
