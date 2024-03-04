@@ -17,7 +17,7 @@ function AdminSidebar(props) {
                 <ul className="mt-9 px-1">
                     <div className="text-slate-600 
                     font-bold mt-1">ADMIN</div>
-                    <HoverComponent to='points_history' name='Dashboard'
+                    <HoverComponent to='dashboard' name='Dashboard'
                         symbol={<RxDashboard />} />
                     <HoverComponent to='events' name='Events'
                         symbol={<BsListTask />} />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import EventsLoader from '../Helper Components/EventsLoader'
 import axios from 'axios'
 
-function AdminPointsHistory() {
+function UserDashboard() {
     const tasks = [1];
     const [events, setEvents] = useState();
 
@@ -21,9 +21,9 @@ function AdminPointsHistory() {
                         <div className="flex justify-between mb-6 h-full">
                             <div>
                                 <div className="flex items-center mb-1">
-                                    <div className="text-2xl font-semibold">2</div>
+                                    <div className="text-2xl font-semibold">12</div>
                                 </div>
-                                <div className="text-sm font-medium text-gray-400">Users</div>
+                                <div className="text-sm font-medium text-gray-400">Points</div>
                             </div>
                         </div>
                     </div>
@@ -31,17 +31,17 @@ function AdminPointsHistory() {
                         <div className="flex justify-between mb-4">
                             <div>
                                 <div className="flex items-center mb-1">
-                                    <div className="text-2xl font-semibold">{events?.length}</div>
+                                    <div className="text-2xl font-semibold">32</div>
                                 </div>
-                                <div className="text-sm font-medium text-gray-400">Events</div>
+                                <div className="text-sm font-medium text-gray-400">Reedemed</div>
                             </div>
                         </div>
                     </div>
                     <div className="bg-white h-[13vh] rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                         <div className="flex justify-between mb-6">
                             <div>
-                                <div className="text-2xl font-semibold mb-1">100</div>
-                                <div className="text-sm font-medium text-gray-400">Blogs</div>
+                                <div className="text-2xl font-semibold mb-1">{events?.length}</div>
+                                <div className="text-sm font-medium text-gray-400">New Events</div>
                             </div>
                         </div>
                     </div>
@@ -261,4 +261,4 @@ function AdminPointsHistory() {
     )
 }
 
-export default AdminPointsHistory
+export default UserDashboard

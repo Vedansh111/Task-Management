@@ -2,40 +2,78 @@ import React from 'react'
 
 function Loader() {
     return (
-        <div className='animate-pulse flex'>
+        <div className='animate-pulse text-gray-800 font-inter font-sans tracking-wide'>
             {/* Sidebar */}
-            <div className='h-screen'>
-                <div className='  w-[24rem] h-full bg-[#ecf1e8] border border-gray-400 border-t-0 flex flex-col items-center'>
-                    <div className=" h-[4rem] my-[1.53rem] p-3 w-[13rem] bg-gray-300 rounded"></div>
-                    <div className='w-full border border-gray-400 '></div>
-                    <div className='flex flex-col justify-center items-center text-3xl w-full my-[1.5rem]'>
-                        <div className=" h-[1rem] my-[1rem] p-3 w-[9rem] bg-gray-300 rounded col-span-2"></div>
-                        <div className=" h-[1rem] m.5y-[1rem] p-3 w-[9rem] bg-gray-300 rounded col-span-2"></div>
-                    </div>
-                    <div className='w-full mt-[31.5rem] border border-gray-400'></div>
-                    <div className='flex items-center justify-between h-full'>
-                        <div className="rounded-full bg-gray-300 h-[3rem] w-[3rem]"></div>
-                        <div className='flex flex-col px-2'>
-                            <div className=" h-[1rem] my-[0.3rem] w-[5rem] bg-gray-300 rounded col-span-2"></div>
-                            <div className=" h-[0.9rem] my-[0.3rem] w-[9rem] bg-gray-300 rounded col-span-2"></div>
+            <div className='fixed left-0 top-0 w-64 h-full bg-[#dfdbda] p-4 z-50 sidebar-menu transition-transform'>
+                <div className="flex items-center pb-4 border-b border-b-gray-400">
+                    <div className="flex items-center font-extrabold text-3xl text-transparent bg-slate-400 rounded-md">TaskNinja</div>
+                </div>
+
+                <ul className="mt-9 px-1">
+                    <div className="bg-slate-400 w-[6rem]
+                    font-bold mt-1 text-transparent rounded-md">ADMIN</div>
+                    <li className="mb-1 group text-balance">
+                        <div
+                            className={`flex font-semibold items-center py-2 px-2 `}>
+                            <i className="ri-home-2-line mr-3 text-lg"></i>
+                            <span className="flex bg-slate-300 rounded-md h-[1rem] text-transparent">sd <span className='px-1'>asdasdasd</span></span>
                         </div>
-                    </div>
-                </div>
+                    </li >
+                    <li className="mb-1 group text-balance">
+                        <div
+                            className={`flex font-semibold items-center py-2 px-2 `}>
+                            <i className="ri-home-2-line mr-3 text-lg"></i>
+                            <span className="flex bg-slate-300 rounded-md h-[1rem] text-transparent">sd <span className='px-1'>asdasdasd</span></span>
+                        </div>
+                    </li >
+
+                    <div className="bg-slate-400 w-[6rem]
+                    font-bold text-transparent rounded-md mt-5">ADMIN</div>
+                    <li className="mb-1 group text-balance">
+                        <div
+                            className={`flex font-semibold items-center py-2 px-2 `}>
+                            <i className="ri-home-2-line mr-3 text-lg"></i>
+                            <span className="flex bg-slate-300 rounded-md h-[1rem] text-transparent">sd <span className='px-1'>asdasdasd</span></span>
+                        </div>
+                    </li >
+                    <li className="mb-1 group text-balance">
+                        <div
+                            className={`flex font-semibold items-center py-2 px-2 `}>
+                            <i className="ri-home-2-line mr-3 text-lg"></i>
+                            <span className="flex bg-slate-300 rounded-md h-[1rem] text-transparent">sd <span className='px-1'>asdasdasd</span></span>
+                        </div>
+                    </li >
+                </ul>
             </div>
-            {/* Header */}
-            <div className=' w-full'>
-                <div className='h-[4.9rem] w-full bg-[#ecf1e8] flex items-center border-[2px] border-gray-400 border-x-0 border-t-0 border-s-0'>
-                    <div className=" h-[1.4rem] ml-[3rem] w-[5.5rem] bg-gray-300 rounded "></div>
-                    <div className=" h-[1.4rem] mx-[1.5rem] w-[5.5rem] bg-gray-300 rounded "></div>
-                    <div className='mx-1 w-[6rem] flex justify-around items-center absolute right-5'>
-                        <div className="rounded-md bg-gray-300 h-[2rem] w-[2rem]"></div>
-                        <div className="rounded-md bg-gray-300 h-[2rem] w-[2rem]"></div>
+
+            <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main `}>
+                {/* Header */}
+                <div
+                    className="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+                    <div
+                        className="h-[2rem] text-lg border rounded-md p-1 text-gray-900 text-transparent bg-slate-200 font-semibold sidebar-toggle">
+                        add
                     </div>
+
+                    <ul className="ml-auto flex items-center">
+                        <li className="dropdown ml-3">
+                            <div
+                                className="dropdown-toggle flex items-center">
+                                <div className="flex-shrink-0 w-10 h-10 relative">
+                                    <div className="p-1 bg-gray-300 rounded-full focus:outline-none w-10 h-10 focus:ring">
+                                    </div>
+                                </div>
+                                <div className="p-2 md:block text-left">
+                                    <h2 className="text-sm font-semibold rounded-md text-transparent bg-slate-200 w-[2rem] h-[1rem] mb-1">asd</h2>
+                                    <p className="text-xs rounded-md text-transparent bg-slate-200">Administrator</p>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
                 </div>
-                <div className='flex justify-center items-center max-h-[89.4vh]'>
-                </div>
-            </div>
-        </div>
+            </main>
+        </div >
     )
 }
 

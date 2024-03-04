@@ -1,22 +1,72 @@
-import React from 'react';
-import Points from '../Helper Components/Points';
-import { IoMdSettings } from "react-icons/io";
-import { MdOutlinePowerSettingsNew } from "react-icons/md";
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LiaGripLinesSolid } from 'react-icons/lia';
+
 function UserHeader(props) {
+    const [settings, setSettings] = useState(0);
+
+    function showSettings() {
+        setSettings(1);
+        if (settings) {
+            setSettings(0);
+        }
+    }
 
     function handleClick() {
         localStorage.clear();
         window.reload();
     }
+
     return (
-        <div className='h-[5rem] w-full bg-[#ecf1e8] flex items-center border-[2px] border-black border-x-0 border-t-0 border-s-0'>
-            <Points name='Points:' points={props.points} />
-            <Points name='Redeemed:' points={props.redeemed} />
-            <div className='animate-fade-left animate-once animate-ease-out mx-1 flex justify-around items-center absolute right-5'>
-                <Link to='user_profile'><IoMdSettings size={30} className='mx-3' /></Link>
-                <Link to='/' onClick={handleClick}><MdOutlinePowerSettingsNew size={30} className='mx-3' /></Link>
-            </div>
+        <div className="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            {/* Toogle Button */}
+            <button
+                onClick={props.function}
+                type="button"
+                className="text-lg border rounded-md p-1.5 border-gray-400 text-gray-900 font-semibold sidebar-toggle">
+                <LiaGripLinesSolid />
+            </button>
+
+            <ul className="ml-auto flex items-center">
+                <li className="dropdown ml-3">
+                    <button type="button"
+                        onClick={showSettings}
+                        className="dropdown-toggle flex items-center">
+                        <div className="flex-shrink-0 w-10 h-10 relative">
+                            <div className="p-1 bg-white rounded-full focus:outline-none focus:ring">
+                                <img className="w-8 h-8 rounded-full" src={props.img} alt="" />
+                                <div className="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>
+                                <div className="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div className="p-2 md:block text-left">
+                            <h2 className="text-sm font-semibold text-gray-800">{props.name}</h2>
+                            <p className="text-xs text-gray-500">{props.email}</p>
+                        </div>
+                    </button>
+                    {
+                        settings ?
+                            <ul className="absolute dropdown-menu shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                                <li>
+                                    <Link to='user_profile'
+                                        className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer">
+                                        Profile
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to='/'
+                                        className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
+                                        onClick={handleClick}>
+                                        Log Out
+                                    </Link>
+                                </li>
+                            </ul>
+
+                            :
+                            <div></div>
+                    }
+                </li>
+            </ul>
         </div>
     )
 }

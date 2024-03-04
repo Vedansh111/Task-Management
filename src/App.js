@@ -13,6 +13,7 @@ import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
 import AdminProofRequests from './AdminPortal/AdminProofRequests';
 import UserRequestedEvents from './UserPortal/UserRequestedEvents';
+import UserDashboard from './UserPortal/UserDashboard';
 import ErrorPage from './Components/ErrorPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ export default function App() {
                 <Route path="/login_through_otp" element={<OtpPage />} />
                 <Route path="/forgot_password" element={<ForgetPasswordPage />} />
                 <Route path="user/" element={<UserEvents />}>
+                    <Route path="dashboard" element={<UserDashboard />} />
                     <Route path="events" element={<Events />} />
                     <Route path="status_events" element={<UserRequestedEvents />} />
                     <Route path="upload_proof" element={<UploadProof />} />
@@ -36,7 +38,7 @@ export default function App() {
                     <Route path="events" element={<AdminEvents />} />
                     <Route path="participate_requests" element={<AdminRequests />} />
                     <Route path="proof_requests" element={<AdminProofRequests />} />
-                    <Route path="points_history" element={<AdminPointsHistory />} />
+                    <Route path="dashboard" element={<AdminPointsHistory />} />
                 </Route>
                 <Route path='*' element={<ErrorPage />} />
             </Routes>

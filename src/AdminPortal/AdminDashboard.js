@@ -6,8 +6,8 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AdminDashboard() {
-    const [sidebarToggle, setSidebarToggle] = useState(1);
     const navigate = useNavigate();
+    const [sidebarToggle, setSidebarToggle] = useState(1);
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
 
@@ -25,7 +25,7 @@ function AdminDashboard() {
             axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
                 setUserInfo(res.data?.user);
                 if (res?.data?.user?.role === 'admin') {
-                    navigate('/admin/points_history');
+                    navigate('/admin/dashboard');
                 }
                 if (res?.data?.user?.role === 'volunteer') {
                     navigate('/user/events');

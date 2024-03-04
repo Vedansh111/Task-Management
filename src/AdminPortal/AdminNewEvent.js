@@ -5,7 +5,7 @@ import InputSettings from '../Helper Components/InputSettings';
 import axios from 'axios';
 import SubmitButton from '../Helper Components/SubmitButton';
 import Swal from 'sweetalert2';
-import { UserValidations } from '../Validations/SignUpValidations';
+import { newEvent } from '../Validations/NewEventValidations';
 
 function AdminNewEvent(props) {
     const [proof, setProof] = useState("");
@@ -21,7 +21,7 @@ function AdminNewEvent(props) {
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
-        validationSchema: UserValidations,
+        validationSchema: newEvent,
         onSubmit: (values, action) => {
             const formData = new FormData();
             formData.append('task[event_name]', values.event_name)
@@ -73,7 +73,7 @@ function AdminNewEvent(props) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-4'>
+        <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-3 h-full'>
             <Input
                 title='Event Name'
                 type='text'
