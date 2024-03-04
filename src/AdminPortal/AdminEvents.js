@@ -122,7 +122,7 @@ function AdminEvents() {
                     <div
                         className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30.5%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-[82vh] absolute right-[4px] bg-[#dfdbda] shadow-md z-50'>
                         <button
-                            onClick={() => setIsOpen(false)} className='mx-3 my-3' ><FaCircleArrowRight size={38} /></button>
+                            onClick={() => setIsOpen(false)}  className={`mx-3 my-3 `} ><FaCircleArrowRight size={38} /></button>
                         <AdminNewEvent function={handleShow} />
                     </div> :
                     <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute z-50 right-9'>

@@ -19,9 +19,9 @@ function LoginPage() {
 
     useEffect(() => {
         if (localStorage.getItem('role') === 'volunteer') {
-            navigate('/user/events', { replace: true });
+            navigate('/user/dashboard', { replace: true });
         } else if (localStorage.getItem('role') === 'admin') {
-            navigate('/admin/events', { replace: true });
+            navigate('/admin/dashboard', { replace: true });
         }
     }, [])
 

@@ -7,8 +7,8 @@ import DropDown from '../Helper Components/DropDown';
 
 function UserRequestedEvents() {
     const [tasks, setTasks] = useState(0);
-    const [age, setAge] = useState('pending');
-    const items = ['pending', 'approved', 'rejected'];
+    const [age, setAge] = useState('approved');
+    const items = ['approved', 'pending', 'rejected'];
 
     const handleChange = (e) => {
         setAge(e.target.value);
@@ -26,54 +26,82 @@ function UserRequestedEvents() {
     }, [age])
 
     return (tasks ?
-        <div className="w-[85%] rounded-md md:rounded-lg sm:rounded-lg border shadow-lg mt-8">
-            <DropDown handleChange={handleChange} items={items} />
-            <div className='h-[70vh] overflow-y-scroll'>
-                <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
-                    <thead className="text-gray-700 uppercase bg-[#c6cac3]">
-                        <tr>
-                            <ThComponent name='Event' />
-                            <ThComponent name='Date' />
-                            <ThComponent name='Time' />
-                            <ThComponent name='Location' />
-                            <ThComponent name='Points' />
-                            <ThComponent name='Status' />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tasks.length === 0 ?
-                            <tr>
-                                <th className='text-2xl' colSpan={8}>No Data Found!!!</th>
-                            </tr> :
-                            (tasks.map((val) => {
-                                return (
-                                    <tr key={val.id}>
-                                        <TdComponent things={val.task.event_name} />
-                                        <TdComponent things={val.task.date} />
-                                        <TdComponent things={val.task.time} />
-                                        <TdComponent things={val.task.event_location} />
-                                        <TdComponent things={val.task.points} />
-                                        {age === 'pending' ?
-                                            <TdComponent things={<div
-                                                className="font-semibold text-white border bg-yellow-600 border-yellow-500 p-1 rounded-md">Requested</div>
-                                            } /> : ""
-                                        }
-                                        {age === 'approved' ?
-                                            <TdComponent things={<div
-                                                className="font-semibold text-white border bg-green-600 border-green-400 p-1 rounded-md">Approved</div>
-                                            } /> : ""
-                                        }
-                                        {age === 'rejected' ?
-                                            <TdComponent things={<div
-                                                className="font-semibold text-white border bg-red-600 border-red-400 p-1 rounded-md">Rejected</div>
-                                            } /> : ""
-                                        }
-                                    </tr>
-                                )
-                            }))
-                        }
-                    </tbody>
-                </table>
+        <div className='p-6'>
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+                <div className="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md h-[82vh]">
+                    <div className="flex justify-between mb-4 items-start">
+                        <DropDown handleChange={handleChange} items={items} />
+                    </div>
+                    <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[95%]">
+                        <table className="w-full min-w-[460px] z-0">
+                            <thead className='uppercase'>
+                                <tr>
+                                    <ThComponent
+                                        moreClasses="rounded-tl-md rounded-bl-md"
+                                        name='Event' />
+                                    <ThComponent name='Date' />
+                                    <ThComponent name='Time' />
+                                    <ThComponent name='Location' />
+                                    <ThComponent name='Points' />
+                                    <ThComponent name='Status' />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tasks.length === 0 ?
+                                    <tr>
+                                        <th className='text-[12px] uppercase tracking-wide font-medium text-gray-400 pt-[13rem] text-lg' colSpan={8}>No Data Found!</th>
+                                    </tr> :
+                                    (tasks.map((val) => {
+                                        return (
+                                            <tr key={val.id} >
+                                                <td className="py-2 px-4 border-b border-b-gray-50">
+                                                    <div className="flex items-center">
+                                                        {/* <img src={val.task.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" /> */}
+                                                        <TdComponent things={val.task.event_name} />
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                    <TdComponent things={val.task.date} />
+                                                </td>
+                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                    <TdComponent things={val.task.time} />
+                                                </td>
+                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                    <TdComponent things={val.task.event_location} />
+                                                </td>
+                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                    <TdComponent things={val.task.points} />
+                                                </td>
+                                                {age === 'approved' ?
+                                                    <td className='py-3 border-b border-b-gray-50'>
+                                                        <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
+                                                    </td>
+                                                    :
+                                                    ""
+                                                }
+                                                {age === 'pending' ?
+                                                    <td className='py-3 border-b border-b-gray-50'>
+                                                        <TdComponent things={<div className="font-semibold border border-yellow-300 p-1 rounded-md bg-yellow-500 text-white text-center">Pending</div>} />
+                                                    </td>
+                                                    :
+                                                    ""
+                                                }
+                                                {age === 'rejected' ?
+                                                    <td className='py-3 border-b border-b-gray-50'>
+                                                        <TdComponent things={<div className="font-semibold border bg-red-600 border-red-400 p-1 rounded-md text-white text-center">Pending</div>} />
+                                                    </td>
+                                                    :
+                                                    ""
+                                                }
+                                            </tr>
+                                        )
+                                    }))
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div> : <EventsLoader />
     )
