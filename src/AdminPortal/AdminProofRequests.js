@@ -78,7 +78,7 @@ function AdminProofRequests() {
                             <DropDown handleChange={handleChange} items={items} />
                         </div>
                         <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[90%] px-1">
-                            <table className="w-full min-w-[460px] z-0  ">
+                            <table className="w-full min-w-[460px] z-0 ">
                                 <thead className='uppercase'>
                                     <tr>
                                         <ThComponent
@@ -89,6 +89,8 @@ function AdminProofRequests() {
                                         <ThComponent
                                             moreClasses="rounded-tr-md rounded-br-md"
                                             name='Email' />
+                                        <ThComponent
+                                            name='Location' />
                                         <ThComponent name='Proof' />
                                         {age === "pending" ?
                                             <>
@@ -121,23 +123,34 @@ function AdminProofRequests() {
                                                             <TdComponent things={val?.participate_volunteer?.user?.email} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={<img src={val?.upload_proof_url} alt='' className='w-[7rem] rounded-[1rem]' />} />
+                                                            {
+                                                                val?.location ?
+                                                                    <TdComponent things={val?.location} /> :
+                                                                    <TdComponent things="---" />
+                                                            }
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            {
+                                                                val?.request_type === 'qr_code' ?
+                                                                    <TdComponent things="Through QR" /> :
+                                                                    <TdComponent things={<img src={val?.upload_proof_url} alt='' className='w-[7rem] object-cover h-[6rem] rounded-[1rem]' />} />
+                                                            }
                                                         </td>
                                                         {(val?.requst_status === 'approved' ?
-                                                            <td className='py-3 border-b border-b-gray-50'>
+                                                            <td className='px-4 py-3 border-b border-b-gray-50'>
                                                                 <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
                                                             </td>
                                                             :
                                                             ""
                                                         )}
                                                         {(val?.requst_status === 'pending' ?
-                                                            <td className='py-3 border-b border-b-gray-50 flex' >
-                                                                <div className='text-gray-600 text-sm font-medium truncate ml-[1rem]'>
+                                                            <td className='py-4 border-b border-b-gray-50 flex' >
+                                                                <div className='text-gray-600 text-sm font-medium truncate '>
                                                                     <button
                                                                         onClick={() => approveRequest(val.id)}
                                                                         className="font-semibold text-green-600 border border-gray-300 p-1 rounded-md hover:bg-[#34cc40] hover:text-white"><MdDone size={20} /></button>
                                                                 </div>
-                                                                <div className='text-gray-600 text-sm font-medium truncate ml-[3rem]'>
+                                                                <div className=' text-gray-600 text-sm font-medium truncate ml-[3rem]'>
                                                                     <button
                                                                         onClick={() => deleteRequest(val.id)}
                                                                         className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><IoMdClose size={20} /></button>

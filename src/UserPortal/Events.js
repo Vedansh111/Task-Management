@@ -19,7 +19,7 @@ function Events() {
         axios.post('api/v1/participate_volunteers', formData).then((res) => {
             console.log(res);
             Swal.fire({
-                title: "Requested!!!",
+                title: "Requested!",
                 text: "Your request is sent.",
                 icon: "success"
             });
@@ -43,44 +43,70 @@ function Events() {
         handleShow();
     }, [])
 
-    return (tasks ?
-        <div className="w-[85%] rounded-md md:rounded-lg sm:rounded-lg border shadow-lg mt-[5rem]">
-            <div className='h-[70vh] overflow-y-scroll'>
-                <table className="w-full h-full bg-[#ecf1e8] text-gray-900  text-center ">
-                    <thead className="text-gray-700 uppercase bg-[#c6cac3]">
-                        <tr>
-                            <ThComponent name='Event' />
-                            <ThComponent name='Date' />
-                            <ThComponent name='Time' />
-                            <ThComponent name='Location' />
-                            <ThComponent name='Points' />
-                            <ThComponent name='Status' />
-                        </tr>
-                    </thead>
-                    <tbody className=''>
-                        {tasks.length === 0 ?
-                            <tr>
-                                <th className='text-2xl' colSpan={8}>No Data Found!!!</th>
-                            </tr> :
-                            (tasks.map((val) => {
-                                return (
-                                    <tr key={val.id}>
-                                        <TdComponent things={val.event_name} />
-                                        <TdComponent things={val.date} />
-                                        <TdComponent things={val.time} />
-                                        <TdComponent things={val.event_location} />
-                                        <TdComponent things={val.points} />
-                                        <TdComponent things={<button
-                                            onClick={() => handleRequest(val.id)}
-                                            className="font-semibold text-blue-800 border border-black p-1 rounded-md hover:bg-[#052142] hover:text-white">Request</button>} />
+    return (
+        tasks ?
+            <div className='p-6'>
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+                    <div className="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md h-[82vh]">
+                        <div className="flex justify-between mb-4 items-start">
+                            <div className="font-medium">All Events</div>
+                        </div>
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[95%]">
+                            <table className="w-full min-w-[460px] z-0">
+                                <thead className='uppercase'>
+                                    <tr>
+                                        <ThComponent
+                                            moreClasses="rounded-tl-md rounded-bl-md"
+                                            name='Event' />
+                                        <ThComponent name='Date' />
+                                        <ThComponent name='Time' />
+                                        <ThComponent name='Location' />
+                                        <ThComponent name='Points' />
+                                        <ThComponent name='Status' />
                                     </tr>
-                                )
-                            }))
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div> : <EventsLoader />
+                                </thead>
+                                <tbody>
+                                    {tasks.length === 0 ?
+                                        <tr>
+                                            <th className='text-xl' colSpan={8}>No Data Found!</th>
+                                        </tr> :
+                                        (tasks.map((val) => {
+                                            return (
+                                                <tr key={val.id} >
+                                                    <td className="py-2 px-4 border-b border-b-gray-50">
+                                                        <div className="flex items-center">
+                                                            <img src={val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" />
+                                                            <TdComponent things={val.event_name} />
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.date} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.time} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.event_location} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.points} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={<button
+                                                            onClick={() => handleRequest(val.id)}
+                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Request</button>} />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }))
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> : <EventsLoader />
     )
 }
 
