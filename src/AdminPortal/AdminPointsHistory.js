@@ -12,6 +12,13 @@ function AdminPointsHistory() {
     const [redeemed, setRedeemed] = useState([]);
     const [names, setNames] = useState([]);
 
+    const today = new Date();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, '0');
+    const year = today.getFullYear();
+    const options = { weekday: 'short' };
+    const dayOfWeek = today.toLocaleDateString('en-US', options);
+
     const seriesData = [{
         name: 'Points',
         type: 'column',
@@ -28,7 +35,7 @@ function AdminPointsHistory() {
             type: 'line',
         },
         stroke: {
-            width: [0, 4]
+            width: [0, 2]
         },
         // title: {
         //     text: 'Points History'
@@ -97,8 +104,8 @@ function AdminPointsHistory() {
                     <div className="bg-white h-[13vh] rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                         <div className="flex justify-between mb-6">
                             <div>
-                                <div className="text-2xl font-semibold mb-1">100</div>
-                                <div className="text-sm font-medium text-gray-400">Blogs</div>
+                                <div className="text-2xl font-semibold mb-1">{`${month}-${day}-${year}`}</div>
+                                <div className="text-sm font-medium text-gray-400">{dayOfWeek}</div>
                             </div>
                         </div>
                     </div>

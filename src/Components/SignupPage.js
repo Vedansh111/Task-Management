@@ -33,7 +33,7 @@ function SignupPage() {
             axios.get('api/v1/users/app_creds').then((res) => {
                 console.log("get data", res.data);
                 const formData = new FormData();
-                formData.append('user[email]', values.email)
+                formData.append('user[email]', values.email.toLowerCase())
                 formData.append('user[name]', values.name)
                 formData.append('user[mobile_number]', values.phone)
                 formData.append('user[password]', values.password)

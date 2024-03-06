@@ -39,6 +39,21 @@ function Events() {
         })
     }, [])
 
+    const viewPoster = (val) => {
+        console.log(val);
+        tasks.filter((value) => {
+            if (value.id === val) {
+                Swal.fire({
+                    title: "Event Poster",
+                    imageWidth: '95%',
+                    imageHeight: 'auto',
+                    imageUrl: value.event_poster_url,
+                    imageAlt: "The event poster"
+                });
+            }
+        })
+    }
+
     useEffect(() => {
         handleShow();
     }, [])
@@ -62,6 +77,7 @@ function Events() {
                                         <ThComponent name='Time' />
                                         <ThComponent name='Location' />
                                         <ThComponent name='Points' />
+                                        <ThComponent name='Poster' />
                                         <ThComponent name='Status' />
                                     </tr>
                                 </thead>
@@ -90,6 +106,11 @@ function Events() {
                                                     </td>
                                                     <td className="py-3 px-4 border-b border-b-gray-50">
                                                         <TdComponent things={val.points} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={<button
+                                                            onClick={() => viewPoster(val.id)}
+                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">View</button>} />
                                                     </td>
                                                     <td className="py-3 px-4 border-b border-b-gray-50">
                                                         <TdComponent things={<button

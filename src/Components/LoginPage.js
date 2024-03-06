@@ -67,6 +67,15 @@ function LoginPage() {
 
                     }).catch((err) => {
                         console.log(err);
+                        if (err.response?.data?.message) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: err.response?.data?.message,
+                            });
+                            setLoader([])
+                            navigate('/')
+                        }
                     })
                 }).catch((err) => {
                     console.log(err);
