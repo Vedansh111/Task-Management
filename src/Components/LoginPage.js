@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 
 function LoginPage() {
     const [loader, setLoader] = useState([]);
@@ -27,6 +28,10 @@ function LoginPage() {
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
+        validationSchema: yup.object({
+            email: yup.string().email('Invalid email address').required('Email is required').matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "Invalid email"),
+            password: yup.string().required('Password is required'),
+        }),
         onSubmit: (values, action) => {
             setLoader(0);
             console.log(values);

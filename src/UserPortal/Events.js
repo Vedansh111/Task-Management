@@ -68,7 +68,7 @@ function Events() {
                                 <tbody>
                                     {tasks.length === 0 ?
                                         <tr>
-                                            <th className='text-xl' colSpan={8}>No Data Found!</th>
+                                            <th className='text-[12px] uppercase tracking-wide font-medium text-gray-400 pt-[13rem] text-lg' colSpan={8}>No Data Found!</th>63
                                         </tr> :
                                         (tasks.map((val) => {
                                             return (

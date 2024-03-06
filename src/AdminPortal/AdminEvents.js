@@ -122,7 +122,7 @@ function AdminEvents() {
                     <div
                         className='animate-fade-left animate-delay-100 animate-once animate-ease-out w-[30.5%] border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-[82vh] absolute right-[4px] bg-[#dfdbda] shadow-md z-50'>
                         <button
-                            onClick={() => setIsOpen(false)}  className={`mx-3 my-3 `} ><FaCircleArrowRight size={38} /></button>
+                            onClick={() => setIsOpen(false)} className={`mx-3 my-3 `} ><FaCircleArrowRight size={38} /></button>
                         <AdminNewEvent function={handleShow} />
                     </div> :
                     <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute z-50 right-9'>
@@ -155,37 +155,41 @@ function AdminEvents() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {
-                                        tasks.map((val) => {
-                                            return (
-                                                <tr key={val.id} >
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.event_name} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.date} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.time} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={<button
-                                                            onClick={() => editEvent(val.id)}
-                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white"><MdEdit size={20} /></button>} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={<button
-                                                            onClick={() => deleteEvent(val.id)}
-                                                            className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><MdDelete size={20} /></button>} />
-                                                    </td>
-                                                    <td className="py-3 px-4     border-b border-b-gray-50">
-                                                        <TdComponent things={<button className="font-semibold text-gray-600 border border-gray-300 p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline size={20} /></button>} />
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
+                                    {tasks.length === 0 ?
+                                        <tr>
+                                            <th className='text-[12px] uppercase tracking-wide font-medium text-gray-400 pt-[13rem] text-lg' colSpan={8}>No Events Found!</th>
+                                        </tr> :
+                                        (
+                                            tasks.map((val) => {
+                                                return (
+                                                    <tr key={val.id} >
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val.event_name} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val.date} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val.time} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={<button
+                                                                onClick={() => editEvent(val.id)}
+                                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white"><MdEdit size={20} /></button>} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={<button
+                                                                onClick={() => deleteEvent(val.id)}
+                                                                className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><MdDelete size={20} /></button>} />
+                                                        </td>
+                                                        <td className="py-3 px-4     border-b border-b-gray-50">
+                                                            <TdComponent things={<button className="font-semibold text-gray-600 border border-gray-300 p-1 rounded-md hover:bg-[#687d78] hover:text-white"><IoShareSocialOutline size={20} /></button>} />
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        )
                                     }
-
                                 </tbody>
                             </table>
                         </div>

@@ -1,14 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import EventsLoader from '../Helper Components/EventsLoader'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import EventsLoader from '../Helper Components/EventsLoader';
+import axios from 'axios';
+import TdComponent from '../Helper Components/TdComponent';
+import ThComponent from '../Helper Components/ThComponent';
+import ReactApexChart from 'react-apexcharts';
 
 function AdminPointsHistory() {
-    const tasks = [1];
-    const [events, setEvents] = useState();
+    const [tasks, setTasks] = useState(0);
+    const [events, setEvents] = useState(0);
+    const [points, setPoints] = useState([]);
+    const [redeemed, setRedeemed] = useState([]);
+    const [names, setNames] = useState([]);
+
+    const seriesData = [{
+        name: 'Points',
+        type: 'column',
+        data: points,
+    }, {
+        name: 'Redeemed',
+        type: 'line',
+        data: redeemed,
+    }];
+
+    const optionsData = {
+        chart: {
+            height: 350,
+            type: 'line',
+        },
+        stroke: {
+            width: [0, 4]
+        },
+        // title: {
+        //     text: 'Points History'
+        // },
+        dataLabels: {
+            enabled: true,
+            enabledOnSeries: [1]
+        },
+        labels: names,
+        xaxis: {
+            type: 'category'
+        },
+        yaxis: [{
+            title: {
+                text: 'Points',
+            },
+        }, {
+            opposite: true,
+            title: {
+                text: 'Redeemed'
+            }
+        }]
+    };
 
     useEffect(() => {
         axios.get('api/v1/tasks').then((res) => {
             setEvents(res.data?.tasks);
+        })
+
+        axios.get('api/v1/users').then((res) => {
+            console.log(res.data?.users);
+            setTasks(res.data?.users);
+            setNames(res.data?.users.map(user => user.name));
+            setPoints(res.data?.users.map(user => user.points ? user.points : 0));
+            setRedeemed(res.data?.users.map(user => user.redeemed ? user.redeemed : 0));
+        }).catch((err) => {
+            console.log(err);
         })
     }, [])
 
@@ -21,7 +78,7 @@ function AdminPointsHistory() {
                         <div className="flex justify-between mb-6 h-full">
                             <div>
                                 <div className="flex items-center mb-1">
-                                    <div className="text-2xl font-semibold">2</div>
+                                    <div className="text-2xl font-semibold">{tasks.length ? tasks.length : 0}</div>
                                 </div>
                                 <div className="text-sm font-medium text-gray-400">Users</div>
                             </div>
@@ -52,47 +109,10 @@ function AdminPointsHistory() {
                     {/* Points Chart */}
                     <div className="bg-white h-[65vh] border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2">
                         <div className="flex justify-between mb-4 items-start">
-                            <div className="font-medium">Order Statistics</div>
-                            <div className="dropdown">
-                                <button type="button" className="dropdown-toggle text-gray-400 hover:text-gray-600"><i className="ri-more-fill"></i></button>
-                                <ul className="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
-                                    <li>
-                                        <div className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</div>
-                                    </li>
-                                    <li>
-                                        <div className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Settings</div>
-                                    </li>
-                                    <li>
-                                        <div className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</div>
-                                    </li>
-                                </ul>
-                            </div>
+                            <div className="font-medium">Points History</div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">10</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">$80</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Active</span>
-                            </div>
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">50</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">+$469</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Completed</span>
-                            </div>
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">4</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">-$130</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Canceled</span>
-                            </div>
-                        </div>
-                        <div>
-                            <canvas id="order-chart"></canvas>
+                        <div className='mt-4'>
+                            <ReactApexChart options={optionsData} series={seriesData} type="line" height={400} />
                         </div>
                     </div>
 
@@ -105,152 +125,36 @@ function AdminPointsHistory() {
                             <table className="w-full min-w-[460px]">
                                 <thead>
                                     <tr>
-                                        <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">User</th>
-                                        <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Points</th>
-                                        <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md">Redeemed</th>
+                                        <ThComponent
+                                            moreClasses="rounded-tl-md rounded-bl-md"
+                                            name='User' />
+                                        <ThComponent name='Points' />
+                                        <ThComponent name='Redeemed' />
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-emerald-500">+$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-rose-500">-$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Withdrawn</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-emerald-500">+$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-rose-500">-$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Withdrawn</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-emerald-500">+$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-rose-500">-$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Withdrawn</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-emerald-500">+$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-rose-500">-$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Withdrawn</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-emerald-500">+$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <div className="flex items-center">
-                                                <img src="https://placehold.co/32x32" alt="" className="w-8 h-8 rounded object-cover block" />
-                                                <div className="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</div>
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="text-[13px] font-medium text-rose-500">-$235</span>
-                                        </td>
-                                        <td className="py-2 px-4 border-b border-b-gray-50">
-                                            <span className="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Withdrawn</span>
-                                        </td>
-                                    </tr>
+                                    {tasks.length === 0 ?
+                                        <tr>
+                                            <th className='text-[12px] uppercase tracking-wide font-medium text-gray-400 pt-[13rem] text-lg' colSpan={8}>No Data Found!</th>
+                                        </tr> :
+                                        (tasks.map((val) => {
+                                            return (
+                                                <tr key={val.id} >
+                                                    <td className="py-2 px-4 border-b border-b-gray-50">
+                                                        <div className="flex items-center">
+                                                            <TdComponent things={val.name} />
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.points ? val.points : 0} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.redeemed ? val.redeemed : 0} />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }))
+                                    }
                                 </tbody>
                             </table>
                         </div>
