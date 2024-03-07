@@ -42,6 +42,16 @@ function UploadProof() {
             showCancelButton: true,
         });
         if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                Swal.fire({
+                    showCloseButton: true,
+                    title: "Your uploaded picture",
+                    imageUrl: e.target.result,
+                    imageAlt: "The uploaded picture"
+                });
+            };
+            reader.readAsDataURL(file);
             formData.append("volunteer_presence[participate_volunteer_id]", val)
             formData.append("volunteer_presence[request_type]", "upload_proof")
             formData.append("volunteer_presence[upload_proof]", file)
@@ -56,16 +66,6 @@ function UploadProof() {
             }).catch((err) => {
                 console.log(err);
             })
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                Swal.fire({
-                    showCloseButton: true,
-                    title: "Your uploaded picture",
-                    imageUrl: e.target.result,
-                    imageAlt: "The uploaded picture"
-                });
-            };
-            reader.readAsDataURL(file);
         }
     }
 
@@ -128,7 +128,7 @@ function UploadProof() {
 
     const handleQR = (val) => {
         console.log(val);
-        axios.post(`api/v1/participate_volunteers/${val}/through_qr_code`).then((res) => {
+        axios.post(`api/v1/participate_volunteers/${val}/generate_qr`).then((res) => {
             console.log(res);
             if (res.status) {
                 Swal.fire({

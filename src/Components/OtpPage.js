@@ -5,12 +5,17 @@ import SubmitButton from '../Helper Components/SubmitButton';
 
 function OtpPage() {
     const [enterOtp, setEnterOtp] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [otpButton, setOtpButton] = useState(true);
+    const [minutes, setMinutes] = useState(0);
+    const [seconds, setSeconds] = useState(0);
     const [access_token, setAccessToken] = useState(0);
     const [remember, setRemember] = useState();
     const ids = [1, 2, 3, 4];
 
     function handleClick() {
         setEnterOtp(true);
+        setOtpButton(false);
         const inputs = document.querySelectorAll('#otp > *[id]');
 
         for (let i = 0; i < inputs.length; i++) {
@@ -36,13 +41,45 @@ function OtpPage() {
                 }
             });
         }
+        sendOTP();
     }
 
-    function handleChange(e){
+    function handleChange(e) {
         setRemember(e.target.value);
     }
 
-    useEffect(()=>{
+    const sendOTP = () => {
+        setMinutes(1);
+        setSeconds(59);
+    };
+
+    const resendOTP = () => {
+        setMinutes(1);
+        setSeconds(59);
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (seconds > 0) {
+                setSeconds(seconds - 1);
+            }
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    setEnterOtp(false);
+                    clearInterval(interval);
+                } else {
+                    setSeconds(59);
+                    setMinutes(minutes - 1);
+                }
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    });
+
+    useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'))
     }, [])
 
@@ -52,18 +89,36 @@ function OtpPage() {
                 <div className='flex flex-col items-center min-w-[25rem] bg-white p-6 rounded-3xl shadow-lg lg:absolute right-[15rem] '>
                     <h1 className='text-3xl font-semibold mt-8'>Welcome Back</h1>
                     <p className='text-center text-sm text-gray-600 font-light mt-2'>Enter your email to receive a one-time password</p>
-                    <input type='text' className='text-center p-2 border border-black mt-4 rounded-sm h-10 w-72' placeholder='Enter your email' onChange={handleChange} required/>
+                    <input type='text' className='text-center p-2 border border-black mt-4 rounded-sm h-10 w-72' placeholder='Enter your email' onChange={handleChange} required />
                     <h1 className='text-xl mt-6 font-semibold'>OTP Verification</h1>
                     <div id="otp" className="flex justify-center mt-3">
                         {ids.map((value) => {
                             return <OtpInput id={value} var={enterOtp} key={value} />
                         })}
                     </div>
-                    <button onClick={() => handleClick()} className='text-sm mt-4 hover:underline'>Send OTP</button>
+                    {seconds > 0 || minutes > 0 ? (
+                        <p className='text-sm text-gray-600'>
+                            Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
+                            {seconds < 10 ? `0${seconds}` : seconds}
+                        </p>
+                    ) : (
+                        <p></p>
+                    )}
+                    {
+                        otpButton ?
+                            <button onClick={() => handleClick()} className='text-sm mt-4 hover:underline'>Send OTP</button>
+                            : ""
+                    }
                     <div className='mt-4'>
                         <SubmitButton name='Verify Account' />
                     </div>
-                    <p className='mt-2 text-sm'>Didn't receive code? <Link to='#' className='font-semibold text-gray-700 hover:text-gray-900'>Resend</Link></p>
+                    <p className='mt-2 text-sm'>Didn't receive code?
+                        <button
+                            hidden={seconds > 0 || minutes > 0}
+                            onClick={resendOTP}
+                            className='ml-0.5 font-semibold text-gray-700 hover:text-gray-900'>Resend
+                        </button>
+                    </p>
                 </div>
             </div>
         </div>

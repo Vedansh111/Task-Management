@@ -4,11 +4,53 @@ import { useOutletContext } from "react-router-dom"
 import axios from 'axios'
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
+import ReactApexChart from 'react-apexcharts';
 
 function UserDashboard() {
     const [tasks, setTasks] = useState(0);
     const [userInfo, fetchUserData] = useOutletContext();
     const [events, setEvents] = useState();
+
+    const seriesData = [{
+        name: 'Points',
+        type: 'column',
+        data: [userInfo.points],
+    }, {
+        name: 'Redeemed',
+        type: 'line',
+        data: [userInfo.redeemed],
+    }];
+
+    const optionsData = {
+        chart: {
+            height: 350,
+            type: 'line',
+        },
+        stroke: {
+            width: [0, 4]
+        },
+        // title: {
+        //     text: 'Points History'
+        // },
+        dataLabels: {
+            enabled: true,
+            enabledOnSeries: [1]
+        },
+        labels: [userInfo.name],
+        xaxis: {
+            type: 'category'
+        },
+        yaxis: [{
+            title: {
+                text: 'Points',
+            },
+        }, {
+            opposite: true,
+            title: {
+                text: 'Redeemed'
+            }
+        }]
+    };
 
     const handleShow = () => {
         axios.get(`api/v1/participate_volunteers?request_type=approved`).then((res) => {
@@ -65,30 +107,10 @@ function UserDashboard() {
                     {/* Points Chart */}
                     <div className="bg-white h-[65vh] border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2">
                         <div className="flex justify-between mb-4 items-start">
-                            <div className="font-medium">Order Statistics</div>
+                            <div className="font-medium">Points History</div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">10</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">$80</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Active</span>
-                            </div>
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">50</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">+$469</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Completed</span>
-                            </div>
-                            <div className="rounded-md border border-dashed border-gray-200 p-4">
-                                <div className="flex items-center mb-0.5">
-                                    <div className="text-xl font-semibold">4</div>
-                                    <span className="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">-$130</span>
-                                </div>
-                                <span className="text-gray-400 text-sm">Canceled</span>
-                            </div>
+                        <div className='mt-4'>
+                            <ReactApexChart options={optionsData} series={seriesData} type="line" height={400} />
                         </div>
                     </div>
 

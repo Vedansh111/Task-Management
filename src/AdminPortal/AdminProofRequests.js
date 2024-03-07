@@ -65,6 +65,25 @@ function AdminProofRequests() {
             })
     }
 
+    const viewPoster = (val) => {
+        console.log(val);
+        tasks.filter((value) => {
+            if (value.id === val) {
+                Swal.fire({
+                    title: "Event Proof",
+                    imageWidth: '95%',
+                    imageHeight: 'auto',
+                    imageUrl: value?.upload_proof_url,
+                    imageAlt: "The event proof"
+                });
+            }
+        })
+    }
+
+    const redeemedRequest = () => {
+
+    }
+
     useEffect(() => {
         handleShow();
     }, [age])
@@ -90,8 +109,13 @@ function AdminProofRequests() {
                                             moreClasses="rounded-tr-md rounded-br-md"
                                             name='Email' />
                                         <ThComponent
+                                            name='Date' />
+                                        <ThComponent
+                                            name='Time' />
+                                        <ThComponent
                                             name='Location' />
-                                        <ThComponent name='Proof' />
+                                        <ThComponent
+                                            name='Proof' />
                                         {age === "pending" ?
                                             <>
                                                 <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
@@ -100,6 +124,7 @@ function AdminProofRequests() {
 
                                         {age === "approved" ?
                                             <>
+                                                <ThComponent name='Status' />
                                                 <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
                                             </> : ''}
                                     </tr>
@@ -123,6 +148,12 @@ function AdminProofRequests() {
                                                             <TdComponent things={val?.participate_volunteer?.user?.email} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.date} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={val?.time} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
                                                             {
                                                                 val?.location ?
                                                                     <TdComponent things={val?.location} /> :
@@ -133,13 +164,24 @@ function AdminProofRequests() {
                                                             {
                                                                 val?.request_type === 'qr_code' ?
                                                                     <TdComponent things="Through QR" /> :
-                                                                    <TdComponent things={<img src={val?.upload_proof_url} alt='' className='w-[7rem] object-cover h-[6rem] rounded-[1rem]' />} />
+                                                                    <TdComponent things={<button
+                                                                        onClick={() => viewPoster(val.id)}
+                                                                        className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">View</button>} />
                                                             }
                                                         </td>
                                                         {(val?.requst_status === 'approved' ?
-                                                            <td className='px-4 py-3 border-b border-b-gray-50'>
-                                                                <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
-                                                            </td>
+                                                            <div>
+                                                                <td className='px-4 py-3 border-b border-b-gray-50'>
+                                                                    <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <div className='text-gray-600 text-sm font-medium truncate '>
+                                                                        <button
+                                                                            onClick={() => redeemedRequest()}
+                                                                            className="font-semibold text-gray-700 border border-gray-300 p-1 rounded-md hover:bg-[#1e64d5] hover:text-white">Reedem</button>
+                                                                    </div>
+                                                                </td>
+                                                            </div>
                                                             :
                                                             ""
                                                         )}
@@ -155,7 +197,8 @@ function AdminProofRequests() {
                                                                         onClick={() => deleteRequest(val.id)}
                                                                         className="font-semibold text-red-600 border border-gray-300 p-1 rounded-md hover:bg-[#c43e19] hover:text-white" ><IoMdClose size={20} /></button>
                                                                 </div>
-                                                            </td> :
+                                                            </td>
+                                                            :
                                                             ""
                                                         )}
                                                     </tr>
