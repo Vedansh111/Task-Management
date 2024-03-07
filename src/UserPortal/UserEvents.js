@@ -7,6 +7,7 @@ import Loader from '../Helper Components/Loader';
 
 function UserEvents() {
     const navigate = useNavigate();
+    const [settings, setSettings] = useState(0);
     const [sidebarToggle, setSidebarToggle] = useState(1);
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
@@ -17,6 +18,10 @@ function UserEvents() {
             setSidebarToggle(1)
         }
     };
+
+    function showSettings() {
+        setSettings(0);
+    }
 
     const fetchUserData = useCallback(() => {
         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
@@ -53,17 +58,32 @@ function UserEvents() {
                             <UserSideBar show={sidebarToggle} />
                             <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
                                 {/* Header */}
-                                <UserHeader img={userInfo.avatar_url} email={userInfo.email} points={userInfo.points} name={userInfo.name} redeemed={userInfo.redeemed} show={sidebarToggle} function={handleClickOutside} />
+                                <UserHeader
+                                    settings={settings}
+                                    showSettings={showSettings}
+                                    img={userInfo.avatar_url}
+                                    email={userInfo.email}
+                                    points={userInfo.points}
+                                    name={userInfo.name}
+                                    redeemed={userInfo.redeemed}
+                                    show={sidebarToggle}
+                                    function={handleClickOutside} />
                                 {/* Outlet */}
-                                <Outlet context={[userInfo, fetchUserData]} />
+                                <Outlet
+                                    context={[userInfo, fetchUserData, showSettings]} />
                             </main>
                         </> :
                         <>
                             <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
                                 {/* Header */}
-                                <UserHeader points={userInfo.points} redeemed={userInfo.redeemed} show={sidebarToggle} function={handleClickOutside} />
+                                <UserHeader
+                                    points={userInfo.points}
+                                    redeemed={userInfo.redeemed}
+                                    show={sidebarToggle}
+                                    function={handleClickOutside} />
                                 {/* Outlet */}
-                                <Outlet context={[userInfo, fetchUserData]} />
+                                <Outlet
+                                    context={[userInfo, fetchUserData, showSettings]} />
                             </main>
                         </>
                 }

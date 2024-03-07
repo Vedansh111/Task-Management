@@ -8,9 +8,9 @@ import ReactApexChart from 'react-apexcharts';
 
 function UserDashboard() {
     const [tasks, setTasks] = useState(0);
-    const [userInfo, fetchUserData] = useOutletContext();
+    const [userInfo, fetchUserData, showSettings] = useOutletContext();
     const [events, setEvents] = useState();
-
+    
     const seriesData = [{
         name: 'Points',
         type: 'column',
@@ -69,7 +69,7 @@ function UserDashboard() {
 
     return (
         tasks ? (
-            <div className='p-6 h-[89vh]'>
+            <div onClick={showSettings} className='p-6 h-[89vh]'>
                 {/* Upper Div - ["No. of users", "No. of events", "No. of something"] */}
                 <div className=" h-[18%]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                     <div className="bg-white  h-[13vh] rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">

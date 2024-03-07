@@ -19,7 +19,7 @@ function AdminEvents() {
         time: '',
         points: '',
     });
-
+    
     const handleAdd = () => {
         setIsOpen(true);
         handleShow();

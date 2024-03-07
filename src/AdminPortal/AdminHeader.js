@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { LiaGripLinesSolid } from "react-icons/lia";
 import { Link } from 'react-router-dom';
 
 function AdminHeader(props) {
-    const [settings, setSettings] = useState(0);
 
     function showSettings() {
-        setSettings(1);
-        if (settings) {
-            setSettings(0);
+        if (props.settings) {
+            props.setSettings(0);
+        } else {
+            props.setSettings(1);
         }
     }
 
@@ -45,7 +45,7 @@ function AdminHeader(props) {
                         </div>
                     </button>
                     {
-                        settings ?
+                        props.settings ?
                             <ul className="absolute dropdown-menu shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
                                 <li>
                                     <Link to='/'

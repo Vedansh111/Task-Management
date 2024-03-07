@@ -7,6 +7,7 @@ import axios from 'axios';
 
 function AdminDashboard() {
     const navigate = useNavigate();
+    const [settings, setSettings] = useState(0);
     const [sidebarToggle, setSidebarToggle] = useState(1);
     const [userInfo, setUserInfo] = useState(0);
     const accessToken = localStorage.getItem('access_token');
@@ -17,6 +18,10 @@ function AdminDashboard() {
             setSidebarToggle(1)
         }
     };
+
+    function showSettings() {
+        setSettings(0);
+    }
 
     useEffect(() => {
         if (!accessToken) {
@@ -44,20 +49,34 @@ function AdminDashboard() {
                     sidebarToggle ?
                         <>
                             {/* Sidebar */}
-                            <AdminSidebar show={sidebarToggle} />
+                            <AdminSidebar
+                                show={sidebarToggle} showSettings={showSettings} />
                             <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
                                 {/* Header */}
-                                <AdminHeader show={sidebarToggle} email={userInfo.email} name={userInfo.name} function={handleClickOutside} />
+                                <AdminHeader
+                                    settings={settings}
+                                    setSettings={setSettings}
+                                    showSettings={showSettings}
+                                    show={sidebarToggle}
+                                    email={userInfo.email}
+                                    name={userInfo.name}
+                                    function={handleClickOutside} />
                                 {/* Outlet */}
-                                <Outlet context={userInfo} />
+                                <Outlet
+                                    context={[userInfo, showSettings]} />
                             </main>
                         </> :
                         <>
                             <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main ${sidebarToggle ? "" : "active"}`}>
                                 {/* Header */}
-                                <AdminHeader show={sidebarToggle} email={userInfo.email} name={userInfo.name} function={handleClickOutside} />
+                                <AdminHeader
+                                    show={sidebarToggle}
+                                    email={userInfo.email}
+                                    name={userInfo.name}
+                                    function={handleClickOutside} />
                                 {/* Outlet */}
-                                <Outlet context={userInfo} />
+                                <Outlet
+                                    context={[userInfo, showSettings]} />
                             </main>
                         </>
                 }
