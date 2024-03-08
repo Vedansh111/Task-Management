@@ -80,8 +80,15 @@ function AdminProofRequests() {
         })
     }
 
-    const redeemedRequest = () => {
-
+    const redeemedRequest = (val) => {
+        axios.put(`api/v1/volunteer_presences/${val}/redeem_point`).then((res) => {
+            console.log(res);
+            Swal.fire({
+                title: "Redeemed!",
+                text: "The points has been redeemed.",
+                icon: "success"
+            });
+        })
     }
 
     useEffect(() => {
@@ -177,7 +184,7 @@ function AdminProofRequests() {
                                                                 <td className="py-3 px-4 border-b border-b-gray-50">
                                                                     <div className='text-gray-600 text-sm font-medium truncate '>
                                                                         <button
-                                                                            onClick={() => redeemedRequest()}
+                                                                            onClick={() => redeemedRequest(val.id)}
                                                                             className="font-semibold text-gray-700 border border-gray-300 p-1 rounded-md hover:bg-[#1e64d5] hover:text-white">Reedem</button>
                                                                     </div>
                                                                 </td>
