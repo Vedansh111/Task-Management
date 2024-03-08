@@ -9,7 +9,7 @@ import HoverComponent from '../Helper Components/HoverComponent';
 function AdminSidebar(props) {
     return (
         <div>
-            <div onClick={props.showSettings} className={`fixed left-0 top-0 w-64 h-full bg-[#dfdbda] p-4 z-50 sidebar-menu  transition-transform ${props.show ? "" : "-translate-x-full"}`}>
+            <div onClick={props.showSettings} className={`fixed left-0 top-0 w-64 h-full bg-[#ccc6c5] p-4 z-50 sidebar-menu  transition-transform ${props.show ? "" : "-translate-x-full"}`}>
                 <div className="flex items-center pb-4 border-b border-b-gray-800">
                     <div className="flex items-center font-extrabold text-3xl">TaskNinja <span className='px-1'><GiNinjaStar /></span></div>
                 </div>

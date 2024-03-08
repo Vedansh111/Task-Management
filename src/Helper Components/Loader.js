@@ -4,7 +4,7 @@ function Loader() {
     return (
         <div className='animate-pulse text-gray-800 font-inter font-sans tracking-wide'>
             {/* Sidebar */}
-            <div className='fixed left-0 top-0 w-64 h-full bg-[#dfdbda] p-4 z-50 sidebar-menu transition-transform'>
+            <div className='fixed left-0 top-0 w-64 h-full bg-[#ccc6c5] p-4 z-50 sidebar-menu transition-transform'>
                 <div className="flex items-center pb-4 border-b border-b-gray-400">
                     <div className="flex items-center font-extrabold text-3xl text-transparent bg-slate-400 rounded-md">TaskNinja</div>
                 </div>
@@ -49,7 +49,7 @@ function Loader() {
             <main className={`w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main `}>
                 {/* Header */}
                 <div
-                    className="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+                    className="py-2 px-6 bg-[#eceaea] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
                     <div
                         className="h-[2rem] text-lg border rounded-md p-1 text-gray-900 text-transparent bg-slate-200 font-semibold sidebar-toggle">
                         add
