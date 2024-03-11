@@ -27,6 +27,8 @@ function UserSideBar(props) {
                     <div className="text-slate-600 font-bold mt-5">REQUESTS</div>
                     <HoverComponent to='upload_proof' name='Upload Proof'
                         symbol={<HiMiniIdentification />} />
+                    <HoverComponent to='event_qr' name='Event QR'
+                        symbol={<HiMiniIdentification />} />
                 </ul>
             </div>
 

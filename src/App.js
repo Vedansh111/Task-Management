@@ -15,6 +15,7 @@ import AdminProofRequests from './AdminPortal/AdminProofRequests';
 import UserRequestedEvents from './UserPortal/UserRequestedEvents';
 import UserDashboard from './UserPortal/UserDashboard';
 import ErrorPage from './Components/ErrorPage';
+import EventQr from './UserPortal/EventQr';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
                     <Route path="events" element={<Events />} />
                     <Route path="status_events" element={<UserRequestedEvents />} />
                     <Route path="upload_proof" element={<UploadProof />} />
+                    <Route path="event_qr" element={<EventQr />} />
                     <Route path="user_profile" element={<UserProfile />} />
                 </Route>
                 <Route path="admin/" element={<AdminDashboard />}>
