@@ -88,7 +88,7 @@ function UserRequestedEvents() {
                                                 }
                                                 {age === 'rejected' ?
                                                     <td className='py-3 border-b border-b-gray-50'>
-                                                        <TdComponent things={<div className="font-semibold border bg-red-600 border-red-400 p-1 rounded-md text-white text-center">Pending</div>} />
+                                                        <TdComponent things={<div className="font-semibold border bg-red-600 border-red-400 p-1 rounded-md text-white text-center">Rejected</div>} />
                                                     </td>
                                                     :
                                                     ""

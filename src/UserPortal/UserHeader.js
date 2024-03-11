@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { LiaGripLinesSolid } from 'react-icons/lia';
 
 function UserHeader(props) {
-    const [settings, setSettings] = useState(0);
 
     function showSettings() {
-        setSettings(1);
-        if (settings) {
-            setSettings(0);
+        props.setSettings(1);
+        if (props.settings) {
+            props.setSettings(0);
         }
     }
 
@@ -18,7 +17,7 @@ function UserHeader(props) {
     }
 
     return (
-        <div className="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+        <div className="py-2 px-6 bg-[#eceaea] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
             {/* Toogle Button */}
             <button
                 onClick={props.function}
@@ -45,7 +44,7 @@ function UserHeader(props) {
                         </div>
                     </button>
                     {
-                        settings ?
+                        props.settings ?
                             <ul className="absolute dropdown-menu shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
                                 <li>
                                     <Link to='user_profile'

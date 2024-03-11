@@ -10,7 +10,7 @@ function UserDashboard() {
     const [tasks, setTasks] = useState(0);
     const [userInfo, fetchUserData, showSettings] = useOutletContext();
     const [events, setEvents] = useState();
-    
+
     const seriesData = [{
         name: 'Points',
         type: 'column',
@@ -142,7 +142,7 @@ function UserDashboard() {
                                                 <tr key={val.id} >
                                                     <td className="py-2 px-4 border-b border-b-gray-50">
                                                         <div className="flex items-center">
-                                                            <img src={val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" />
+                                                            {/* <img src={val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" /> */}
                                                             <TdComponent things={val.task.event_name} />
                                                         </div>
                                                     </td>
