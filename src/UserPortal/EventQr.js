@@ -1,11 +1,9 @@
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TdComponent from '../Helper Components/TdComponent';
 import ThComponent from '../Helper Components/ThComponent';
 import EventsLoader from '../Helper Components/EventsLoader';
-import UploadProofButton from '../Helper Components/UploadProofButton';
 import Swal from 'sweetalert2';
-import Webcam from "react-webcam";
 // import DropDown from '../Helper Components/DropDown';
 
 function EventQr() {
@@ -14,146 +12,23 @@ function EventQr() {
         latitude: null,
         longitude: null,
     });
-    const [qr, setQr] = useState(false);
-    const webcamRef = React.useRef(null);
-    const [locationView, setLocationView] = useState(0);
-    const [imageSrc, setImageSrc] = useState();
-    const [imageFile, setImageFile] = useState();
-    const [show, setShow] = useState();
-    const [change, setChange] = useState();
-    const formData = new FormData();
-
-    const uploadMain = (val) => {
-        setShow(val);
-    }
-
-    const handleUpload = async (val) => {
-        const { value: file } = await Swal.fire({
-            title: "Select image",
-            input: "file",
-            inputAttributes: {
-                "accept": "image/*",
-                "aria-label": "Upload your proof"
-            },
-            showCancelButton: true,
-        });
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                Swal.fire({
-                    showCloseButton: true,
-                    title: "Your uploaded picture",
-                    imageUrl: e.target.result,
-                    imageAlt: "The uploaded picture"
-                });
-            };
-            reader.readAsDataURL(file);
-            formData.append("volunteer_presence[participate_volunteer_id]", val)
-            formData.append("volunteer_presence[request_type]", "upload_proof")
-            formData.append("volunteer_presence[upload_proof]", file)
-            axios.post('api/v1/volunteer_presences', formData).then((res) => {
-                console.log(res);
-                setChange(res.data.status);
-                Swal.fire({
-                    title: "Uploaded!",
-                    text: "Your proof is uploaded.",
-                    icon: "success"
-                });
-            }).catch((err) => {
-                console.log(err);
-            })
-        }
-    }
-
-    const getUserPhoto = (val) => {
-        try {
-            if (imageFile) {
-                formData.append("volunteer_presence[participate_volunteer_id]", val);
-                formData.append("volunteer_presence[request_type]", "geo_location");
-                formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
-                formData.append("volunteer_presence[upload_proof]", imageFile);
-                axios.post('/api/v1/volunteer_presences', formData)
-                    .then((res) => {
-                        console.log(res);
-                        Swal.fire({
-                            title: "Uploaded!",
-                            text: "Your proof is uploaded.",
-                            icon: "success"
-                        });
-                        setLocationView(0)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        } catch (error) {
-            console.error('Error occurred while shortening URL:', error);
-        }
-    };
-
-    const capture = useCallback(async () => {
-        setImageSrc(webcamRef.current.getScreenshot());
-        const screenshot = webcamRef.current.getScreenshot();
-        try {
-            const blob = await fetch(screenshot).then(res => res.blob());
-            const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
-            console.log(file);
-            setImageFile(file);
-        } catch (error) {
-            console.error('Error occurred while capturing and sending screenshot:', error);
-        }
-    }, [webcamRef]);
-
-    const handleLocation = () => {
-        setLocationView(1);
-        try {
-            // Get user's location
-            if (position.latitude && position.longitude) {
-                axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${position.latitude},${position.longitude}&key=52e0489d27fa4b149f155d298a0e7bec`)
-                    .then((res) => {
-                        // console.log(res.data.results);
-                        res?.data?.results.map((val) => {
-                            return console.log(val.formatted);
-                        })
-                    })
-            }
-        } catch (err) {
-            console.error('Error:', err);
-        }
-    };
+    // const formData = new FormData();
 
     const viewPoster = (val) => {
-        console.log(val);
-        tasks.filter((value) => {
-            if (value.id === val) {
-                Swal.fire({
-                    title: "Event Poster",
-                    imageWidth: '95%',
-                    imageHeight: 'auto',
-                    imageUrl: value.event_poster_url,
-                    imageAlt: "The event poster"
-                });
-            }
-        })
-    }
-
-    const handleQR = (val) => {
-        console.log(val);
         axios.post(`api/v1/participate_volunteers/${val}/generate_qr`).then((res) => {
             console.log(res);
             if (res.status) {
-                Swal.fire({
-                    title: "Generated!",
-                    text: "Your QR code is gererated.",
-                    icon: "success"
-                });
                 axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {
                     console.log(res?.data?.participate_volunteer);
                     res?.data?.participate_volunteer.filter((value) => {
-                        console.log(value);
                         if (val === value.id) {
-                            console.log(value.qr_code_url);
-                            setQr(value.qr_code_url);
+                            Swal.fire({
+                                title: "QR Code",
+                                imageWidth: '300px',
+                                imageHeight: '300px',
+                                imageUrl: value.qr_code_url,
+                                imageAlt: "The Qr code"
+                            });
                         }
                     })
                 })
@@ -198,6 +73,8 @@ function EventQr() {
                                             moreClasses="rounded-tl-md rounded-bl-md"
                                             name='Event' />
                                         <ThComponent name='Date' />
+                                        <ThComponent name='Location' />
+                                        <ThComponent name='Points' />
                                         <ThComponent name='Status' />
                                     </tr>
                                 </thead>
@@ -216,9 +93,15 @@ function EventQr() {
                                                         <TdComponent things={val.task?.date} />
                                                     </td>
                                                     <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.task?.event_location} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
+                                                        <TdComponent things={val.task?.points} />
+                                                    </td>
+                                                    <td className="py-3 px-4 border-b border-b-gray-50">
                                                         <TdComponent things={<button
                                                             onClick={() => viewPoster(val.id)}
-                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">View</button>} />
+                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Generate QR</button>} />
                                                     </td>
                                                 </tr>
                                             )
