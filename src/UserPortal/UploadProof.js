@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import TdComponent from '../Helper Components/TdComponent';
 import ThComponent from '../Helper Components/ThComponent';
-// import DropDown from '../Helper Components/DropDown';
 import EventsLoader from '../Helper Components/EventsLoader';
 import UploadProofButton from '../Helper Components/UploadProofButton';
 // import { useOutletContext } from 'react-router-dom';
@@ -29,10 +28,6 @@ function UploadProof() {
     const handleChange = (e) => {
         setAge(e.target.value);
     };
-
-    const uploadMain = (val) => {
-        setShow(val);
-    }
 
     const handleUpload = async (val) => {
         const { value: file } = await Swal.fire({
@@ -74,31 +69,42 @@ function UploadProof() {
 
     const getUserPhoto = (val) => {
         try {
-            if (imageFile) {
-                formData.append("volunteer_presence[participate_volunteer_id]", val);
-                formData.append("volunteer_presence[request_type]", "geo_location");
-                formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
-                formData.append("volunteer_presence[upload_proof]", imageFile);
-                axios.post('/api/v1/volunteer_presences', formData)
-                    .then((res) => {
-                        console.log(res);
-                        Swal.fire({
-                            title: "Uploaded!",
-                            text: "Your proof is uploaded.",
-                            icon: "success"
-                        });
-                        setLocationView(0)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
+            Swal.fire({
+                title: "QR Code",
+                imageWidth: '300px',
+                imageHeight: '300px',
+                imageUrl: imageSrc,
+                imageAlt: "The Qr code"
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    if (imageFile) {
+                        formData.append("volunteer_presence[participate_volunteer_id]", val);
+                        formData.append("volunteer_presence[request_type]", "geo_location");
+                        formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
+                        formData.append("volunteer_presence[upload_proof]", imageFile);
+                        axios.post('/api/v1/volunteer_presences', formData)
+                            .then((res) => {
+                                console.log(res);
+                                Swal.fire({
+                                    title: "Uploaded!",
+                                    text: "Your proof is uploaded.",
+                                    icon: "success"
+                                });
+                                setLocationView(0)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    }
+                }
+            })
+
         } catch (error) {
             console.error('Error occurred while shortening URL:', error);
         }
     };
 
-    const capture = useCallback(async () => {
+    const capture = useCallback(async (val) => {
         setImageSrc(webcamRef.current.getScreenshot());
         const screenshot = webcamRef.current.getScreenshot();
         try {
@@ -106,6 +112,9 @@ function UploadProof() {
             const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
             console.log(file);
             setImageFile(file);
+            if (file){
+                getUserPhoto(val);
+            }
         } catch (error) {
             console.error('Error occurred while capturing and sending screenshot:', error);
         }
@@ -137,7 +146,6 @@ function UploadProof() {
 
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                console.log(position);
                 setPosition({
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
@@ -164,6 +172,8 @@ function UploadProof() {
                                             moreClasses="rounded-tl-md rounded-bl-md"
                                             name='Event' />
                                         <ThComponent name='Date' />
+                                        <ThComponent name='Location' />
+                                        <ThComponent name='Points' />
                                         <ThComponent name='Status' />
                                     </tr>
                                 </thead>
@@ -184,59 +194,59 @@ function UploadProof() {
                                                                 <td className="py-3 px-4 border-b border-b-gray-50">
                                                                     <TdComponent things={val.task?.date} />
                                                                 </td>
-                                                                {show === val.id ?
-                                                                    change ?
-                                                                        <td className='py-3 px-2 rounded border border-yellow-400 bg-yellow-500'>
-                                                                            Requested
-                                                                        </td>
-                                                                        :
-                                                                        <td className='py-3 px-2 border-b border-b-gray-50'>
-                                                                            {
-                                                                                locationView ?
-                                                                                    imageSrc ?
-                                                                                        <div className='py-3'>
-                                                                                            <img src={imageSrc}
-                                                                                                className='rounded-[2rem]'
-                                                                                                alt='' />
-                                                                                            <TdComponent things={
-                                                                                                <UploadProofButton
-                                                                                                    function={() => getUserPhoto(val.id)}
-                                                                                                    name='Upload' />} />
-                                                                                        </div>
-                                                                                        :
-                                                                                        <div className='py-3'>
-                                                                                            <Webcam
-                                                                                                audio={false}
-                                                                                                width={280}
-                                                                                                height={280}
-                                                                                                screenshotFormat="image/jpeg"
-                                                                                                ref={webcamRef}
-                                                                                            />
-                                                                                            <TdComponent things={
-                                                                                                <UploadProofButton
-                                                                                                    function={capture}
-                                                                                                    name='Capture Photo' />} />
-                                                                                        </div>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_location} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.points} />
+                                                                </td>
 
-                                                                                    :
+                                                                <td className='flex py-3 border-b border-b-gray-50'>
+                                                                    <TdComponent things={
+                                                                        <UploadProofButton
+                                                                            function={() => handleUpload(val.id)}
+                                                                            name='Upload Image' />} />
+                                                                    {
+                                                                        locationView ?
+                                                                            imageSrc ?
+                                                                                <div className='py-3'>
+                                                                                    {
+
+                                                                                    }
+                                                                                    {/* <img src={imageSrc}
+                                                                                        className='rounded-[2rem]'
+                                                                                        alt='' /> */}
                                                                                     <TdComponent things={
                                                                                         <UploadProofButton
-                                                                                            function={handleLocation}
-                                                                                            name='Location' />} />
-                                                                            }
+                                                                                            function={() => getUserPhoto(val.id)}
+                                                                                            name='Upload' />} />
+                                                                                </div>
+                                                                                :
+                                                                                <div className='py-3'>
+                                                                                    <Webcam
+                                                                                        audio={false}
+                                                                                        width={280}
+                                                                                        height={280}
+                                                                                        screenshotFormat="image/jpeg"
+                                                                                        ref={webcamRef}
+                                                                                    />
+                                                                                    <TdComponent things={
+                                                                                        <UploadProofButton
+                                                                                            function={capture(val.id)}
+                                                                                            name='Capture Photo' />} />
+                                                                                </div>
+
+                                                                            :
                                                                             <TdComponent things={
                                                                                 <UploadProofButton
-                                                                                    function={() => handleUpload(val.id)}
-                                                                                    name='Image/Video' />} />
-                                                                        </td>
-                                                                    :
-                                                                    <td className="py-3 px-2 border-b border-b-gray-50">
-                                                                        <TdComponent things={<button
-                                                                            onClick={() => uploadMain(val.id)}
-                                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Upload</button>} />
-                                                                    </td>
-                                                                }
-                                                            </tr> : ""
+                                                                                    function={handleLocation}
+                                                                                    name='Location' />} />
+                                                                    }
+
+                                                                </td>
+
+                                                            </tr>
+                                                            : ""
                                                     }
                                                     {
                                                         age === 'uploaded' && val.volunteer_presence ?
@@ -246,6 +256,12 @@ function UploadProof() {
                                                                 </td>
                                                                 <td className="py-3 px-4 border-b border-b-gray-50">
                                                                     <TdComponent things={val.task?.date} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_location} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.points} />
                                                                 </td>
                                                                 <td className='py-3 border-b border-b-gray-50'>
                                                                     <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Uploaded</div>} />

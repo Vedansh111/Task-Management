@@ -17,7 +17,7 @@ function UserHeader(props) {
     }
 
     return (
-        <div className="py-2 px-6 bg-[#eceaea] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+        <div className={`py-2 px-6 bg-[#eceaea] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30`}>
             {/* Toogle Button */}
             <button
                 onClick={props.function}
@@ -26,14 +26,18 @@ function UserHeader(props) {
                 <LiaGripLinesSolid />
             </button>
 
-            <ul className="ml-auto flex items-center">
+            <ul className={` flex items-center ${props.show ? "ml-auto" : "bg-red-800 ml-auto"}`}>
                 <li className="dropdown ml-3">
                     <button type="button"
                         onClick={showSettings}
                         className="dropdown-toggle flex items-center">
                         <div className="flex-shrink-0 w-10 h-10 relative">
                             <div className="p-1 bg-white rounded-full focus:outline-none focus:ring">
-                                <img className="w-8 h-8 rounded-full" src={props.img === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : props.img} alt="" />
+                                {
+                                    props.show ?
+                                        <img className="w-8 h-8 rounded-full" src={props.img === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : props.img} alt="" /> :
+                                        <img className="w-8 h-8 rounded-full" src={"https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg"} alt="" />
+                                }
                                 <div className="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>
                                 <div className="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
                             </div>
