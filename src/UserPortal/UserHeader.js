@@ -26,7 +26,7 @@ function UserHeader(props) {
                 <LiaGripLinesSolid />
             </button>
 
-            <ul className={` flex items-center ${props.show ? "ml-auto" : "bg-red-800 ml-auto"}`}>
+            <ul className={`ml-auto flex items-center ${props.show ? "" : "hidden"}`}>
                 <li className="dropdown ml-3">
                     <button type="button"
                         onClick={showSettings}
@@ -35,7 +35,7 @@ function UserHeader(props) {
                             <div className="p-1 bg-white rounded-full focus:outline-none focus:ring">
                                 {
                                     props.show ?
-                                        <img className="w-8 h-8 rounded-full" src={props.img === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : props.img} alt="" /> :
+                                        <img className="w-8 h-8 rounded-full" src={props.img} alt="" /> :
                                         <img className="w-8 h-8 rounded-full" src={"https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg"} alt="" />
                                 }
                                 <div className="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>

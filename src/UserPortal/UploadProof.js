@@ -18,8 +18,6 @@ function UploadProof() {
     const webcamRef = React.useRef(null);
     const [locationView, setLocationView] = useState(0);
     const [imageSrc, setImageSrc] = useState();
-    const [imageFile, setImageFile] = useState();
-    const [show, setShow] = useState();
     const [change, setChange] = useState();
     const formData = new FormData();
     const [age, setAge] = useState('pending');
@@ -67,23 +65,26 @@ function UploadProof() {
         }
     }
 
-    const getUserPhoto = (val) => {
+    const getUserPhoto = (val, img, file) => {
+        console.log(val);
         try {
             Swal.fire({
-                title: "QR Code",
+                title: "Image",
                 imageWidth: '300px',
                 imageHeight: '300px',
-                imageUrl: imageSrc,
-                imageAlt: "The Qr code"
+                imageUrl: img,
+                imageAlt: "The image",
             }).then((res) => {
                 if (res.isConfirmed) {
-                    if (imageFile) {
+                    console.log("waah");
+                    if (file) {
                         formData.append("volunteer_presence[participate_volunteer_id]", val);
                         formData.append("volunteer_presence[request_type]", "geo_location");
                         formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
-                        formData.append("volunteer_presence[upload_proof]", imageFile);
+                        formData.append("volunteer_presence[upload_proof]", file);
                         axios.post('/api/v1/volunteer_presences', formData)
                             .then((res) => {
+                                setChange(res.data.status);
                                 console.log(res);
                                 Swal.fire({
                                     title: "Uploaded!",
@@ -105,15 +106,14 @@ function UploadProof() {
     };
 
     const capture = useCallback(async (val) => {
-        setImageSrc(webcamRef.current.getScreenshot());
         const screenshot = webcamRef.current.getScreenshot();
         try {
             const blob = await fetch(screenshot).then(res => res.blob());
             const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
             console.log(file);
-            setImageFile(file);
-            if (file){
-                getUserPhoto(val);
+            if (file) {
+                setLocationView(0);
+                getUserPhoto(val, screenshot, file);
             }
         } catch (error) {
             console.error('Error occurred while capturing and sending screenshot:', error);
@@ -208,34 +208,19 @@ function UploadProof() {
                                                                             name='Upload Image' />} />
                                                                     {
                                                                         locationView ?
-                                                                            imageSrc ?
-                                                                                <div className='py-3'>
-                                                                                    {
-
-                                                                                    }
-                                                                                    {/* <img src={imageSrc}
-                                                                                        className='rounded-[2rem]'
-                                                                                        alt='' /> */}
-                                                                                    <TdComponent things={
-                                                                                        <UploadProofButton
-                                                                                            function={() => getUserPhoto(val.id)}
-                                                                                            name='Upload' />} />
-                                                                                </div>
-                                                                                :
-                                                                                <div className='py-3'>
-                                                                                    <Webcam
-                                                                                        audio={false}
-                                                                                        width={280}
-                                                                                        height={280}
-                                                                                        screenshotFormat="image/jpeg"
-                                                                                        ref={webcamRef}
-                                                                                    />
-                                                                                    <TdComponent things={
-                                                                                        <UploadProofButton
-                                                                                            function={capture(val.id)}
-                                                                                            name='Capture Photo' />} />
-                                                                                </div>
-
+                                                                            <div className='py-3'>
+                                                                                <Webcam
+                                                                                    audio={false}
+                                                                                    width={280}
+                                                                                    height={280}
+                                                                                    screenshotFormat="image/jpeg"
+                                                                                    ref={webcamRef}
+                                                                                />
+                                                                                <TdComponent things={
+                                                                                    <UploadProofButton
+                                                                                        function={() => capture(val.id)}
+                                                                                        name='Capture Photo' />} />
+                                                                            </div>
                                                                             :
                                                                             <TdComponent things={
                                                                                 <UploadProofButton
