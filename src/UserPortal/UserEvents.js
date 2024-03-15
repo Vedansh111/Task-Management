@@ -23,7 +23,7 @@ function UserEvents() {
         setSettings(0);
     }
 
-    const fetchUserData = useCallback(() => {
+    const fetchUserData = () => {
         axios.get(`api/v1/users/find_user?access_token=${accessToken}`).then((res) => {
             console.log(res.data?.user);
             setUserInfo(res.data?.user);
@@ -37,7 +37,7 @@ function UserEvents() {
             console.error('Error fetching user data:', error);
             navigate('/');
         });
-    }, [])
+    };
 
     useEffect(() => {
         if (!accessToken) {

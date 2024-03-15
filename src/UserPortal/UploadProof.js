@@ -17,7 +17,6 @@ function UploadProof() {
     });
     const webcamRef = React.useRef(null);
     const [locationView, setLocationView] = useState(0);
-    const [imageSrc, setImageSrc] = useState();
     const [change, setChange] = useState();
     const formData = new FormData();
     const [age, setAge] = useState('pending');
@@ -76,8 +75,7 @@ function UploadProof() {
                 imageAlt: "The image",
             }).then((res) => {
                 if (res.isConfirmed) {
-                    console.log("waah");
-                    if (file) {
+                    if (file && position.latitude && position.longitude) {
                         formData.append("volunteer_presence[participate_volunteer_id]", val);
                         formData.append("volunteer_presence[request_type]", "geo_location");
                         formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
@@ -137,6 +135,8 @@ function UploadProof() {
             console.error('Error:', err);
         }
     };
+
+    console.log(position.latitude, position.longitude);
 
     useEffect(() => {
         axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {

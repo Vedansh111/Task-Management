@@ -13,7 +13,7 @@ function UserHeader(props) {
 
     function handleClick() {
         localStorage.clear();
-        window.reload();
+        // window.reload();
     }
 
     return (

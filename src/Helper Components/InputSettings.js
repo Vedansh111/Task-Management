@@ -3,7 +3,7 @@ import React from 'react'
 function InputSettings(props) {
     return (
         <div className=' flex p-2 m-1 items-center'>
-            <label htmlFor={props.name} className='text-wrap text-base font-medium mr-2.5 w-[4.5rem]'>{props.title}</label>
+            <label htmlFor={props.name} className='text-wrap text-base font-medium w-[2.5rem]'>{props.title}</label>
             <div className='flex flex-col '>
                 <input type={props.type}
                     name={props.name}
