@@ -15,6 +15,8 @@ function AdminSidebar(props) {
                 </div>
 
                 <ul className="mt-9 px-1">
+
+                    {/* Admin */}
                     <div className="text-slate-600 
                     font-bold mt-1">ADMIN</div>
                     <HoverComponent to='dashboard' name='Dashboard'
@@ -22,10 +24,18 @@ function AdminSidebar(props) {
                     <HoverComponent to='events' name='Events'
                         symbol={<BsListTask />} />
 
+                    {/* Requests */}
                     <div className="text-slate-600 font-bold mt-5">REQUESTS</div>
                     <HoverComponent to='participate_requests' name='Participate Request'
                         symbol={<IoPeople />} />
                     <HoverComponent to='proof_requests' name='Proof Request'
+                        symbol={<RiUploadCloud2Fill />} />
+
+                    {/* Booth */}
+                    <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
+                    <HoverComponent to='booth' name='Booth'
+                        symbol={<IoPeople />} />
+                    <HoverComponent to='booth_attendence' name='Booth Attendence'
                         symbol={<RiUploadCloud2Fill />} />
                 </ul>
             </div>

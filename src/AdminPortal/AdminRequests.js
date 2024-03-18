@@ -15,7 +15,6 @@ function AdminRequests() {
 
     const handleChange = (event) => {
         setAge(event.target.value);
-
     };
 
     const handleShow = () => {
