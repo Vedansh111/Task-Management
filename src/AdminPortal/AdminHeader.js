@@ -14,7 +14,7 @@ function AdminHeader(props) {
 
     function handleClick() {
         localStorage.clear();
-        window.reload();
+        // window.reload();
     }
 
     return (

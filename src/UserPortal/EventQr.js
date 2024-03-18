@@ -76,8 +76,7 @@ function EventQr() {
                                         <ThComponent name='Location' />
                                         <ThComponent name='Points' />
                                         <ThComponent name='Status' />
-                                    </tr>
-                                    
+                                    </tr>                                   
                                 </thead>
                                 <tbody>
                                     {tasks.length === 0 ?
