@@ -24,8 +24,8 @@ function EventQr() {
                         if (val === value.id) {
                             Swal.fire({
                                 title: "QR Code",
-                                imageWidth: '300px',
-                                imageHeight: '300px',
+                                imageWidth: '200px',
+                                imageHeight: '200px',
                                 imageUrl: value.qr_code_url,
                                 imageAlt: "The Qr code"
                             });
@@ -76,7 +76,7 @@ function EventQr() {
                                         <ThComponent name='Location' />
                                         <ThComponent name='Points' />
                                         <ThComponent name='Status' />
-                                    </tr>                                   
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {tasks.length === 0 ?

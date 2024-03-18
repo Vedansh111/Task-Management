@@ -13,7 +13,6 @@ function OtpPage() {
     const [otpButton, setOtpButton] = useState(true);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
-    const [otpValues, setOtpValues] = useState(['', '', '', '']);
     const ids = [1, 2, 3, 4];
     const initialValues = {
         email: '',
@@ -141,7 +140,6 @@ function OtpPage() {
                 if (minutes === 0) {
                     setEnterOtp(false);
                     setVerifyButton(false);
-                    setOtpValues(['', '', '', '']);
                     clearInterval(interval);
                 } else {
                     setSeconds(59);
