@@ -1,5 +1,5 @@
-import React from 'react'
-import EventsLoader from '../Helper Components/EventsLoader'
+import React from 'react';
+import EventsLoader from '../Helper Components/EventsLoader';
 
 function AdminBooth() {
     const tasks = [1, 2, 3];

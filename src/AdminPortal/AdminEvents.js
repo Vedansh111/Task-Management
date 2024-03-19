@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react';
 import AdminNewEvent from './AdminNewEvent';
 import { IoAddCircle } from "react-icons/io5";
 import { FaCircleArrowRight } from "react-icons/fa6";
@@ -13,36 +13,23 @@ import Swal from 'sweetalert2';
 function AdminEvents() {
     const [isOpen, setIsOpen] = useState(false);
     const [tasks, setTasks] = useState(0);
-    const [initialValues, setInitialValues] = useState({
-        name: '',
-        date: '',
-        time: '',
-        points: '',
-    });
-    
+
     const handleAdd = () => {
         setIsOpen(true);
         handleShow();
     }
 
     const editEvent = async (valu) => {
-        tasks.filter((item) => {
-            console.log(item);
-            return (item?.id === valu) ? setInitialValues({
-                name: item?.event_name,
-                date: item?.date,
-                time: item?.time,
-                points: item?.points,
-            }) : false;
-        })
+        const see = tasks.filter(item => item?.id === valu);
+        console.log(see);
         console.log(valu);
         const { value: formValues } = await Swal.fire({
             title: "Edit the event",
             html: `  
-            Event Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.name}" placeholder="Event Name..."><br/>
-            Date:<input type="date" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.date}" placeholder="Date..."><br/>
-            Time:<input type="time" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.time}" placeholder="Time..."><br/>
-            Points:<input type="text" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${initialValues.points}" placeholder="Points...">
+            Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.event_name}" placeholder="Name..."><br/>
+            Date:<input type="date" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.date}" placeholder="Date..."><br/>
+            Time:<input type="time" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.time}" placeholder="Time..."><br/>
+            Points:<input type="text" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.points}" placeholder="Points...">
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -115,7 +102,6 @@ function AdminEvents() {
     }, [])
 
     return (
-
         tasks ? (
             <div className='p-6'>
                 {isOpen ?

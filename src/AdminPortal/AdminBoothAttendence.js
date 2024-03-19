@@ -1,10 +1,11 @@
-import React from 'react'
-import EventsLoader from '../Helper Components/EventsLoader'
+import React from 'react';
+import EventsLoader from '../Helper Components/EventsLoader';
 import ThComponent from '../Helper Components/ThComponent';
 import TdComponent from '../Helper Components/TdComponent';
 
 function AdminBoothAttendence() {
     const tasks = [1,2,3,4];
+    
   return (
     tasks ? (
         <div className='p-6'>

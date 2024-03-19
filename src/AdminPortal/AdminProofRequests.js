@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import TdComponent from '../Helper Components/TdComponent'
-import ThComponent from '../Helper Components/ThComponent'
-import { MdDone } from "react-icons/md"
-import { IoMdClose } from "react-icons/io"
-import EventsLoader from '../Helper Components/EventsLoader'
-import DropDown from '../Helper Components/DropDown'
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import TdComponent from '../Helper Components/TdComponent';
+import ThComponent from '../Helper Components/ThComponent';
+import { MdDone } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
+import EventsLoader from '../Helper Components/EventsLoader';
+import DropDown from '../Helper Components/DropDown';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function AdminProofRequests() {
     const [tasks, setTasks] = useState(0);

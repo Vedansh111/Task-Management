@@ -8,11 +8,10 @@ import Swal from 'sweetalert2';
 
 function EventQr() {
     const [tasks, setTasks] = useState([]);
-    const [position, setPosition] = useState({
-        latitude: null,
-        longitude: null,
-    });
-    // const formData = new FormData();
+    // const [position, setPosition] = useState({
+    //     latitude: null,
+    //     longitude: null,
+    // });
 
     const viewPoster = (val) => {
         axios.post(`api/v1/participate_volunteers/${val}/generate_qr`).then((res) => {
@@ -44,17 +43,17 @@ function EventQr() {
             setTasks(res?.data?.participate_volunteer);
         })
 
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                console.log(position);
-                setPosition({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                });
-            });
-        } else {
-            console.log("Geolocation is not available in your browser.");
-        }
+        // if ("geolocation" in navigator) {
+        //     navigator.geolocation.getCurrentPosition(function (position) {
+        //         console.log(position);
+        //         setPosition({
+        //             latitude: position.coords.latitude,
+        //             longitude: position.coords.longitude,
+        //         });
+        //     });
+        // } else {
+        //     console.log("Geolocation is not available in your browser.");
+        // }
     }, [])
 
     return (
@@ -65,7 +64,7 @@ function EventQr() {
                         {/* <div className="flex justify-between mb-4 items-start">
                             <DropDown handleChange={handleChange} items={items} />
                         </div> */}
-                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[90%] px-1">
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto lg:h-[90%] md:h-full px-1">
                             <table className="w-full min-w-[460px] z-0">
                                 <thead className='uppercase'>
                                     <tr>
