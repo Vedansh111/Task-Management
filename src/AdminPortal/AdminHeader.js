@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { LiaGripLinesSolid } from "react-icons/lia";
 import { Link } from 'react-router-dom';
 

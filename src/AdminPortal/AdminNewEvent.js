@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import Input from '../Helper Components/Input';
 import InputSettings from '../Helper Components/InputSettings';

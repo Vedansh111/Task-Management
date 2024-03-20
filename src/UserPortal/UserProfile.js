@@ -110,7 +110,7 @@ function UserProfile() {
                 <div className='flex flex-col justify-center items-center h-[75vh] lg:w-[50%] md:[60%] border shadow-lg rounded-md bg-slate-100'>
                     <form className='lg:w-[70%] md:w-[2/3] lg:items-start md:items-start  h-full md:flex md:flex-col md:justify-center' onSubmit={handleSubmit} method='post'>
                         <div className='flex p-2 m-1 items-center'>
-                            <label className='text-wrap text-base font-medium mr-2.5 w-[4.5rem]'>Profile Picture</label>
+                            <label className='text-wrap text-center text-base font-medium mr-2 w-[4.3rem]'>Profile Picture</label>
                             <img src={values.avatar ? values.avatar : "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg"} alt="img"
                                 className='object-center rounded-full w-[3rem] h-[3rem] border border-gray-400 mx-1.5' />
                             <button
@@ -162,11 +162,11 @@ function UserProfile() {
                             touched={touched.address}
                             values={values.address}
                             width='20rem' />
-                        <div className='flex p-2 m-2 items-center'>
-                            <label className='text-wrap text-base font-medium mr-2.5 w-[4.5rem]'>Upload Id</label>
+                        <div className='flex p-2 m-1 items-center'>
+                            <label className='text-wrap text-base text-center font-medium mr-2 w-[4.3rem]'>Upload Id</label>
                             <button
                                 type='button'
-                                className='ml-1.5 border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
+                                className='border border-gray-500 text-black p-1 rounded-md hover:bg-[#506f36] hover:text-white'
                                 onClick={uploadAadhar}>Aadhar Card/ Pan Card</button>
                         </div>
                         <div className='flex items-center justify-center w-full h-fit mt-5'>

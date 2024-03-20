@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { GiNinjaStar } from "react-icons/gi";
 import { BsListTask } from "react-icons/bs";
 import { RiUploadCloud2Fill } from "react-icons/ri";

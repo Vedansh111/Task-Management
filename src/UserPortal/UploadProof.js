@@ -74,8 +74,8 @@ function UploadProof() {
                 imageUrl: img,
                 imageAlt: "The image",
             }).then((res) => {
-                if (res.isConfirmed) {
-                    if (file && position.latitude && position.longitude) {
+                if (res.isConfirmed && position.latitude && position.longitude) {
+                    if (file) {
                         formData.append("volunteer_presence[participate_volunteer_id]", val);
                         formData.append("volunteer_presence[request_type]", "geo_location");
                         formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
