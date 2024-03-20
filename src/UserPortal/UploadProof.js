@@ -66,6 +66,7 @@ function UploadProof() {
 
     const getUserPhoto = (val, img, file) => {
         console.log(val);
+        console.log(position);
         try {
             Swal.fire({
                 title: "Image",
@@ -74,6 +75,7 @@ function UploadProof() {
                 imageUrl: img,
                 imageAlt: "The image",
             }).then((res) => {
+                console.log(res.isConfirmed);
                 if (res.isConfirmed && position.latitude && position.longitude) {
                     if (file) {
                         formData.append("volunteer_presence[participate_volunteer_id]", val);
@@ -82,7 +84,6 @@ function UploadProof() {
                         formData.append("volunteer_presence[upload_proof]", file);
                         axios.post('/api/v1/volunteer_presences', formData)
                             .then((res) => {
-                                setChange(res.data.status);
                                 console.log(res);
                                 Swal.fire({
                                     title: "Uploaded!",
@@ -97,7 +98,6 @@ function UploadProof() {
                     }
                 }
             })
-
         } catch (error) {
             console.error('Error occurred while shortening URL:', error);
         }
@@ -111,6 +111,7 @@ function UploadProof() {
             console.log(file);
             if (file) {
                 setLocationView(0);
+                setChange(val);
                 getUserPhoto(val, screenshot, file);
             }
         } catch (error) {
@@ -120,23 +121,8 @@ function UploadProof() {
 
     const handleLocation = () => {
         setLocationView(1);
-        try {
-            // Get user's location
-            if (position.latitude && position.longitude) {
-                axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${position.latitude},${position.longitude}&key=52e0489d27fa4b149f155d298a0e7bec`)
-                    .then((res) => {
-                        // console.log(res.data.results);
-                        res?.data?.results.map((val) => {
-                            return console.log(val.formatted);
-                        })
-                    })
-            }
-        } catch (err) {
-            console.error('Error:', err);
-        }
+        console.log(position.latitude, position.longitude);
     };
-
-    console.log(position.latitude, position.longitude);
 
     useEffect(() => {
         axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {
@@ -200,7 +186,6 @@ function UploadProof() {
                                                                 <td className="py-3 px-4 border-b border-b-gray-50">
                                                                     <TdComponent things={val.task?.points} />
                                                                 </td>
-
                                                                 <td className='flex py-3 border-b border-b-gray-50'>
                                                                     <TdComponent things={
                                                                         <UploadProofButton
@@ -227,9 +212,7 @@ function UploadProof() {
                                                                                     function={handleLocation}
                                                                                     name='Location' />} />
                                                                     }
-
                                                                 </td>
-
                                                             </tr>
                                                             : ""
                                                     }

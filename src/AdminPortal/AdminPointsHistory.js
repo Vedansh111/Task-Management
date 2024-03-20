@@ -81,9 +81,9 @@ function AdminPointsHistory() {
 
     return (
         tasks ? (
-            <div onClick={showSettings[1]} className='p-6 lg:h-[89vh]'>
+            <div onClick={showSettings[1]} className='p-6 lg:h-[89vh] md:h-full sm:h-full'>
                 {/* Upper Div - ["No. of users", "No. of events", "No. of something"] */}
-                <div className=" lg:h-[18%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:mb-5 md:mb-6">
+                <div className="lg:h-[18%] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:mb-5 md:mb-6 sm:mb-6">
                     <div className="bg-white  h-[13vh] rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                         <div className="flex justify-between mb-6 h-full">
                             <div>
@@ -131,7 +131,7 @@ function AdminPointsHistory() {
                         <div className="flex justify-between mb-4 items-start">
                             <div className="font-medium">Points Table</div>
                         </div>
-                        <div className="overflow-auto lg:h-full md:h-[55vh]">
+                        <div className="overflow-auto h-[93%]">
                             <table className="w-full lg:min-w-[460px]">
                                 <thead>
                                     <tr>

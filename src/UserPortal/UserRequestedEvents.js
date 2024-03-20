@@ -32,7 +32,7 @@ function UserRequestedEvents() {
                     <div className="flex justify-between mb-4 items-start">
                         <DropDown handleChange={handleChange} items={items} />
                     </div>
-                    <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto lg:h-[90%] md:h-[90%]">
+                    <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[90%]">
                         <table className="w-full min-w-[460px] z-0">
                             <thead className='uppercase'>
                                 <tr>

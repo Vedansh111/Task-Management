@@ -65,7 +65,7 @@ function Events() {
                         <div className="flex justify-between mb-4 items-start">
                             <div className="font-medium">All Events</div>
                         </div>
-                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto lg:h-[93%] md:h-[93%]">
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[93%]">
                             <table className="w-full min-w-[460px] z-0">
                                 <thead className='uppercase'>
                                     <tr>

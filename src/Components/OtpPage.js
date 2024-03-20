@@ -162,83 +162,80 @@ function OtpPage() {
     }, []);
 
     return (
-        <div className=' h-screen bg-center bg-cover' style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519419166318-4f5c601b8e6c?q=90&w=1650&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <div className='flex flex-col items-center w-[25rem] bg-white p-6 rounded-3xl shadow-lg lg:absolute md:absolute sm:absolute bottom-[11rem] right-[15rem] '>
-                        <h1 className='text-3xl font-semibold mt-8'>Welcome Back</h1>
-                        <p className='text-center text-sm text-gray-600 font-light mt-2'>Enter your email to receive a one-time password</p>
+        <div className=' h-screen bg-center bg-cover md:grid md:items-center' style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519419166318-4f5c601b8e6c?q=90&w=1650&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
+            <form onSubmit={handleSubmit}>
+                <div className='flex flex-col items-center w-[25rem] bg-white p-6 rounded-3xl shadow-lg lg:absolute md:absolute sm:absolute bottom-[11rem] right-[15rem] '>
+                    <h1 className='text-3xl font-semibold mt-8'>Welcome Back</h1>
+                    <p className='text-center text-sm text-gray-600 font-light mt-2'>Enter your email to receive a one-time password</p>
 
-                        <input
-                            type='email'
-                            className='text-center p-2 border border-black mt-4 rounded-sm h-10 w-72'
-                            name='email'
-                            placeholder='Enter your email'
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                        />
-                        {errors.email && touched.email ?
-                            <p className=' text-xs'>{errors.email}</p> : null}
+                    <input
+                        type='email'
+                        className='text-center p-2 border border-black mt-4 rounded-sm h-10 w-72'
+                        name='email'
+                        placeholder='Enter your email'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.email}
+                    />
+                    {errors.email && touched.email ?
+                        <p className=' text-xs'>{errors.email}</p> : null}
 
-                        <h1 className='text-xl mt-6 font-semibold'>OTP Verification</h1>
+                    <h1 className='text-xl mt-6 font-semibold'>OTP Verification</h1>
 
-                        <div id="otp" className="flex justify-center mt-3">
-                            {ids.map((value, index) => (
-                                <OtpInput
-                                    name={`otpValues[${index}]`} // Use array notation for name
-                                    id={value}
-                                    var={enterOtp}
-                                    key={value}
-                                    value={values.otpValues[index]}
-                                    handleChange={(e) => handleOtpChange(index, e.target.value)} // Handle OTP input change
-                                />
-                            ))}
-                        </div>
-                        {seconds > 0 || minutes > 0 ? (
-                            <p className='text-sm text-gray-600'>
-                                Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
-                                {seconds < 10 ? `0${seconds}` : seconds}
-                            </p>
-                        ) : (
-                            <p></p>
-                        )}
-                        {
-                            otpButton ?
-                                <button
-                                    type='button'
-                                    onClick={() => handleClick()}
-                                    className='text-sm mt-4 hover:scale-105 border border-gray-500 p-1.5 rounded-md'>Send OTP</button>
-                                :
-                                ""
-                        }
-
-                        {
-                            verifyButton ?
-                                <div className='flex justify-center mt-4'>
-                                    <button
-                                        type='submit'
-                                        className='mt-3 mb-3 p-2 text-white rounded-md border border-gray-500 font-medium text-lg hover:scale-105'
-                                        style={{ backgroundColor: 'black' }}>
-                                        Verify Account
-                                    </button>
-                                </div > :
-                                " "
-                        }
-
-                        <p
-                            hidden={seconds > 0 || minutes > 0}
-                            className='mt-2 text-sm'>Didn't receive code?
+                    <div id="otp" className="flex justify-center mt-3">
+                        {ids.map((value, index) => (
+                            <OtpInput
+                                name={`otpValues[${index}]`} // Use array notation for name
+                                id={value}
+                                var={enterOtp}
+                                key={value}
+                                value={values.otpValues[index]}
+                                handleChange={(e) => handleOtpChange(index, e.target.value)} // Handle OTP input change
+                            />
+                        ))}
+                    </div>
+                    {seconds > 0 || minutes > 0 ? (
+                        <p className='text-sm text-gray-600'>
+                            Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
+                            {seconds < 10 ? `0${seconds}` : seconds}
+                        </p>
+                    ) : (
+                        <p></p>
+                    )}
+                    {
+                        otpButton ?
                             <button
                                 type='button'
-                                onClick={resendOTP}
-                                className='ml-0.5 font-semibold text-gray-700 hover:text-gray-900'>Resend
-                            </button>
-                        </p>
-                    </div>
-                </form>
+                                onClick={() => handleClick()}
+                                className='text-sm mt-4 hover:scale-105 border border-gray-500 p-1.5 rounded-md'>Send OTP</button>
+                            :
+                            ""
+                    }
 
-            </div>
+                    {
+                        verifyButton ?
+                            <div className='flex justify-center mt-4'>
+                                <button
+                                    type='submit'
+                                    className='mt-3 mb-3 p-2 text-white rounded-md border border-gray-500 font-medium text-lg hover:scale-105'
+                                    style={{ backgroundColor: 'black' }}>
+                                    Verify Account
+                                </button>
+                            </div > :
+                            " "
+                    }
+
+                    <p
+                        hidden={seconds > 0 || minutes > 0}
+                        className='mt-2 text-sm'>Didn't receive code?
+                        <button
+                            type='button'
+                            onClick={resendOTP}
+                            className='ml-0.5 font-semibold text-gray-700 hover:text-gray-900'>Resend
+                        </button>
+                    </p>
+                </div>
+            </form>
         </div>
     )
 }

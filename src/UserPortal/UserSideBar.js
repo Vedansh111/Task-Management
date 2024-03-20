@@ -9,7 +9,7 @@ import { GrStatusInfo } from "react-icons/gr";
 function UserSideBar(props) {
     return (
         <div>
-            <div onClick={props.showSettings} className={`fixed left-0 top-0 w-64 h-full bg-[#ccc6c5] p-4 z-50 sidebar-menu  transition-transform ${props.show ? "" : "-translate-x-full"}`}>
+            <div onClick={props.showSettings} className={`lg:fixed md:fixed sm:static left-0 top-0 lg:w-64 md:w-64 sm:w-full h-full bg-[#ccc6c5] p-4 z-50 sidebar-menu  transition-transform ${props.show ? "" : "-translate-x-full"}`}>
                 <div className="flex items-center pb-4 border-b border-b-gray-800">
                     <div className="flex items-center font-extrabold text-3xl">TaskNinja <span className='px-1'><GiNinjaStar /></span></div>
                 </div>
@@ -32,7 +32,7 @@ function UserSideBar(props) {
                 </ul>
             </div>
 
-            <div className={`fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay ${props.show ? " " : "hidden"}`}></div>
+            <div className={`lg:fixed md:fixed sm:static top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay ${props.show ? " " : "hidden"}`}></div>
         </div >
     )
 }
