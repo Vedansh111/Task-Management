@@ -101,7 +101,7 @@ function LoginPage() {
                     <div className='w-full md:w-[350px] flex flex-col justify-center items-center mt-20 md:mt-0'>
                         <h1 className='text-3xl font-semibold mb-2'>TaskNinja</h1>
                         <h1 className='mb-4'>Hello, who's this?</h1>
-                        <form className='w-full' onSubmit={handleSubmit} method='post'>
+                        <form className='lg:w-full md:w-[90%]' onSubmit={handleSubmit} method='post'>
                             <Input
                                 title='Email'
                                 type='email'
@@ -124,7 +124,7 @@ function LoginPage() {
                                 touched={touched.password}
                                 values={values.password}
                             />
-                            <div className='flex justify-between'>
+                            <div className='flex justify-between lg:w-[90%] '>
                                 <LinkTo name='Forgot Password?' to='forgot_password' />
                                 <LinkTo name='Login through OTP' to='/login_through_otp' />
                             </div>

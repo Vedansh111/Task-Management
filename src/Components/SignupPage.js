@@ -65,14 +65,14 @@ function SignupPage() {
             </div>
 
             {/* SignUp section */}
-            <div className='w-full md:w-1/2 flex flex-col items-center bg-[#fdfdfa]'>
+            <div className='w-full md:w-1/2 lg:flex flex-col items-center bg-[#fdfdfa]'>
                 <div className='bg- w-full md:w-[350px] h-[50px] md:mt-0 md:mr-0 flex justify-end items-center text-center absolute top-0 right-2'>
                     <h1>Already have an account?</h1>
                     <HoverButton name='Log In' to='/' />
                 </div>
                 <div className='w-full md:w-[350px] flex flex-col justify-center items-center mt-20 md:mt-0'>
                     <h1 className='text-3xl font-semibold mb-4'>TaskNinja</h1>
-                    <form className='w-full md:flex md:flex-col md:justify-center md:items-center' onSubmit={handleSubmit} method='post'>
+                    <form className='w-full flex flex-col justify-center items-center' onSubmit={handleSubmit} method='post'>
                         <Input
                             title='Name'
                             type='text'

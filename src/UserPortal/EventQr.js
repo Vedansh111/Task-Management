@@ -4,14 +4,21 @@ import TdComponent from '../Helper Components/TdComponent';
 import ThComponent from '../Helper Components/ThComponent';
 import EventsLoader from '../Helper Components/EventsLoader';
 import Swal from 'sweetalert2';
+import DropDown from '../Helper Components/DropDown';
 // import DropDown from '../Helper Components/DropDown';
 
 function EventQr() {
     const [tasks, setTasks] = useState([]);
+    const [age, setAge] = useState('pending');
+    const items = ['pending', 'uploaded'];
     // const [position, setPosition] = useState({
     //     latitude: null,
     //     longitude: null,
     // });
+
+    const handleChange = (e) => {
+        setAge(e.target.value);
+    };
 
     const viewPoster = (val) => {
         axios.post(`api/v1/participate_volunteers/${val}/generate_qr`).then((res) => {
@@ -61,10 +68,10 @@ function EventQr() {
             <div className='p-6'>
                 <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
                     <div className='bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md h-[82vh]'>
-                        {/* <div className="flex justify-between mb-4 items-start">
+                        <div className="flex justify-between mb-4 items-start">
                             <DropDown handleChange={handleChange} items={items} />
-                        </div> */}
-                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto lg:h-[90%] md:h-full px-1">
+                        </div>
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-full px-1">
                             <table className="w-full min-w-[460px] z-0">
                                 <thead className='uppercase'>
                                     <tr>
