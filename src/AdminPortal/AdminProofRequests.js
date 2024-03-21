@@ -88,6 +88,7 @@ function AdminProofRequests() {
                 text: "The points has been redeemed.",
                 icon: "success"
             });
+            handleShow();
         })
     }
 
@@ -181,13 +182,20 @@ function AdminProofRequests() {
                                                                 <td className='px-4 py-3 border-b border-b-gray-50'>
                                                                     <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Approved</div>} />
                                                                 </td>
-                                                                <td className="py-3 px-4 border-b border-b-gray-50">
-                                                                    <div className='text-gray-600 text-sm font-medium truncate '>
-                                                                        <button
-                                                                            onClick={() => redeemedRequest(val.id)}
-                                                                            className="font-semibold text-gray-700 border border-gray-300 p-1 rounded-md hover:bg-[#1e64d5] hover:text-white">Reedem</button>
-                                                                    </div>
-                                                                </td>
+                                                                {
+                                                                    val?.redeemed_points ?
+                                                                        <td className='py-3 border-b border-b-gray-50'>
+                                                                            <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Reedemed</div>} />
+                                                                        </td>
+                                                                        :
+                                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                            <div className='text-gray-600 text-sm font-medium truncate '>
+                                                                                <button
+                                                                                    onClick={() => redeemedRequest(val.id)}
+                                                                                    className="font-semibold text-gray-700 border border-gray-300 p-1 rounded-md hover:bg-[#1e64d5] hover:text-white">Reedem</button>
+                                                                            </div>
+                                                                        </td>
+                                                                }
                                                             </div>
                                                             :
                                                             ""
@@ -218,7 +226,7 @@ function AdminProofRequests() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         ) : <EventsLoader />
     )
 }

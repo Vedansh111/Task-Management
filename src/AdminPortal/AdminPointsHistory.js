@@ -69,7 +69,7 @@ function AdminPointsHistory() {
         })
 
         axios.get('api/v1/users').then((res) => {
-            console.log(res.data?.users);
+            console.log(res.data);
             setTasks(res.data?.users);
             setNames(res.data?.users.map(user => user.name));
             setPoints(res.data?.users.map(user => user.points ? user.points : 0));

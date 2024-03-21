@@ -45,8 +45,8 @@ function Events() {
                 Swal.fire({
                     title: "Event Poster",
                     imageWidth: '95%',
-                    imageHeight: 'auto',
-                    imageUrl: value.event_poster_url,
+                    imageHeight: '400px',
+                    imageUrl: value.event_poster_url === "" ? "https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg?auto=compress&cs=tinysrgb&w=600" : value.event_poster_url,
                     imageAlt: "The event poster"
                 });
             }
@@ -90,7 +90,7 @@ function Events() {
                                                 <tr key={val.id} >
                                                     <td className="py-2 px-4 border-b border-b-gray-50">
                                                         <div className="flex items-center">
-                                                            <img src={val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" />
+                                                            <img src={val.event_poster_url === "" ? "https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg?auto=compress&cs=tinysrgb&w=600" : val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" />
                                                             <TdComponent things={val.event_name} />
                                                         </div>
                                                     </td>
