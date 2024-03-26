@@ -45,7 +45,7 @@ function LoginPage() {
                     axios.post('api/v1/users/login', formData).then((res) => {
                         setLoader(res);
                         localStorage.setItem('access_token', res.data?.user?.access_token);
-                        localStorage.setItem('role', res.data?.user?.role?.role_name);
+                        localStorage.setItem('role', res.data?.user?.role);
                         (localStorage.getItem('role') === 'admin') ? navigate('/admin/dashboard', { replace: true }) : navigate('/user/dashboard', { replace: true });
                         console.log("post data", res);
                         const Toast = Swal.mixin({

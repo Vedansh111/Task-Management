@@ -32,9 +32,9 @@ function AdminSidebar(props) {
 
                     {/* Booth */}
                     <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
-                    <HoverComponent to='booth' name='Booth'
+                    <HoverComponent to='admin_booth' name='Booth'
                         symbol={<IoPeople />} />
-                    <HoverComponent to='booth_attendence' name='Booth Attendence'
+                    <HoverComponent to='admin_booth_attendence' name='Booth Attendence'
                         symbol={<RiUploadCloud2Fill />} />
                 </ul>
             </div>

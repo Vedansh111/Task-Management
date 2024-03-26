@@ -5,6 +5,7 @@ import HoverComponent from '../Helper Components/HoverComponent';
 import { GiNinjaStar } from 'react-icons/gi';
 import { RxDashboard } from 'react-icons/rx';
 import { GrStatusInfo } from "react-icons/gr";
+import { IoPeople } from 'react-icons/io5';
 
 function UserSideBar(props) {
     return (
@@ -29,6 +30,11 @@ function UserSideBar(props) {
                         symbol={<HiMiniIdentification />} />
                     <HoverComponent to='event_qr' name='Event QR'
                         symbol={<HiMiniIdentification />} />
+
+                    {/* Booth */}
+                    <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
+                    <HoverComponent to='user_booth' name='Booth'
+                        symbol={<IoPeople />} />
                 </ul>
             </div>
 

@@ -16,20 +16,22 @@ import AdminEvents from './AdminPortal/AdminEvents';
 import AdminRequests from './AdminPortal/AdminRequests';
 import AdminPointsHistory from './AdminPortal/AdminPointsHistory';
 import AdminProofRequests from './AdminPortal/AdminProofRequests';
-import AdminBooth from './AdminPortal/AdminBooth';
-import AdminBoothAttendence from './AdminPortal/AdminBoothAttendence';
+import AdminBooth from './Booth Management/Admin/AdminBooth';
+import AdminBoothAttendence from './Booth Management/Admin/AdminBoothAttendence';
+import UserBooth from './Booth Management/User/UserBooth';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
-    // const access_token = localStorage.getItem('access_token');
-    // const role = localStorage.getItem('role');
     return (
         <Router>
             <Routes>
+                {/* Pages */}
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/login_through_otp" element={<OtpPage />} />
                 <Route path="/forgot_password" element={<ForgetPasswordPage />} />
+
+                {/* User Side */}
                 <Route path="user/" element={<UserEvents />}>
                     <Route path="dashboard" element={<UserDashboard />} />
                     <Route path="events" element={<Events />} />
@@ -37,15 +39,20 @@ export default function App() {
                     <Route path="upload_proof" element={<UploadProof />} />
                     <Route path="event_qr" element={<EventQr />} />
                     <Route path="user_profile" element={<UserProfile />} />
+                    <Route path="user_booth" element={<UserBooth />} />
                 </Route>
+
+                {/* Admin Side */}
                 <Route path="admin/" element={<AdminDashboard />}>
                     <Route path="events" element={<AdminEvents />} />
                     <Route path="participate_requests" element={<AdminRequests />} />
                     <Route path="proof_requests" element={<AdminProofRequests />} />
                     <Route path="dashboard" element={<AdminPointsHistory />} />
-                    <Route path="booth" element={<AdminBooth />} />
-                    <Route path="booth_attendence" element={<AdminBoothAttendence />} />
+                    <Route path="admin_booth" element={<AdminBooth />} />
+                    <Route path="admin_booth_attendence" element={<AdminBoothAttendence />} />
                 </Route>
+
+                {/* Error */}
                 <Route path='*' element={<ErrorPage />} />
             </Routes>
         </Router>

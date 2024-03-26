@@ -9,8 +9,8 @@ import Swal from 'sweetalert2';
 function UserProfile() {
     const [accessToken, setAccessToken] = useState();
     const [userInfo, fetchUserData] = useOutletContext();
-    const [avatarUrl, setAvatarUrl] = useState("");
-    const [aadharCardUrl, setAadharCardUrl] = useState("");
+    const [avatarUrl, setAvatarUrl] = useState(userInfo.avatar_url);
+    const [aadharCardUrl, setAadharCardUrl] = useState(userInfo.aadhar_card_url);
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
@@ -19,17 +19,17 @@ function UserProfile() {
     const initialValues = {
         name: userInfo.name,
         email: userInfo.email,
-        password: userInfo.password,
         phone: userInfo.mobile_number,
         position: userInfo.role,
         address: userInfo.residential_address,
-        avatar: userInfo.avatar_url,
-        aadhar_card: userInfo.aadhar_card_url,
+        avatar: avatarUrl,
+        aadhar_card: aadharCardUrl,
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
+            console.log(values);
             await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
                 user: {
                     name: values.name,
@@ -54,6 +54,10 @@ function UserProfile() {
                     });
                 }).catch((err) => {
                     console.log(err);
+                    Swal.fire({
+                        title: "Nothing to update!",
+                        icon: "info"
+                    });
                 })
         },
     });
@@ -109,11 +113,11 @@ function UserProfile() {
     return (
         <div className='p-6'>
             <div className='flex w-full justify-center items-center mt-10'>
-                <div className='flex flex-col justify-center items-center h-[75vh] lg:w-[50%] md:[60%] border shadow-lg rounded-md bg-slate-100'>
-                    <form className='lg:w-[70%] md:w-[2/3] lg:items-start md:items-start  h-full md:flex md:flex-col md:justify-center' onSubmit={handleSubmit} method='post'>
+                <div className='flex flex-col justify-center items-center h-[75vh] lg:w-[50%] md:w-[40%] sm:w-[90%] border shadow-lg rounded-md bg-slate-100'>
+                    <form className='lg:w-[70%] sm:w-[70%] md:w-[2/3] lg:flex lg:items-start md:items-start  h-full md:flex md:flex-col md:justify-center sm:flex sm:flex-col sm:justify-center' onSubmit={handleSubmit} method='post'>
                         <div className='flex p-2 m-1 items-center'>
                             <label className='text-wrap text-center text-base font-medium mr-2 w-[4.3rem]'>Profile Picture</label>
-                            <img src={values.avatar ? values.avatar : "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg"} alt="img"
+                            <img src={values.avatar === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : values.avatar} alt="img"
                                 className='object-center rounded-full w-[3rem] h-[3rem] border border-gray-400 mx-1.5' />
                             <button
                                 type='button'

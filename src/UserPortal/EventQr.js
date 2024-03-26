@@ -40,8 +40,6 @@ function EventQr() {
         })
     }
 
-
-
     useEffect(() => {
         axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {
             console.log(res?.data?.participate_volunteer);
@@ -57,7 +55,7 @@ function EventQr() {
                         <div className="flex justify-between mb-4 items-start">
                             <DropDown handleChange={handleChange} items={items} />
                         </div>
-                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-full px-1">
+                        <div className="animate-fade-left animate-delay-100 animate-once animate-ease-out overflow-auto h-[90%] px-1">
                             <table className="w-full min-w-[460px] z-0">
                                 <thead className='uppercase'>
                                     <tr>
