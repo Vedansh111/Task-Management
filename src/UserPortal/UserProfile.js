@@ -74,6 +74,7 @@ function UserProfile() {
                 Swal.fire({
                     title: "Your uploaded picture",
                     imageUrl: e.target.result,
+                    imageHeight: '400px',
                     imageAlt: "The uploaded picture"
                 });
             };
@@ -97,6 +98,7 @@ function UserProfile() {
                 Swal.fire({
                     title: "Your uploaded aadhar card",
                     imageUrl: e.target.result,
+                    imageHeight: '400px',
                     imageAlt: "The uploaded picture"
                 });
             };

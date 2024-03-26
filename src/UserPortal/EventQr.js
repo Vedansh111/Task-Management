@@ -11,10 +11,6 @@ function EventQr() {
     const [tasks, setTasks] = useState([]);
     const [age, setAge] = useState('pending');
     const items = ['pending', 'uploaded'];
-    // const [position, setPosition] = useState({
-    //     latitude: null,
-    //     longitude: null,
-    // });
 
     const handleChange = (e) => {
         setAge(e.target.value);
@@ -44,24 +40,14 @@ function EventQr() {
         })
     }
 
+
+
     useEffect(() => {
         axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {
             console.log(res?.data?.participate_volunteer);
             setTasks(res?.data?.participate_volunteer);
         })
-
-        // if ("geolocation" in navigator) {
-        //     navigator.geolocation.getCurrentPosition(function (position) {
-        //         console.log(position);
-        //         setPosition({
-        //             latitude: position.coords.latitude,
-        //             longitude: position.coords.longitude,
-        //         });
-        //     });
-        // } else {
-        //     console.log("Geolocation is not available in your browser.");
-        // }
-    }, [])
+    }, [age])
 
     return (
         tasks ?
@@ -91,25 +77,53 @@ function EventQr() {
                                         </tr> :
                                         (tasks.map((val) => {
                                             return (
-                                                <tr key={val.id}>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.task?.event_name} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.task?.date} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.task?.event_location} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={val.task?.points} />
-                                                    </td>
-                                                    <td className="py-3 px-4 border-b border-b-gray-50">
-                                                        <TdComponent things={<button
-                                                            onClick={() => viewPoster(val.id)}
-                                                            className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Generate QR</button>} />
-                                                    </td>
-                                                </tr>
+                                                <>
+                                                    {
+                                                        age === 'pending' && !val.volunteer_presence ?
+                                                            <tr key={val.id}>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_name} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.date} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_location} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.points} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={<button
+                                                                        onClick={() => viewPoster(val.id)}
+                                                                        className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">Generate QR</button>} />
+                                                                </td>
+                                                            </tr>
+                                                            :
+                                                            ""
+                                                    }
+                                                    {
+                                                        age === 'uploaded' && val.volunteer_presence ?
+                                                            <tr key={val.id}>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_name} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.date} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.event_location} />
+                                                                </td>
+                                                                <td className="py-3 px-4 border-b border-b-gray-50">
+                                                                    <TdComponent things={val.task?.points} />
+                                                                </td>
+                                                                <td className='py-3 border-b border-b-gray-50'>
+                                                                    <TdComponent things={<div className="font-semibold border border-green-500 p-1 rounded-md bg-[#34cc40] text-white text-center">Uploaded</div>} />
+                                                                </td>
+                                                            </tr> :
+                                                            ""
+                                                    }
+                                                </>
                                             )
                                         }))
                                     }

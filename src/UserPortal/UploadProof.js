@@ -43,37 +43,65 @@ function UploadProof() {
                     showCloseButton: true,
                     title: "Your uploaded picture",
                     imageUrl: e.target.result,
-                    imageAlt: "The uploaded picture"
-                });
-            };
-            reader.readAsDataURL(file);
-            formData.append("volunteer_presence[participate_volunteer_id]", val)
-            formData.append("volunteer_presence[request_type]", "upload_proof")
-            formData.append("volunteer_presence[upload_proof]", file)
-            axios.post('api/v1/volunteer_presences', formData).then((res) => {
-                console.log(res);
-                setChange(res.data.status);
-                Swal.fire({
-                    title: "Uploaded!",
-                    text: "Your proof is uploaded.",
-                    icon: "success"
-                });
-            }).catch((err) => {
-                console.log(err);
-            })
+                    imageAlt: "The uploaded picture",
+                    showConfirmButton: 'Upload',
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        reader.readAsDataURL(file);
+                        formData.append("volunteer_presence[participate_volunteer_id]", val)
+                        formData.append("volunteer_presence[request_type]", "upload_proof")
+                        formData.append("volunteer_presence[upload_proof]", file)
+                        axios.post('api/v1/volunteer_presences', formData).then((res) => {
+                            console.log(res);
+                            getTasks();
+                            setChange(res.data.status);
+                            Swal.fire({
+                                title: "Uploaded!",
+                                text: "Your proof is uploaded.",
+                                icon: "success"
+                            });
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    }
+                })
+            }
         }
     }
 
+    const handleLocation = () => {
+        setLocationView(1);
+    }
+
+    const capture = useCallback(async (val) => {
+        const screenshot = webcamRef.current.getScreenshot();
+        try {
+            const blob = await fetch(screenshot).then(res => res.blob());
+            const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
+            console.log(file);
+            if (file) {
+                setLocationView(0);
+                setChange(val);
+                getUserPhoto(val, screenshot, file);
+            } else {
+                console.log('File or position is missing!');
+            }
+        } catch (error) {
+            console.error('Error occurred while capturing and sending screenshot:', error);
+        }
+    }, [webcamRef]);
+
     const getUserPhoto = (val, img, file) => {
-        console.log(val);
-        console.log(position);
+        console.log("lat", position);
         try {
             Swal.fire({
                 title: "Image",
-                imageWidth: '300px',
-                imageHeight: '300px',
+                imageWidth: '400px',
+                imageHeight: '250px',
                 imageUrl: img,
                 imageAlt: "The image",
+                showCancelButton: true,
+                confirmButtonText: "Send",
             }).then((res) => {
                 console.log(res.isConfirmed);
                 if (res.isConfirmed && position.latitude && position.longitude) {
@@ -84,6 +112,7 @@ function UploadProof() {
                         formData.append("volunteer_presence[upload_proof]", file);
                         axios.post('/api/v1/volunteer_presences', formData)
                             .then((res) => {
+                                getTasks();
                                 console.log(res);
                                 Swal.fire({
                                     title: "Uploaded!",
@@ -103,32 +132,15 @@ function UploadProof() {
         }
     };
 
-    const capture = useCallback(async (val) => {
-        const screenshot = webcamRef.current.getScreenshot();
-        try {
-            const blob = await fetch(screenshot).then(res => res.blob());
-            const file = new File([blob], 'screenshot.jpg', { type: 'image/jpeg' });
-            console.log(file);
-            if (file) {
-                setLocationView(0);
-                setChange(val);
-                getUserPhoto(val, screenshot, file);
-            }
-        } catch (error) {
-            console.error('Error occurred while capturing and sending screenshot:', error);
-        }
-    }, [webcamRef]);
-
-    const handleLocation = () => {
-        setLocationView(1);
-        console.log(position.latitude, position.longitude);
-    };
-
-    useEffect(() => {
+    const getTasks = () => {
         axios.get('api/v1/participate_volunteers?request_type=approved').then((res) => {
             console.log(res?.data?.participate_volunteer);
             setTasks(res?.data?.participate_volunteer);
         })
+    }
+
+    useEffect(() => {
+        getTasks();
 
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -138,7 +150,7 @@ function UploadProof() {
                 });
             });
         } else {
-            console.log("Geolocation is not available in your browser.");
+            console.error("Geolocation is not available in this browser.");
         }
     }, [age])
 
