@@ -138,6 +138,7 @@ function AdminEvents() {
                                         <ThComponent />
                                         <ThComponent />
                                         <ThComponent />
+                                        <ThComponent />
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,8 +150,11 @@ function AdminEvents() {
                                             tasks.map((val) => {
                                                 return (
                                                     <tr key={val.id} >
-                                                        <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val.event_name} />
+                                                        <td className="py-2 px-4 border-b border-b-gray-50">
+                                                            <div className="flex items-center">
+                                                                <img src={val.event_poster_url === "" ? "https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg?auto=compress&cs=tinysrgb&w=600" : val.event_poster_url} alt="" className="w-8 h-8 rounded-md object-cover block" />
+                                                                <TdComponent things={val.event_name} />
+                                                            </div>
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
                                                             <TdComponent things={val.date} />

@@ -19,6 +19,7 @@ import AdminProofRequests from './AdminPortal/AdminProofRequests';
 import AdminBooth from './Booth Management/Admin/AdminBooth';
 import AdminBoothAttendence from './Booth Management/Admin/AdminBoothAttendence';
 import UserBooth from './Booth Management/User/UserBooth';
+import Role from './Booth Management/Admin/Role';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
                     <Route path="dashboard" element={<AdminPointsHistory />} />
                     <Route path="admin_booth" element={<AdminBooth />} />
                     <Route path="admin_booth_attendence" element={<AdminBoothAttendence />} />
+                    <Route path="admin_role" element={<Role />} />
                 </Route>
 
                 {/* Error */}

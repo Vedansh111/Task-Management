@@ -10,7 +10,7 @@ function UserProfile() {
     const [accessToken, setAccessToken] = useState();
     const [userInfo, fetchUserData] = useOutletContext();
     const [avatarUrl, setAvatarUrl] = useState(userInfo.avatar_url);
-    const [aadharCardUrl, setAadharCardUrl] = useState(userInfo.aadhar_card_url);
+    const [aadharCardUrl, setAadharCardUrl] = useState(userInfo.avatar_card_url);
 
     useEffect(() => {
         setAccessToken(localStorage.getItem('access_token'));
@@ -22,43 +22,75 @@ function UserProfile() {
         phone: userInfo.mobile_number,
         position: userInfo.role,
         address: userInfo.residential_address,
-        avatar: avatarUrl,
-        aadhar_card: aadharCardUrl,
+        avatar: userInfo.avatar_url,
+        aadhar_card: userInfo.avatar_card_url,
     };
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         onSubmit: async (values) => {
-            console.log(values);
-            await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
-                user: {
-                    name: values.name,
-                    email: values.email,
-                    mobile_number: values.phone,
-                    residential_address: values.address,
-                    avatar: avatarUrl,
-                    aadhar_card: aadharCardUrl,
-                },
-            }, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-                .then((res) => {
-                    console.log(res);
-                    fetchUserData();
-                    Swal.fire({
-                        title: "Updated!",
-                        text: "Your profile is updated.",
-                        icon: "success"
-                    });
-                }).catch((err) => {
-                    console.log(err);
-                    Swal.fire({
-                        title: "Nothing to update!",
-                        icon: "info"
-                    });
+            console.log('values', values);
+            console.log(avatarUrl === userInfo.avatar_url);
+            if (avatarUrl === userInfo.avatar_url && aadharCardUrl === userInfo.avatar_card_url) {
+                await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
+                    user: {
+                        name: values.name,
+                        email: values.email,
+                        mobile_number: values.phone,
+                        residential_address: values.address,
+                    },
+                }, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 })
+                    .then((res) => {
+                        console.log("without image", res);
+                        fetchUserData();
+                        Swal.fire({
+                            title: "Updated!",
+                            text: "Your profile is updated.",
+                            icon: "success"
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                        Swal.fire({
+                            title: "Nothing to update!",
+                            icon: "info"
+                        });
+                    })
+            } else {
+                await axios.put(`api/v1/users/update_profile?access_token=${accessToken}`, {
+                    user: {
+                        name: values.name,
+                        email: values.email,
+                        mobile_number: values.phone,
+                        residential_address: values.address,
+                        avatar: avatarUrl,
+                        aadhar_card: aadharCardUrl
+                    },
+                }, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then((res) => {
+                        console.log('with image', res);
+                        fetchUserData();
+                        Swal.fire({
+                            title: "Updated!",
+                            text: "Your profile is updated.",
+                            icon: "success"
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                        Swal.fire({
+                            title: "Nothing to update!",
+                            icon: "info"
+                        });
+                    })
+            }
+
         },
     });
 
@@ -117,7 +149,7 @@ function UserProfile() {
                     <form className='lg:w-[70%] sm:w-[70%] md:w-[2/3] lg:flex lg:items-start md:items-start  h-full md:flex md:flex-col md:justify-center sm:flex sm:flex-col sm:justify-center' onSubmit={handleSubmit} method='post'>
                         <div className='flex p-2 m-1 items-center'>
                             <label className='text-wrap text-center text-base font-medium mr-2 w-[4.3rem]'>Profile Picture</label>
-                            <img src={values.avatar === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : values.avatar} alt="img"
+                            <img src={userInfo.avatar_url === "" ? "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg" : userInfo.avatar_url} alt="img"
                                 className='object-center rounded-full w-[3rem] h-[3rem] border border-gray-400 mx-1.5' />
                             <button
                                 type='button'

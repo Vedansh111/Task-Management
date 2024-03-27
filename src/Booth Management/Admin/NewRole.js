@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import InputSettings from '../../Helper Components/InputSettings';
 import * as yup from 'yup';
 
-function NewBooth(props) {
+function NewRole(props) {
     const initialValues = {
         booth_name: '',
         booth_number: '',
@@ -48,8 +48,8 @@ function NewBooth(props) {
         },
     });
 
-    return (
-        <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-3 h-full'>
+  return (
+    <form onSubmit={handleSubmit} className='flex flex-col items-center -mt-3 h-full'>
             <Input
                 title='Booth Name'
                 type='text'
@@ -96,7 +96,7 @@ function NewBooth(props) {
             </div>
             <SubmitButton name='Add Booth' />
         </form>
-    )
+  )
 }
 
-export default NewBooth
+export default NewRole

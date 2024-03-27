@@ -1,10 +1,12 @@
 import React from 'react';
-import { GiNinjaStar } from "react-icons/gi";
+import { GiNinjaStar, GiCampingTent } from "react-icons/gi";
 import { BsListTask } from "react-icons/bs";
 import { RiUploadCloud2Fill } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
 import { IoPeople } from "react-icons/io5";
 import HoverComponent from '../Helper Components/HoverComponent';
+import { FaHouseCircleCheck } from "react-icons/fa6";
+import { IoMdPersonAdd } from "react-icons/io";
 
 function AdminSidebar(props) {
     return (
@@ -33,9 +35,11 @@ function AdminSidebar(props) {
                     {/* Booth */}
                     <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
                     <HoverComponent to='admin_booth' name='Booth'
-                        symbol={<IoPeople />} />
+                        symbol={<GiCampingTent />} />
+                    <HoverComponent to='admin_role' name='Role'
+                        symbol={<IoMdPersonAdd />} />
                     <HoverComponent to='admin_booth_attendence' name='Booth Attendence'
-                        symbol={<RiUploadCloud2Fill />} />
+                        symbol={<FaHouseCircleCheck />} />
                 </ul>
             </div>
 
