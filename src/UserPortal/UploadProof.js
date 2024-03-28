@@ -92,7 +92,18 @@ function UploadProof() {
     }, [webcamRef]);
 
     const getUserPhoto = (val, img, file) => {
-        console.log("lat", position);
+        let latitude;
+        let longitude;
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+            });
+        } else {
+            console.error("Geolocation is not available in this browser.");
+        }
+
         try {
             Swal.fire({
                 title: "Image",
@@ -104,11 +115,11 @@ function UploadProof() {
                 confirmButtonText: "Send",
             }).then((res) => {
                 console.log(res.isConfirmed);
-                if (res.isConfirmed && position.latitude && position.longitude) {
+                if (res.isConfirmed && latitude && longitude) {
                     if (file) {
                         formData.append("volunteer_presence[participate_volunteer_id]", val);
                         formData.append("volunteer_presence[request_type]", "geo_location");
-                        formData.append("volunteer_presence[location]", position.latitude + "," + position.longitude);
+                        formData.append("volunteer_presence[location]", latitude + "," + longitude);
                         formData.append("volunteer_presence[upload_proof]", file);
                         axios.post('/api/v1/volunteer_presences', formData)
                             .then((res) => {
@@ -141,17 +152,6 @@ function UploadProof() {
 
     useEffect(() => {
         getTasks();
-
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                setPosition({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                });
-            });
-        } else {
-            console.error("Geolocation is not available in this browser.");
-        }
     }, [age])
 
     return (

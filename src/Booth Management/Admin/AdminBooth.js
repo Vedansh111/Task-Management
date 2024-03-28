@@ -8,11 +8,13 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FaCircleArrowRight } from 'react-icons/fa6';
 import NewBooth from './NewBooth';
+import { IoMdAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 function AdminBooth() {
     const [isOpen, setIsOpen] = useState(false);
     const [tasks, setTasks] = useState(0);
+    const [role, setRole] = useState(0);
 
     const handleAdd = () => {
         setIsOpen(true);
@@ -26,7 +28,7 @@ function AdminBooth() {
             title: "Edit the event",
             html: `  
             Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_name}" placeholder="Name..."><br/>
-            Number:<input type="number" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_number}" placeholder="Number..."><br/>
+            No.:<input type="number" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_number}" placeholder="Number..."><br/>
             Lat:<input type="number" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_lat}" placeholder="Lat..."><br/>
             Lon:<input type="number" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_lon}" placeholder="Lon...">
             `,
@@ -94,7 +96,72 @@ function AdminBooth() {
             console.log(res.data.booths);
             setTasks(res.data.booths);
         })
+
+        axios.get('api/v1/roles').then((res) => {
+            console.log('roles', res.data.roles);
+            setRole(res.data.roles);
+        })
     };
+
+    const viewPoster = (val) => {
+        Swal.fire({
+            title: "QR Code",
+            imageWidth: '200px',
+            imageHeight: '200px',
+            imageUrl: val,
+            imageAlt: "The Qr code"
+        });
+    }
+
+    const assignRole = async (valu) => {
+        console.log(valu);
+
+        const { value: formValues } = await Swal.fire({
+            title: "Assign a role!",
+            html: `  
+            Name:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" placeholder="Name..."><br/>
+            Email:<input type="email" id="swal-input2" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" placeholder="Email..."><br/>
+            Role Id:<input type="number" id="swal-input3" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" placeholder="Role id..."><br/>
+            Choose a role:
+            <select name="role" id="swal-input4" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md">
+            ${role.map((res) => {
+                return `<option value="${res.role_name}">${res.role_name}</option>`;
+            })}
+        </select>`,
+            focusConfirm: false,
+            showCancelButton: true,
+            preConfirm: () => {
+                return [
+                    document.getElementById("swal-input1").value,
+                    document.getElementById("swal-input2").value,
+                    document.getElementById("swal-input3").value,
+                    document.getElementById("swal-input4").value,
+                    document.getElementById("swal-input5").value,
+                ];
+            }
+        });
+        if (formValues) {
+            const formData = new FormData();
+            formData.append('user[name]', formValues[0])
+            formData.append('user[email]', formValues[1])
+            formData.append('user[role_id]', formValues[2])
+            formData.append('user[]', formValues[3])
+            axios.post(`api/v1/booths/${valu}/booth_user_allocation`, formData).then((res) => {
+                console.log(res);
+                if (res.data) {
+                    handleShow();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Updated!",
+                        text: "Your role is assigned.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+        }
+    }
 
     useEffect(() => {
         handleShow();
@@ -134,6 +201,10 @@ function AdminBooth() {
                                             name='Booth Name' />
                                         <ThComponent
                                             name='Location' />
+                                        <ThComponent
+                                            name='Qr Code' />
+                                        <ThComponent
+                                            name='Assign Role' />
                                         <ThComponent />
                                         <ThComponent />
                                     </tr>
@@ -161,6 +232,16 @@ function AdminBooth() {
                                                                 className='text-gray-600 text-sm font-medium ml-1 truncate underline'>
                                                                 View
                                                             </Link>
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={<button
+                                                                onClick={() => viewPoster(val.qr_code)}
+                                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">View QR</button>} />
+                                                        </td>
+                                                        <td className="py-3 px-4 border-b border-b-gray-50">
+                                                            <TdComponent things={<button
+                                                                onClick={() => assignRole(val.id)}
+                                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#687983] hover:text-white"><IoMdAdd size={20} /></button>} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
                                                             <TdComponent things={<button

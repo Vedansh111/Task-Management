@@ -5,9 +5,8 @@ import { IoAddCircle } from 'react-icons/io5';
 import TdComponent from '../../Helper Components/TdComponent';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { FaCircleArrowRight } from 'react-icons/fa6';
-import NewBooth from './NewBooth';
+import NewRole from './NewRole';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 function Role() {
@@ -25,7 +24,7 @@ function Role() {
         const { value: formValues } = await Swal.fire({
             title: "Edit the role",
             html: `  
-            Role:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0]?.booth_name}" placeholder="Name..."><br/>
+            Role:<input type="text" id="swal-input1" class="w-[15rem] p-1 mx-2 my-1.5 border border-gray-500 rounded-md" value="${see[0].role_name}" placeholder="Name..."><br/>
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -38,7 +37,7 @@ function Role() {
         if (formValues) {
             const formData = new FormData();
             formData.append('role[role_name]', formValues[0])
-            axios.put(`api/v1/booths/${valu}`, formData).then((res) => {
+            axios.put(`api/v1/roles/${valu}`, formData).then((res) => {
                 console.log(res);
                 if (res.data) {
                     handleShow();
@@ -66,7 +65,7 @@ function Role() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await axios.delete(`api/v1/booths/${val}`).then((res) => {
+                await axios.delete(`api/v1/roles/${val}`).then((res) => {
                     if (res.status === 200) {
                         handleShow();
                     }
@@ -82,7 +81,7 @@ function Role() {
 
     const handleShow = () => {
         axios.get('api/v1/roles').then((res) => {
-            console.log(res.data);
+            console.log(res.data.roles.slice(2,));
             setTasks(res.data.roles);
         })
     };
@@ -96,10 +95,10 @@ function Role() {
             <div className='p-6'>
                 {isOpen ?
                     <div
-                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out lg:w-[30.5%] md:w-[31%] sm:w-full border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-[46vh] absolute right-[4px] bg-[#dfdbda] shadow-md z-50'>
+                        className='animate-fade-left animate-delay-100 animate-once animate-ease-out lg:w-[25.5%] md:w-[31%] sm:w-full border border-gray-400 border-r-0 rounded-tl-[2rem] rounded-bl-[2rem]  h-[27vh] absolute right-[4px] bg-[#dfdbda] shadow-md z-50'>
                         <button
                             onClick={() => setIsOpen(false)} className={`mx-3 my-3 `} ><FaCircleArrowRight size={38} /></button>
-                        <NewBooth function={handleShow} />
+                        <NewRole function={handleShow} />
                     </div> :
                     <div className='animate-fade-right animate-duration-[700ms] animate-once animate-ease-out flex flex-col absolute z-50 right-9'>
                         <button

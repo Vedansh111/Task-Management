@@ -30,11 +30,18 @@ function UserSideBar(props) {
                         symbol={<HiMiniIdentification />} />
                     <HoverComponent to='event_qr' name='Event QR'
                         symbol={<HiMiniIdentification />} />
-
-                    {/* Booth */}
-                    <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
-                    <HoverComponent to='user_booth' name='Booth'
-                        symbol={<IoPeople />} />
+                    {
+                        props.userInfo.booth ?
+                            (
+                                <>
+                                    {/* Booth */}
+                                    <div className="text-slate-600 font-bold mt-5">BOOTH MANAGEMENT</div>
+                                    <HoverComponent to='user_booth' name='Booth'
+                                        symbol={<IoPeople />} />
+                                </>
+                            )
+                            : null
+                    }
                 </ul>
             </div>
 

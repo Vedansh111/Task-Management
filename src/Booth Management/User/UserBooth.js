@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import EventsLoader from '../../Helper Components/EventsLoader';
 import TdComponent from '../../Helper Components/TdComponent';
 import ThComponent from '../../Helper Components/ThComponent';
 import UploadProofButton from '../../Helper Components/UploadProofButton';
+import axios from 'axios';
+import { Link, useOutletContext } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function UserBooth() {
-    const tasks = [1, 2, 3];
+    const [tasks, setTasks] = useState(0);
+    const userInfo = useOutletContext();
+
+    const handleShow = () => {
+        axios.get('api/v1/booths').then((res) => {
+            setTasks(res.data.booths.filter((val) => {
+                return val.user_id === userInfo[0].id
+            }));
+        })
+    };
+
+    const viewPoster = (val) => {
+        Swal.fire({
+            title: "QR Code",
+            imageWidth: '200px',
+            imageHeight: '200px',
+            imageUrl: val,
+            imageAlt: "The Qr code"
+        });
+    }
+
+    useEffect(() => {
+        handleShow();
+    }, [])
 
     return (
         tasks ? (
@@ -20,31 +46,17 @@ function UserBooth() {
                                 <thead className='uppercase'>
                                     <tr>
                                         <ThComponent
+                                            name='Booth No.' />
+                                        <ThComponent
                                             moreClasses="rounded-tl-md rounded-bl-md"
                                             name='Booth Name' />
                                         <ThComponent
-                                            name='Date' />
-                                        <ThComponent
-                                            moreClasses="rounded-tr-md rounded-br-md"
-                                            name='Time' />
-                                        <ThComponent
                                             name='Location' />
                                         <ThComponent
-                                            name='Booth No.' />
-                                        <ThComponent
                                             name='QR Code' />
-                                        <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
-                                        {/* {age === "pending" ?
-                                        <>
-                                            <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
-                                            <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
-                                        </> : ''}
-
-                                    {age === "approved" ?
-                                        <>
-                                            <ThComponent name='Status' />
-                                            <th className="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-3 px-2 bg-gray-100 text-left "></th>
-                                        </> : ''} */}
+                                        <ThComponent />
+                                        <ThComponent />
+                                        <ThComponent />
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,22 +69,22 @@ function UserBooth() {
                                                 return (
                                                     <tr key={val.id} >
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.task?.event_name} />
+                                                            <TdComponent things={val?.booth_number} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.user?.name} />
+                                                            <TdComponent things={val?.booth_name} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.user?.email} />
+                                                            <Link target="_blank"
+                                                                to={`https://www.google.com/maps?q=${val.booth_lat}, ${val.booth_lon}`}
+                                                                className='text-gray-600 text-sm font-medium ml-1 truncate underline'>
+                                                                View
+                                                            </Link>
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.user?.email} />
-                                                        </td>
-                                                        <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.user?.email} />
-                                                        </td>
-                                                        <td className="py-3 px-4 border-b border-b-gray-50">
-                                                            <TdComponent things={val?.participate_volunteer?.user?.email} />
+                                                            <TdComponent things={<button
+                                                                onClick={() => viewPoster(val.qr_code)}
+                                                                className="font-semibold text-blue-800 border border-gray-300 p-1 rounded-md hover:bg-[#558ccb] hover:text-white">View QR</button>} />
                                                         </td>
                                                         <td className="py-3 px-4 border-b border-b-gray-50">
                                                             <TdComponent things={
